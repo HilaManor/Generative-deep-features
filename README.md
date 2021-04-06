@@ -10,3 +10,7 @@
 Hila Manor and Da-El Klang  
 Supervised by Tamar Rott-Shaham
 
+## Notes:
+Q1 - How to init noise for image? The color channels are correlated...
+Q2 - It seems that the weights of the style loss is always 1.
+
