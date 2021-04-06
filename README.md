@@ -10,3 +10,6 @@
 Hila Manor and Da-El Klang  
 Supervised by Tamar Rott-Shaham
 
+## Notes:
+Q1 - how to init noise for image? the color channels are correlated...
+
