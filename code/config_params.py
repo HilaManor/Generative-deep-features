@@ -18,7 +18,7 @@ STYLE_WEIGHTS = np.array([1,0.75,0.2,0.2,0.2])
 #STYLE_WEIGHTS = np.array([1,1,1,1,1])
 # STYLE_WEIGHTS = np.ones(len(STYLE_LAYERS))
 
-EPOCHS = 4000
+EPOCHS = 7000
 
 seed = 42
 
