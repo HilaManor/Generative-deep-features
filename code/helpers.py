@@ -6,7 +6,8 @@ from PIL import Image
 
 # desired size of the output image
 #imsize = 512 if torch.cuda.is_available() else 128  # use small size if no gpu
-imsize=64
+#imsize=64
+imsize=32
 
 loader = transforms.Compose([
     transforms.Resize(imsize),  # scale imported image

@@ -4,7 +4,10 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
+import matplotlib.pyplot as plt
+
 import copy
+import helpers
 
 import style_loss as StlLoss
 import contextual_loss as CtxLoss
@@ -97,7 +100,7 @@ def get_style_model_and_losses(device, cnn, normalization_mean, normalization_st
             target_feature = model(style_img).detach()
 #            style_loss = StlLoss.StyleLoss(target_feature)
 #             model.add_module("style_loss_{}".format(i), style_loss)
-            contx_loss = CtxLoss.ContextualLoss(target_feature)
+            contx_loss = CtxLoss.ContextualLoss(target_feature, device=device)
             model.add_module("contx_loss_{}".format(i), contx_loss)
 
 #             style_losses.append(style_loss)
@@ -105,8 +108,8 @@ def get_style_model_and_losses(device, cnn, normalization_mean, normalization_st
 
     # now we trim off the layers after the last content and style losses
     for i in range(len(model) - 1, -1, -1):
-#         if isinstance(model[i], StyleLoss): #or isinstance(model[i], ContentLoss):
-        if isinstance(model[i], contx_loss): #or isinstance(model[i], ContentLoss):
+#         if isinstance(model[i], StlLoss.StyleLoss): #or isinstance(model[i], ContentLoss):
+        if isinstance(model[i], CtxLoss.ContextualLoss): #or isinstance(model[i], ContentLoss):
             break
 
     model = model[:(i + 1)]
@@ -171,10 +174,10 @@ def run_style_transfer(device, cnn, normalization_mean, normalization_std,
 #                     style_score.item(), content_score.item()))
                 #print('Style Loss : {:4f} '.format(style_score.item()))
                 #print()
-            if run[0] % 500 == 0:
+            if run[0] % 50 == 0:
                 vis_img = copy.deepcopy(input_img)
-                plt.figure()
-                imshow(vis_img, title=f'On run {run[0]}')
+                #plt.figure()
+                helpers.imshow(vis_img, title=f'On run {run[0]}')
         
             return style_score #+ content_score
 
