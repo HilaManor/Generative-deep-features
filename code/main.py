@@ -10,7 +10,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 from torchvision import transforms, models
 import copy
-
+import time
 import helpers
 import net_model
 
@@ -25,13 +25,11 @@ cnn = models.vgg19(pretrained=True).features.to(device).eval()
 cnn_normalization_mean = torch.tensor([0.485, 0.456, 0.406]).to(device)
 cnn_normalization_std = torch.tensor([0.229, 0.224, 0.225]).to(device)
 
-# desired size of the output image
-#imsize = 512 if torch.cuda.is_available() else 128  # use small size if no gpu
-imsize=64
+
 
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-style_img = helpers.image_loader("./images/starry_night_full.jpg")
+style_img = helpers.image_loader("../images/starry_night_full.jpg",device)
 #content_img = image_loader("./images/.jpg")
 
 # assert style_img.size() == content_img.size(), \
@@ -65,7 +63,7 @@ STYLE_WEIGHTS = np.array([1,1,1,1,1])
 # STYLE_WEIGHTS = np.ones(len(STYLE_LAYERS))
 EPOCHS = 1000
 start_time = time.time()
-output, losses = net_model.run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std,
+output, losses = net_model.run_style_transfer(device,cnn, cnn_normalization_mean, cnn_normalization_std,
 #                             content_img, 
                             style_img, input_img,  
                             STYLE_LAYERS, STYLE_WEIGHTS,

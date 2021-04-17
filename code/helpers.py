@@ -4,13 +4,17 @@ from torchvision import transforms, models
 import matplotlib.pyplot as plt
 from PIL import Image
 
+# desired size of the output image
+#imsize = 512 if torch.cuda.is_available() else 128  # use small size if no gpu
+imsize=64
+
 loader = transforms.Compose([
     transforms.Resize(imsize),  # scale imported image
     transforms.ToTensor()])  # transform it into a torch tensor
     
 unloader = transforms.ToPILImage()  # reconvert into PIL image
 
-def image_loader(image_name, loader=loader):
+def image_loader(image_name,device, loader=loader):
     image = Image.open(image_name) #.convert('RGB')
     #image = image.filter(ImageFilter.GaussianBlur(GAUSSIAN_BLUR))
     # fake batch dimension required to fit network's input dimensions

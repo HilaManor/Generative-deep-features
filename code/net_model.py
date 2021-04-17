@@ -47,7 +47,7 @@ STYLE_LAYERS_TRANSLATION = {'conv_1': 'conv1_1',
                             'conv_16': 'conv5_4'}
 
 
-def get_style_model_and_losses(cnn, normalization_mean, normalization_std,
+def get_style_model_and_losses(device, cnn, normalization_mean, normalization_std,
                                style_img, #content_img,
                                #content_layers,
                                style_layers):
@@ -123,7 +123,7 @@ def get_input_optimizer(input_img):
 
 
 ## ~~~~~~~~~~~~~~ Main Training Loop ~~~~~~~~~~~~~
-def run_style_transfer(cnn, normalization_mean, normalization_std,
+def run_style_transfer(device, cnn, normalization_mean, normalization_std,
                        #content_img, 
                        style_img, input_img,
                        style_layers, style_weights,
@@ -131,7 +131,7 @@ def run_style_transfer(cnn, normalization_mean, normalization_std,
     """Run the style transfer."""
     print('Building the style transfer model..')
 #     model, style_losses, content_losses = get_style_model_and_losses(cnn,
-    model, style_losses = get_style_model_and_losses(cnn, 
+    model, style_losses = get_style_model_and_losses(device, cnn, 
         normalization_mean, normalization_std, style_img, style_layers)#, content_img)
     optimizer = get_input_optimizer(input_img)
     
