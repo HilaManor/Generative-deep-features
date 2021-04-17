@@ -71,4 +71,5 @@ class ContextualLoss(nn.Module):
         # (c,d)=dimensions of a f. map (N=c*d)
         
         # resize F_XL into \hat F_XL
-        return features.view(batch_size * depth, c * d)
+        # return features.view(batch_size * depth, c * d)
+        return features.reshape(batch_size * depth, c * d)
