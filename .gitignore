@@ -3,3 +3,5 @@
 /PDFs/SinGAN_supplemental.pdf
 /code/.idea/*
 *.pyc
+/.idea/*
+*/.idea/*
