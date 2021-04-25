@@ -1,21 +1,26 @@
 import models
+import loss_model
 import functions
+import torchvision
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import matplotlib.pyplot as plt
 
-def train(opt, Gs, Zs, reals, NoiseAmp):
-    # TODO load image
-    # TODO-FUTURE created multi-scale images
+def train(real_img, out_dir, opt):
+    real_imgs = [real_img]  # TODO-FUTURE created multi-scale images
+
+    Generators = []
 
     # TODO-FUTURE Create SCALES (while)
-    nfc = 32 # / 64? TODO
-    min_nfc = 32 # / 64? TODO
+    plt.imsave(os.path.join(out_dir, "real_scale.png"))
 
     curr_G = init_generator(opt)
+    vgg = torchvision.models.vgg19(pretrained=True).features.to(opt.device).eval()
 
-    G, z_curr = train_single_scale(Gs, curr_G, real_imgs, opt)
+    G, z_curr = train_single_scale(Gs, curr_G, real_imgs, vgg, opt)
 
+    return G, z_curr
 
 
 def init_generator(opt):
@@ -27,7 +32,7 @@ def init_generator(opt):
 
 
 
-def train_single_scale(Generators, curr_G, real_imgs, opt):
+def train_single_scale(Generators, curr_G, real_imgs, vgg, opt):
     real_img = real_imgs[len(Generators)]
     opt.nzx = real_img.shape[2]  # Width of image in current scale
     opt.nzy = real_img.shape[3]  # Height of image in current scale
@@ -41,21 +46,23 @@ def train_single_scale(Generators, curr_G, real_imgs, opt):
 
     # TODO-FUTURE create noise (and pad it?)
 
+    loss_block, layers_losses = loss_model.generate_loss_block(vgg, real_img, 'pdl', opt.chosen_layers, opt)
+
     # Setup Optimizer
-    optimizer = optim.Adam(curr_G.parameters(), lr=0.0005, betas=(0.5, 0.999))
+    optimizer = optim.Adam(curr_G.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[1000],
-                                               gamma=0.1)
+                                               gamma=opt.gamma)
 
     # TODO arrays for errors for graphs
     style_loss = []
 
     # TODO-FUTURE currently only for generic implementation (1 scale)
-    prev = torch.full([1, opt.nc_z, opt.nzx, opt.nzy], 0, device=opt.device)
+    prev = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
     # TODO in_s = prev
     prev = image_pad_func(prev)
-    z_prev = torch.full([1, opt.nc_z, opt.nzx, opt.nzy], 0, device=opt.device)
+    z_prev = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
     z_prev = noise_pad_func(z_prev)
-    opt.noise_amp = 1
+    # TODO-FUTURE opt.noise_amp = 1
 
     # TODO-FUTRE:
     #   first epoch & first step (D)
@@ -75,11 +82,11 @@ def train_single_scale(Generators, curr_G, real_imgs, opt):
         # z_opt is {Z*, 0, 0, 0, ...}. The specific set of input noise maps
         # which generates the original image xn
         z_opt = functions.generate_noise([1, opt.nzx, opt.nzy])
-        z_opt = noise_pad_func(z_opt.expand(1, opt.nc_z, opt.nzx, opt.nzy))
+        z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
 
         # noise_ is the input noise (before adding the image or changing the variance)
         noise_ = functions.generate_noise([1, opt.nzx, opt.nzy], device=opt.device)
-        noise_ = noise_pad_func(noise_.expand(1, opt.nc_z, opt.nzx, opt.nzy))
+        noise_ = noise_pad_func(noise_.expand(1, opt.nc, opt.nzx, opt.nzy))
         # Notice that the noise for the 3 RGB channels is the same
         # TODO-FUTURE z_opt should only be generated in 1st scale
 
@@ -92,8 +99,11 @@ def train_single_scale(Generators, curr_G, real_imgs, opt):
             curr_G.zero_grad()
             fake_im = curr_G(noise.detach(), prev)  # TODO think on detach
 
-            # TODO Add style_loss: fake + real -> LOSS
-
+            loss_block(fake_im)
+            loss = 0
+            for i, sl in enumerate(layers_losses):
+                loss += opt.layers_weights[i] * sl.loss
+            style_loss.append(loss)
             loss.backward()  # TODO retain_graph=True
 
             # TODO-FUTUE implement reconstruction-loss using alpha (We want to ensure that there exists a specific set of input
@@ -123,4 +133,4 @@ def train_single_scale(Generators, curr_G, real_imgs, opt):
 
 def draw_concat(Generators, mode, noise_pad_func, image_pad_func, opt):
     # TODO-FUTURE good luck
-    return torch.full([1, opt.nc_z, opt.nzx, opt.nzy], 0, device=opt.device)
+    return torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)

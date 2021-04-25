@@ -2,66 +2,7 @@
 
 import numpy as np
 from scipy.ndimage import filters, measurements, interpolation
-from skimage import color
 from math import pi
-#from SinGAN.functions import torch2uint8, np2torch
-import torch
-
-
-def denorm(x):
-    out = (x + 1) / 2
-    return out.clamp(0, 1)
-
-def norm(x):
-    out = (x - 0.5) * 2
-    return out.clamp(-1, 1)
-
-def move_to_gpu(t):
-    if (torch.cuda.is_available()):
-        t = t.to(torch.device('cuda'))
-    return t
-
-def np2torch(x,opt):
-    if opt.nc_im == 3:
-        x = x[:,:,:,None]
-        x = x.transpose((3, 2, 0, 1))/255
-    else:
-        x = color.rgb2gray(x)
-        x = x[:,:,None,None]
-        x = x.transpose(3, 2, 0, 1)
-    x = torch.from_numpy(x)
-    if not (opt.not_cuda):
-        x = move_to_gpu(x)
-    x = x.type(torch.cuda.FloatTensor) if not(opt.not_cuda) else x.type(torch.FloatTensor)
-    #x = x.type(torch.cuda.FloatTensor)
-    x = norm(x)
-    return x
-
-def torch2uint8(x):
-    x = x[0,:,:,:]
-    x = x.permute((1,2,0))
-    x = 255*denorm(x)
-    x = x.cpu().numpy()
-    x = x.astype(np.uint8)
-    return x
-
-
-def imresize(im,scale,opt):
-    #s = im.shape
-    im = torch2uint8(im)
-    im = imresize_in(im, scale_factor=scale)
-    im = np2torch(im,opt)
-    #im = im[:, :, 0:int(scale * s[2]), 0:int(scale * s[3])]
-    return im
-
-def imresize_to_shape(im,output_shape,opt):
-    #s = im.shape
-    im = torch2uint8(im)
-    im = imresize_in(im, output_shape=output_shape)
-    im = np2torch(im,opt)
-    #im = im[:, :, 0:int(scale * s[2]), 0:int(scale * s[3])]
-    return im
-
 
 def imresize_in(im, scale_factor=None, output_shape=None, kernel=None, antialiasing=True, kernel_shift_flag=False):
     # First standardize values and fill missing arguments (if needed) by deriving scale from output shape or vice versa

@@ -43,6 +43,7 @@ class Normalization(nn.Module):
         """normalize img"""
         return (img - self.mean) / self.std
 
+
 def generate_loss_block(vgg, real_img, mode, chosen_layers, opt):
     # TODO: vgg = copy.deepcopy(vgg)
 
