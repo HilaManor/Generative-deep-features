@@ -19,6 +19,7 @@ def plot_loss(losses, ignore_first_iter=1000, only_last_iter=5000):
     # fig.add_subplot(2, 2, 4)
     # plt.plot(np.arange(len(losses))[ignore_first_iter:], np.array(losses[ignore_first_iter:]) - np.array(losses[501:-1]))
     # plt.title('Zoomed Derivative vs Iter')
+    plt.show()
     return fig
 
 def save_fig(fig, out_dir, opt):
@@ -29,7 +30,8 @@ def save_fig(fig, out_dir, opt):
 def show_im(img_tensor):
     new_image = img_tensor.detach().to(device='cpu', copy=True)
     new_image = functions.convert_image_np(new_image)
-    fig = plt.imshow(new_image)
+    plt.imshow(new_image)
+    plt.show()
     return new_image
 
 def save_im(img, out_dir, opt, convert=False):
