@@ -42,7 +42,7 @@ def get_arguments():
     opt_hyper_group.add_argument('--lr', type=float, default=0.0005, help='Learning rate. default=0.0005')
     opt_hyper_group.add_argument('--beta1', type=float, default=0.5, help='beta1 for adam. default=0.5')
     opt_hyper_group.add_argument('--Gsteps', type=int, default=1, help='Generator inner steps')  # TODO 3
-
+    opt_hyper_group.add_argument('--alpha', type=float, default=10, help='reconstruction loss weight')
 
 
     pyrmaid_group = parser.add_argument_group('Pyramid Configuration',
