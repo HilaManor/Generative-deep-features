@@ -148,6 +148,9 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
     # TODO save network?
     fig = plotting_helpers.plot_loss(style_loss)
     plotting_helpers.save_fig(fig, out_dir, opt)
+    im = plotting_helpers.show_im(fake_im)
+    plotting_helpers.save_im(im, out_dir, opt)
+
     return curr_G, z_opt
 
 
