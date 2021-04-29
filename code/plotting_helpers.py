@@ -48,5 +48,5 @@ def save_im(img, out_dir, opt, convert=False):
 
 def __generate_base_name(opt):
     base_name = f"{opt.loss_func}_e{opt.epochs}_{opt.nzx}px_lr{opt.lr}" \
-                 f"_up-{opt.chosen_layers[-1]}_W{opt.layers_weights}"
+                 f"a{opt.alpha}_up-{opt.chosen_layers[-1]}_W{opt.layers_weights}"
     return base_name
