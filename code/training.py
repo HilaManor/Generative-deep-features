@@ -62,11 +62,12 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
 
     # Setup Optimizer
     optimizer = optim.Adam(curr_G.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
-    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[600,1800,3600],
+    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[600,1500,2600],
                                                gamma=opt.gamma)
 
     # TODO arrays for errors for graphs
-    style_loss = []
+    style_loss_arr = []
+    rec_loss_arr = []
 
     # TODO-FUTURE currently only for generic implementation (1 scale)
     prev = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
@@ -116,28 +117,33 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
             loss = 0
             for i, sl in enumerate(layers_losses):
                 loss += opt.layers_weights[i] * sl.loss
-            style_loss.append(loss)
-            loss.backward()  # TODO retain_graph=True
+            style_loss_arr.append(loss.detach())
+            loss.backward(retain_graph=True)
 
             # TODO-FUTUE implement reconstruction-loss using alpha (We want to ensure that there exists a specific set of input
             #  noise maps, which generates the original image x)
-            #      if alpha != 0
-            #           Z_opt = noise_amp * z_opt + z_prev
-            #               --> in first scale: z_prev=0, z_opt random every iter
-            #               --> else: z_prev = previous generate image FROM KNOWN NOISE
-            #               -->         z_opt = 0 ({Z*,0,0,0,0,0})
-            #           GDS (train) by reconstruction loss
-            #               --> .
-            #       else:
-            #           Z_opt = z_opt (remember, only in first scale the noise changes every ITER)
-            #               --> = 0 in all but first scale
-            #           rec_loss = 0
+
+            if opt.alpha != 0:
+                Z_opt = z_opt + z_prev
+                #               --> in first scale: z_prev=0, z_opt random every iter
+                #               --> else: z_prev = previous generate image FROM KNOWN NOISE
+                #               -->         z_opt = 0 ({Z*,0,0,0,0,0})
+                # Todo-future:    Z_opt = noise_amp * z_opt + z_prev
+                loss_criterion = nn.MSELoss()
+                rec_loss = opt.alpha * loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
+                rec_loss.backward(retain_graph=True)
+                rec_loss = rec_loss.detach()
+            else:
+                Z_opt = z_opt   #(remember, only in first scale the noise changes every ITER)
+                                #   --> = 0 in all but first scale
+                rec_loss = 0
 
             optimizer.step()
         scheduler.step()
+        rec_loss_arr.append(rec_loss)
 
         if epoch % opt.epoch_print == 0:
-            print("epoch {}:\t{}: {:4f}".format(epoch, opt.loss_func, style_loss[-1]), end="\t\t")
+            print("epoch {}:\t{}: {:4f}".format(epoch, opt.loss_func, style_loss_arr[-1]), end="\t\t")
             print(f"Time: {time.time() - start_time}")
             start_time = time.time()
         if epoch % opt.epoch_show == 0:
@@ -148,7 +154,7 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
         prev = image_pad_func(prev)
 
     # TODO save network?
-    fig = plotting_helpers.plot_loss(style_loss)
+    fig = plotting_helpers.plot_loss(style_loss_arr)
     plotting_helpers.save_fig(fig, out_dir, opt)
     im = plotting_helpers.show_im(fake_im, title='Final Image')
     plotting_helpers.save_im(im, out_dir, opt)
