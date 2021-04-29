@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import os
 
 def plot_loss(losses, ignore_first_iter=1000, only_last_iter=5000):
     fig = plt.figure(figsize=(16, 10))
@@ -17,3 +17,9 @@ def plot_loss(losses, ignore_first_iter=1000, only_last_iter=5000):
     # plt.plot(np.arange(len(losses))[ignore_first_iter:], np.array(losses[ignore_first_iter:]) - np.array(losses[501:-1]))
     # plt.title('Zoomed Derivative vs Iter')
     return fig
+
+def save_fig(fig, out_dir, opt):
+    base_name = f"{opt.loss_func}_e{opt.epochs}_{opt.nzx}px_lr{opt.lr}" \
+                 f"_up-{opt.chosen_layers[-1]}_W{opt.layers_weights}"
+    path = os.path.join(out_dir, base_name + "_fig.png")
+    fig.savefig(path)

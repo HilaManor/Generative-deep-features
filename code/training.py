@@ -23,7 +23,8 @@ def train(real_img, out_dir, opt):
     vgg = torchvision.models.vgg19(pretrained=True).features.to(opt.device).eval()
 
     start_time = time.time()
-    curr_G, z_curr = train_single_scale(Generators, curr_G, real_imgs, vgg, opt)
+    ## TODO-FUTURE - use diffrent dir for each scale
+    curr_G, z_curr = train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt)
     print(f"{len(Generators)} Scale Training Time: {time.time()-start_time}")
 
     [p.requires_grad_(False) for p in curr_G.parameters()]
@@ -43,7 +44,7 @@ def init_generator(opt):
 
 
 
-def train_single_scale(Generators, curr_G, real_imgs, vgg, opt):
+def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
     real_img = real_imgs[len(Generators)]
     opt.nzx = real_img.shape[2]  # Width of image in current scale
     opt.nzy = real_img.shape[3]  # Height of image in current scale
@@ -61,7 +62,7 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, opt):
 
     # Setup Optimizer
     optimizer = optim.Adam(curr_G.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
-    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[1000],
+    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[600,1800,3600],
                                                gamma=opt.gamma)
 
     # TODO arrays for errors for graphs
@@ -146,6 +147,7 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, opt):
 
     # TODO save network?
     fig = plotting_helpers.plot_loss(style_loss)
+    plotting_helpers.save_fig(fig, out_dir, opt)
     return curr_G, z_opt
 
 
