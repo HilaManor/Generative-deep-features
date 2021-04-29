@@ -14,6 +14,11 @@ def get_arguments():
                            help='Number of channels for the images')
     gen_group.add_argument('--manual_seed', type=int, help='Set a manual seed')
 
+    vis_group = parser.add_argument_group('Visualisation Configuration',
+                                          'Configure the visualisation parameters')
+    vis_group.add_argument('--epoch_print', type=int, default=50,
+                               help='Amount of epochs to wait before printing status')
+
 
     gen_hyper_group = parser.add_argument_group('Generators Hyper-parameters Configuration',
                                             'Set the hyper parameters of the generators')
@@ -45,5 +50,7 @@ def get_arguments():
                         default=25)
     pyrmaid_group.add_argument('--max_size', type=int, help='image minimal size at the coarser scale',
                         default=250)
+
+
 
     return parser

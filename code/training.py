@@ -135,7 +135,7 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, opt):
             optimizer.step()
         scheduler.step()
 
-        if epoch % 50 == 0:
+        if epoch % opt.epoch_print == 0:
             print("epoch {}:\t{}: {:4f}".format(epoch, opt.loss_func, style_loss[-1]), end="\t\t")
             print(f"Time: {time.time() - start_time}")
             start_time = time.time()
