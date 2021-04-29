@@ -35,7 +35,7 @@ if __name__ == '__main__':
                                 opt.nc, opt.is_cuda)
 
     Generators, Zs = training.train(real_img, out_dir, opt)
-    
+
     print('Done Training')
 
 

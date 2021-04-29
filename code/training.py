@@ -4,10 +4,11 @@ import functions
 import torchvision
 import torch
 import os
+
 import time
 import torch.nn as nn
 import torch.optim as optim
-import matplotlib.pyplot as plt
+import plotting_helpers
 
 def train(real_img, out_dir, opt):
     real_imgs = [real_img]  # TODO-FUTURE created multi-scale images
@@ -144,6 +145,7 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, opt):
         prev = image_pad_func(prev)
 
     # TODO save network?
+    fig = plotting_helpers.plot_loss(style_loss)
     return curr_G, z_opt
 
 
