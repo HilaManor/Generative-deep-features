@@ -18,7 +18,8 @@ def get_arguments():
                                           'Configure the visualisation parameters')
     vis_group.add_argument('--epoch_print', type=int, default=50,
                                help='Amount of epochs to wait before printing status')
-
+    vis_group.add_argument('--epoch_show', type=int, default=400,
+                           help='Amount of epochs to wait before showing mid-image')
 
     gen_hyper_group = parser.add_argument_group('Generators Hyper-parameters Configuration',
                                             'Set the hyper parameters of the generators')

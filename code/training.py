@@ -140,6 +140,8 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
             print("epoch {}:\t{}: {:4f}".format(epoch, opt.loss_func, style_loss[-1]), end="\t\t")
             print(f"Time: {time.time() - start_time}")
             start_time = time.time()
+        if epoch % opt.epoch_show == 0:
+            plotting_helpers.show_im(fake_im)
 
         # update prev
         prev = draw_concat(Generators, 'rand', noise_pad_func, image_pad_func, opt)
