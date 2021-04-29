@@ -29,7 +29,6 @@ def weights_init(m):
 class GeneratorConcatSkip2CleanAdd(nn.Module):
     def __init__(self, opt):
         super(GeneratorConcatSkip2CleanAdd, self).__init__()
-        self.is_cuda = torch.cuda.is_available()
         N = opt.nfc
         self.head = ConvBlock(opt.nc, N, opt.ker_size, opt.padd_size,
                               opt.stride)  # GenConvTransBlock(opt.nc,N,opt.ker_size,opt.padd_size,opt.stride)

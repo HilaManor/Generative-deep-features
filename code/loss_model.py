@@ -48,8 +48,8 @@ def generate_loss_block(vgg, real_img, mode, chosen_layers, opt):
     # TODO: vgg = copy.deepcopy(vgg)
 
     # normalization module
-    normalization = Normalization(opt.normalization_mean.to(opt.device),
-                                  opt.normalization_std.to(opt.device)).to(opt.device)
+    normalization = Normalization(vgg_normalization_mean.to(opt.device),
+                                  vgg_normalization_std.to(opt.device)).to(opt.device)
 
     # an iterable access to or list of content/syle losses
     layers_losses = []
@@ -91,7 +91,7 @@ def generate_loss_block(vgg, real_img, mode, chosen_layers, opt):
 
             loss = loss_f(target_feature, device=opt.device)
             model.add_module(f"{mode.lower()}_loss_{i}", loss)
-            layers_losses.append(loss)
+            layers_losses.append(loss)  # Appends by reference :)
 
     # now we trim off the layers after the last losses
     for i in range(len(model) - 1, -1, -1):

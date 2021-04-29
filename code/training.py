@@ -3,6 +3,8 @@ import loss_model
 import functions
 import torchvision
 import torch
+import os
+import time
 import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
@@ -11,16 +13,24 @@ def train(real_img, out_dir, opt):
     real_imgs = [real_img]  # TODO-FUTURE created multi-scale images
 
     Generators = []
+    Zs = []
 
     # TODO-FUTURE Create SCALES (while)
-    plt.imsave(os.path.join(out_dir, "real_scale.png"))
+    #TODO (there's a bug already) plt.imsave(os.path.join(out_dir, "real_scale.png"))
 
     curr_G = init_generator(opt)
     vgg = torchvision.models.vgg19(pretrained=True).features.to(opt.device).eval()
 
-    G, z_curr = train_single_scale(Gs, curr_G, real_imgs, vgg, opt)
+    start_time = time.time()
+    curr_G, z_curr = train_single_scale(Generators, curr_G, real_imgs, vgg, opt)
+    print(f"{len(Generators)} Scale Training Time: {time.time()-start_time}")
 
-    return G, z_curr
+    [p.requires_grad_(False) for p in curr_G.parameters()]
+    curr_G.eval()
+    Generators.append(curr_G)
+    Zs.append(z_curr)
+
+    return Generators, Zs
 
 
 def init_generator(opt):
@@ -36,7 +46,7 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, opt):
     real_img = real_imgs[len(Generators)]
     opt.nzx = real_img.shape[2]  # Width of image in current scale
     opt.nzy = real_img.shape[3]  # Height of image in current scale
-    # receptive field...
+    # TODO-FUTURE receptive field...
     # the padding amount is determined by the generators amount of layers
     pad_noise = int(((opt.ker_size - 1) * opt.num_layer) / 2)
     pad_image = int(((opt.ker_size - 1) * opt.num_layer) / 2)
@@ -46,7 +56,7 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, opt):
 
     # TODO-FUTURE create noise (and pad it?)
 
-    loss_block, layers_losses = loss_model.generate_loss_block(vgg, real_img, 'pdl', opt.chosen_layers, opt)
+    loss_block, layers_losses = loss_model.generate_loss_block(vgg, real_img, opt.loss_func, opt.chosen_layers, opt)
 
     # Setup Optimizer
     optimizer = optim.Adam(curr_G.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
@@ -78,6 +88,7 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, opt):
     #               --> z_prev = previous generate image FROM KNOWN NOISE
     #   else (not first epoch || not first step)
 
+    start_time = time.time()
     for epoch in range(opt.epochs):
         # z_opt is {Z*, 0, 0, 0, ...}. The specific set of input noise maps
         # which generates the original image xn
@@ -122,6 +133,11 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, opt):
 
             optimizer.step()
         scheduler.step()
+
+        if epoch % 50 == 0:
+            print("epoch {}:\t{}: {:4f}".format(epoch, opt.loss_func, style_loss[-1]), end="\t\t")
+            print(f"Time: {time.time() - start_time}")
+            start_time = time.time()
 
         # update prev
         prev = draw_concat(Generators, 'rand', noise_pad_func, image_pad_func, opt)
