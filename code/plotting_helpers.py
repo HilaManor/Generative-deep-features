@@ -28,10 +28,12 @@ def save_fig(fig, out_dir, opt):
     path = os.path.join(out_dir, base_name + "_fig.png")
     fig.savefig(path)
 
-def show_im(img_tensor):
+def show_im(img_tensor, title=None):
     new_image = img_tensor.detach().to(device='cpu', copy=True)
     new_image = functions.convert_image_np(new_image)
     plt.imshow(new_image)
+    if title:
+        plt.title(title)
     plt.show(block=False)
     plt.pause(0.01)
     return new_image

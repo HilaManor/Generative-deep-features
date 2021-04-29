@@ -141,7 +141,7 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
             print(f"Time: {time.time() - start_time}")
             start_time = time.time()
         if epoch % opt.epoch_show == 0:
-            plotting_helpers.show_im(fake_im)
+            plotting_helpers.show_im(fake_im, title=f'at {epoch} epoch')
 
         # update prev
         prev = draw_concat(Generators, 'rand', noise_pad_func, image_pad_func, opt)
@@ -150,7 +150,7 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
     # TODO save network?
     fig = plotting_helpers.plot_loss(style_loss)
     plotting_helpers.save_fig(fig, out_dir, opt)
-    im = plotting_helpers.show_im(fake_im)
+    im = plotting_helpers.show_im(fake_im, title='Final Image')
     plotting_helpers.save_im(im, out_dir, opt)
 
     return curr_G, z_opt
