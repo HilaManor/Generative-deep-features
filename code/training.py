@@ -143,8 +143,8 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
         rec_loss_arr.append(rec_loss)
 
         if epoch % opt.epoch_print == 0:
-            print(f"epoch {epoch}:\t{opt.loss_func}:%.2f \t Rec: {rec_loss_arr[-1]} \t"
-                  f"Time: %.2f" % (style_loss_arr[-1], time.time() - start_time))
+            print(f"epoch {epoch}:\t{opt.loss_func}:%.2f \t Rec:%.2f \tTime: %.2f" %
+                  (style_loss_arr[-1], rec_loss_arr[-1], time.time() - start_time))
             start_time = time.time()
         if epoch % opt.epoch_show == 0:
             example_fake = curr_G(example_noise, prev)
