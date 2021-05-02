@@ -91,6 +91,9 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
     #               --> z_prev = previous generate image FROM KNOWN NOISE
     #   else (not first epoch || not first step)
 
+    example_noise = functions.generate_noise([1, opt.nzx, opt.nzy]).detach()
+    example_noise = noise_pad_func(example_noise.expand(1, opt.nc, opt.nzx, opt.nzy))
+
     start_time = time.time()
     for epoch in range(opt.epochs):
         # z_opt is {Z*, 0, 0, 0, ...}. The specific set of input noise maps
@@ -147,9 +150,11 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
                   f"Time: {time.time() - start_time}" % style_loss_arr[-1])
             start_time = time.time()
         if epoch % opt.epoch_show == 0:
-            plotting_helpers.show_im(fake_im, title=f'e{epoch} epoch')
+            example_fake = curr_G(example_noise, prev)
+            plotting_helpers.show_im(example_fake, title=f'e{epoch} epoch')
         if epoch % opt.epoch_save == 0:
-            plotting_helpers.save_im(fake_im, out_dir, f'e{epoch}', convert=True)
+            example_fake = curr_G(example_noise, prev)
+            plotting_helpers.save_im(example_fake, out_dir, f'e{epoch}', convert=True)
 
         # update prev
         prev = draw_concat(Generators, 'rand', noise_pad_func, image_pad_func, opt)
