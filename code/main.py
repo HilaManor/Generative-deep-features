@@ -4,6 +4,7 @@ import random
 import os
 import functions
 import training
+from plotting_helpers import generate_out_name
 
 if __name__ == '__main__':
     parser = get_arguments()
@@ -28,13 +29,15 @@ if __name__ == '__main__':
 
     basename = os.path.basename(opt.image_path)
     basename = basename[:basename.rfind('.')]
-    out_dir = os.path.join(opt.output_folder, basename)
-    os.makedirs(out_dir, exist_ok=True)
 
     real_img = functions.read_image(opt.image_path, opt.nc, opt.is_cuda)
     real_img = functions.resize(real_img,
                                 min(opt.max_size / max([real_img.shape[2], real_img.shape[3]]), 1),
                                 opt.nc, opt.is_cuda)
+
+    opt.nzx = real_img.shape[2]
+    out_dir = os.path.join(opt.output_folder, basename, generate_out_name(opt))
+    os.makedirs(out_dir, exist_ok=True)
 
     Generators, Zs = training.train(real_img, out_dir, opt)
 
