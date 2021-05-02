@@ -98,14 +98,17 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
     for epoch in range(opt.epochs):
         # z_opt is {Z*, 0, 0, 0, ...}. The specific set of input noise maps
         # which generates the original image xn
-        z_opt = functions.generate_noise([1, opt.nzx, opt.nzy])
-        z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
+        # z_opt = functions.generate_noise([1, opt.nzx, opt.nzy])
+        # z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
 
         # noise_ is the input noise (before adding the image or changing the variance)
-        noise_ = functions.generate_noise([1, opt.nzx, opt.nzy], device=opt.device)
-        noise_ = noise_pad_func(noise_.expand(1, opt.nc, opt.nzx, opt.nzy))
+        # noise_ = functions.generate_noise([1, opt.nzx, opt.nzy], device=opt.device)
+        # noise_ = noise_pad_func(noise_.expand(1, opt.nc, opt.nzx, opt.nzy))
         # Notice that the noise for the 3 RGB channels is the same
         # TODO-FUTURE z_opt should only be generated in 1st scale
+
+        z_opt = example_noise
+        noise_ = example_noise
 
         noise = noise_
         # TODO-FUTURE if not first scale noise = noise_amp * noise_ + prev
@@ -163,7 +166,8 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
     # TODO save network?
     fig = plotting_helpers.plot_losses(style_loss_arr, rec_loss_arr)
     plotting_helpers.save_fig(fig, out_dir, 'fin')
-    im = plotting_helpers.show_im(fake_im, title='Final Image')
+    example_fake = curr_G(example_noise, prev)
+    im = plotting_helpers.show_im(example_fake, title='Final Image')
     plotting_helpers.save_im(im, out_dir, 'fin')
 
     return curr_G, z_opt
