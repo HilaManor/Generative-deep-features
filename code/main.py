@@ -4,6 +4,7 @@ import random
 import os
 import functions
 import training
+from plotting_helpers import generate_out_name
 
 if __name__ == '__main__':
     parser = get_arguments()
@@ -11,7 +12,7 @@ if __name__ == '__main__':
 
     opt.loss_func = 'pdl'
     #opt.loss_func = 'style'
-    opt.layers_weights = [1, 0.75, 0.5, 0.25]
+    opt.layers_weights = [1, 0.75, 0.2, 0.2]
     # opt.layers_weights = [1, 1, 1, 1]
     opt.chosen_layers = ['conv1_1', 'conv2_1', 'conv3_1', 'conv4_1']
     if torch.cuda.is_available() and not opt.is_cuda:
@@ -28,13 +29,15 @@ if __name__ == '__main__':
 
     basename = os.path.basename(opt.image_path)
     basename = basename[:basename.rfind('.')]
-    out_dir = os.path.join(opt.output_folder, basename)
-    os.makedirs(out_dir, exist_ok=True)
 
     real_img = functions.read_image(opt.image_path, opt.nc, opt.is_cuda)
     real_img = functions.resize(real_img,
                                 min(opt.max_size / max([real_img.shape[2], real_img.shape[3]]), 1),
                                 opt.nc, opt.is_cuda)
+
+    opt.nzx = real_img.shape[2]
+    out_dir = os.path.join(opt.output_folder, basename, generate_out_name(opt))
+    os.makedirs(out_dir, exist_ok=True)
 
     Generators, Zs = training.train(real_img, out_dir, opt)
 

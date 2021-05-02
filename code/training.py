@@ -91,18 +91,24 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
     #               --> z_prev = previous generate image FROM KNOWN NOISE
     #   else (not first epoch || not first step)
 
+    example_noise = functions.generate_noise([1, opt.nzx, opt.nzy]).detach()
+    example_noise = noise_pad_func(example_noise.expand(1, opt.nc, opt.nzx, opt.nzy))
+
     start_time = time.time()
     for epoch in range(opt.epochs):
         # z_opt is {Z*, 0, 0, 0, ...}. The specific set of input noise maps
         # which generates the original image xn
-        z_opt = functions.generate_noise([1, opt.nzx, opt.nzy])
-        z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
+        # z_opt = functions.generate_noise([1, opt.nzx, opt.nzy])
+        # z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
 
         # noise_ is the input noise (before adding the image or changing the variance)
-        noise_ = functions.generate_noise([1, opt.nzx, opt.nzy], device=opt.device)
-        noise_ = noise_pad_func(noise_.expand(1, opt.nc, opt.nzx, opt.nzy))
+        # noise_ = functions.generate_noise([1, opt.nzx, opt.nzy], device=opt.device)
+        # noise_ = noise_pad_func(noise_.expand(1, opt.nc, opt.nzx, opt.nzy))
         # Notice that the noise for the 3 RGB channels is the same
         # TODO-FUTURE z_opt should only be generated in 1st scale
+
+        z_opt = example_noise
+        noise_ = example_noise
 
         noise = noise_
         # TODO-FUTURE if not first scale noise = noise_amp * noise_ + prev
@@ -143,21 +149,26 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
         rec_loss_arr.append(rec_loss)
 
         if epoch % opt.epoch_print == 0:
-            print("epoch {}:\t{}: {:4f}".format(epoch, opt.loss_func, style_loss_arr[-1]), end="\t\t")
-            print(f"Rec: {rec_loss_arr[-1]} \tTime: {time.time() - start_time}")
+            print(f"epoch {epoch}:\t{opt.loss_func}:%.2f \t Rec: {rec_loss_arr[-1]} \t"
+                  f"Time: %.2f" % (style_loss_arr[-1], time.time() - start_time))
             start_time = time.time()
         if epoch % opt.epoch_show == 0:
-            plotting_helpers.show_im(fake_im, title=f'at {epoch} epoch')
+            example_fake = curr_G(example_noise, prev)
+            plotting_helpers.show_im(example_fake, title=f'e{epoch} epoch')
+        if epoch % opt.epoch_save == 0:
+            example_fake = curr_G(example_noise, prev)
+            plotting_helpers.save_im(example_fake, out_dir, f'e{epoch}', convert=True)
 
         # update prev
         prev = draw_concat(Generators, 'rand', noise_pad_func, image_pad_func, opt)
         prev = image_pad_func(prev)
 
     # TODO save network?
-    fig = plotting_helpers.plot_loss(style_loss_arr)
-    plotting_helpers.save_fig(fig, out_dir, opt)
-    im = plotting_helpers.show_im(fake_im, title='Final Image')
-    plotting_helpers.save_im(im, out_dir, opt)
+    fig = plotting_helpers.plot_losses(style_loss_arr, rec_loss_arr)
+    plotting_helpers.save_fig(fig, out_dir, 'fin')
+    example_fake = curr_G(example_noise, prev)
+    im = plotting_helpers.show_im(example_fake, title='Final Image')
+    plotting_helpers.save_im(im, out_dir, 'fin')
 
     return curr_G, z_opt
 
