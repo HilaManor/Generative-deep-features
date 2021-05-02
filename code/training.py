@@ -143,8 +143,8 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
         rec_loss_arr.append(rec_loss)
 
         if epoch % opt.epoch_print == 0:
-            print("epoch {}:\t{}: {:4f}".format(epoch, opt.loss_func, style_loss_arr[-1]), end="\t\t")
-            print(f"Rec: {rec_loss_arr[-1]} \tTime: {time.time() - start_time}")
+            print(f"epoch {epoch}:\t{opt.loss_func}:%.2f \t Rec: {rec_loss_arr[-1]} \t"
+                  f"Time: {time.time() - start_time}" % style_loss_arr[-1])
             start_time = time.time()
         if epoch % opt.epoch_show == 0:
             plotting_helpers.show_im(fake_im, title=f'e{epoch} epoch')
