@@ -5,7 +5,7 @@ import torch
 import functions
 
 
-def plot_loss(style_losses, rec_losses, ignore_first_iter=500):
+def plot_losses(style_losses, rec_losses, ignore_first_iter=500):
     fig = plt.figure(figsize=(16, 10))
     fig.add_subplot(2, 2, 1)
     plt.plot(np.array(style_losses) + np.array(rec_losses))
