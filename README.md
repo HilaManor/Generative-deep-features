@@ -14,3 +14,4 @@ Supervised by Tamar Rott-Shaham
 Q1 - How to init noise for image? The color channels are correlated...
 Q2 - It seems that the weights of the style loss is always 1.
 
+Rec Loss is affected by image size!
