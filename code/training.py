@@ -91,24 +91,21 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
     #               --> z_prev = previous generate image FROM KNOWN NOISE
     #   else (not first epoch || not first step)
 
+    # z_opt is {Z*, 0, 0, 0, ...}. The specific set of input noise maps
+    # which generates the original image xn
+    z_opt = functions.generate_noise([1, opt.nzx, opt.nzy])
+    z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
+    # Notice that the noise for the 3 RGB channels is the same
+
     example_noise = functions.generate_noise([1, opt.nzx, opt.nzy]).detach()
     example_noise = noise_pad_func(example_noise.expand(1, opt.nc, opt.nzx, opt.nzy))
 
     start_time = time.time()
     for epoch in range(opt.epochs):
-        # z_opt is {Z*, 0, 0, 0, ...}. The specific set of input noise maps
-        # which generates the original image xn
-        # z_opt = functions.generate_noise([1, opt.nzx, opt.nzy])
-        # z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
-
         # noise_ is the input noise (before adding the image or changing the variance)
-        # noise_ = functions.generate_noise([1, opt.nzx, opt.nzy], device=opt.device)
-        # noise_ = noise_pad_func(noise_.expand(1, opt.nc, opt.nzx, opt.nzy))
+        noise_ = functions.generate_noise([1, opt.nzx, opt.nzy], device=opt.device)
+        noise_ = noise_pad_func(noise_.expand(1, opt.nc, opt.nzx, opt.nzy))
         # Notice that the noise for the 3 RGB channels is the same
-        # TODO-FUTURE z_opt should only be generated in 1st scale
-
-        z_opt = example_noise
-        noise_ = example_noise
 
         noise = noise_
         # TODO-FUTURE if not first scale noise = noise_amp * noise_ + prev
@@ -131,8 +128,6 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
 
             if opt.alpha != 0:
                 Z_opt = z_opt + z_prev
-                #               --> in first scale: z_prev=0, z_opt random every iter
-                #               --> else: z_prev = previous generate image FROM KNOWN NOISE
                 #               -->         z_opt = 0 ({Z*,0,0,0,0,0})
                 # Todo-future:    Z_opt = noise_amp * z_opt + z_prev
                 loss_criterion = nn.MSELoss()
@@ -140,8 +135,7 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
                 rec_loss.backward(retain_graph=True)
                 rec_loss = rec_loss.detach()
             else:
-                Z_opt = z_opt   #(remember, only in first scale the noise changes every ITER)
-                                #   --> = 0 in all but first scale
+                Z_opt = z_opt
                 rec_loss = 0
 
             optimizer.step()
@@ -155,9 +149,13 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
         if epoch % opt.epoch_show == 0:
             example_fake = curr_G(example_noise, prev)
             plotting_helpers.show_im(example_fake, title=f'e{epoch} epoch')
+            z_opt_fake = curr_G(z_opt, prev)
+            plotting_helpers.show_im(z_opt_fake, title=f'Zopt_e{epoch} epoch')
         if epoch % opt.epoch_save == 0:
             example_fake = curr_G(example_noise, prev)
             plotting_helpers.save_im(example_fake, out_dir, f'e{epoch}', convert=True)
+            z_opt_fake = curr_G(z_opt, prev)
+            plotting_helpers.save_im(z_opt_fake, out_dir, f'Zopt_fin', convert=True)
 
         # update prev
         prev = draw_concat(Generators, 'rand', noise_pad_func, image_pad_func, opt)
@@ -167,6 +165,8 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
     fig = plotting_helpers.plot_losses(style_loss_arr, rec_loss_arr)
     plotting_helpers.save_fig(fig, out_dir, 'fin')
     example_fake = curr_G(example_noise, prev)
+    im = plotting_helpers.show_im(example_fake, title='Final Image')
+    plotting_helpers.save_im(im, out_dir, 'fin')
     im = plotting_helpers.show_im(example_fake, title='Final Image')
     plotting_helpers.save_im(im, out_dir, 'fin')
 
