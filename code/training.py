@@ -1,14 +1,15 @@
 import models
 import loss_model
-import image_processing
 import torchvision
 import torch
 
+import math
 import time
 import torch.nn as nn
 import torch.optim as optim
 import plotting_helpers
 import image_processing
+import output_handler
 
 def train(out_dir, real_img, scale_factor, total_scales, opt):
     real_imgs = image_processing.create_real_imgs_pyramid(real_img, scale_factor, total_scales, opt)
@@ -17,11 +18,14 @@ def train(out_dir, real_img, scale_factor, total_scales, opt):
     Zs = []
 
     for scale in range(total_scales):
+        curr_nfc = min(opt.nfc * pow(2, math.floor(scale / 4)), 128)
+        curr_min_nfc = min(opt.min_nfc * pow(2, math.floor(scale / 4)), 128)
 
-    # TODO-FUTURE Create SCALES (while)
-    #TODO (there's a bug already) plt.imsave(os.path.join(out_dir, "real_scale.png"))
+        scale_out_dir = output_handler.gen_scale_dir(out_dir, scale)
+        # TODO-FUTURE Create SCALES (while)
+        #TODO (there's a bug already) plt.imsave(os.path.join(out_dir, "real_scale.png"))
 
-    curr_G = init_generator(opt)
+        curr_G = init_generator(curr_nfc, curr_min_nfc, opt)
     vgg = torchvision.models.vgg19(pretrained=True).features.to(opt.device).eval()
 
     start_time = time.time()
@@ -37,9 +41,10 @@ def train(out_dir, real_img, scale_factor, total_scales, opt):
     return Generators, Zs
 
 
-def init_generator(opt):
-    netG = models.GeneratorConcatSkip2CleanAdd(opt.nfc, opt.nc, opt.ker_size, opt.padd_size, opt.stride, opt.num_layer, opt.min_nfc).to(opt.device)
-    #netG = models.GeneratorConcatSkip2CleanAdd(opt).to(opt.device)
+def init_generator(curr_nfc, curr_min_nfc, opt):
+    netG = models.GeneratorConcatSkip2CleanAdd(curr_nfc, opt.nc, opt.ker_size, opt.padd_size,
+                                               opt.stride, opt.num_layer,
+                                               curr_min_nfc).to(opt.device)
     netG.apply(models.weights_init)
     # TODO load from file?
     print(netG)

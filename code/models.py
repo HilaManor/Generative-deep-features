@@ -27,8 +27,9 @@ def weights_init(m):
 
 
 class GeneratorConcatSkip2CleanAdd(nn.Module):
-    def __init__(self, N, nc, ker_size, padd_size, stride, num_layers, min_nfc):
+    def __init__(self, nfc, nc, ker_size, padd_size, stride, num_layers, min_nfc):
         super(GeneratorConcatSkip2CleanAdd, self).__init__()
+        N = nfc
         self.head = ConvBlock(nc, N, ker_size, padd_size, stride)
         self.body = nn.Sequential()
         for i in range(num_layers - 2):

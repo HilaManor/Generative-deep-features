@@ -2,7 +2,7 @@ from config import get_arguments
 import torch
 import random
 import os
-import image_processing
+import image_processing, image_helpers
 import training
 from plotting_helpers import gen_unique_out_dir_path
 
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     basename = os.path.basename(opt.image_path)
     basename = basename[:basename.rfind('.')]
 
-    real_img = image_processing.read_image(opt.image_path, opt.nc, opt.is_cuda)
+    real_img = image_helpers.read_image(opt.image_path, opt.nc, opt.is_cuda)
     real_resized, scale_factor, total_scales = image_processing.preprocess_image(real_img, opt)
 
     opt.nzx = real_resized.shape[2]
