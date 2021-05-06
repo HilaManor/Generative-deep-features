@@ -38,7 +38,8 @@ def train(out_dir, real_img, scale_factor, total_scales, opt):
 
 
 def init_generator(opt):
-    netG = models.GeneratorConcatSkip2CleanAdd(opt).to(opt.device)
+    netG = models.GeneratorConcatSkip2CleanAdd(opt.nfc, opt.nc, opt.ker_size, opt.padd_size, opt.stride, opt.num_layer, opt.min_nfc).to(opt.device)
+    #netG = models.GeneratorConcatSkip2CleanAdd(opt).to(opt.device)
     netG.apply(models.weights_init)
     # TODO load from file?
     print(netG)
