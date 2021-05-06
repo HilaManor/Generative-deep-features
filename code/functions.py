@@ -7,6 +7,7 @@ import numpy as np
 from skimage import io as img
 from skimage import color
 import imresize
+import math
 
 def generate_noise(size,num_samp=1,device='cuda',type='gaussian', scale=1):
     if type == 'gaussian':
@@ -89,3 +90,29 @@ def convert_image_np(inp):
 
     inp = np.clip(inp,0,1)
     return inp
+
+
+def preprocess_image(real_img, opt):
+    n_scales_curr2min = math.ceil(math.log(opt.min_size /
+                                           (min(real_img.shape[2], real_img.shape[3])),
+                                           opt.scale_factor)) + 1
+    n_scales_curr2max = math.ceil(math.log(min([opt.max_size, max([real_img.shape[2], real_img.shape[3]])]) /
+                                           max([real_img.shape[2], real_img.shape[3]]), opt.scale_factor))
+    total_downsampling_scales = n_scales_curr2min - n_scales_curr2max
+    initial_resize_scale = min(opt.max_size / max([real_img.shape[2], real_img.shape[3]]), 1)
+
+    real_resized = resize(real_img, initial_resize_scale, opt.nc, opt.is_cuda)
+
+    scale_factor = math.pow(opt.min_size/(min(real_resized.shape[2], real_resized.shape[3])),
+                            1 / total_downsampling_scales)
+    total_scales = total_downsampling_scales + 1
+    return real_resized, scale_factor, total_scales
+
+def create_real_imgs_pyramid(real_img, scale_factor, total_scales, opt):
+    pyramid = []
+    # TODO: real = real[:,0:3,:,:]
+    for scale_power in reversed(range(total_scales)):
+        scale = math.pow(scale_factor, scale_power)
+        resized_real = resize(real_img, scale, opt.nc, opt.is_cuda)
+        pyramid.append(resized_real)
+    return pyramid

@@ -3,18 +3,20 @@ import loss_model
 import functions
 import torchvision
 import torch
-import os
 
 import time
 import torch.nn as nn
 import torch.optim as optim
 import plotting_helpers
+import functions
 
-def train(real_img, out_dir, opt):
-    real_imgs = [real_img]  # TODO-FUTURE created multi-scale images
+def train(out_dir, real_img, scale_factor, total_scales, opt):
+    real_imgs = functions.create_real_imgs_pyramid(real_img, scale_factor, total_scales, opt)
 
     Generators = []
     Zs = []
+
+    for scale in range(total_scales):
 
     # TODO-FUTURE Create SCALES (while)
     #TODO (there's a bug already) plt.imsave(os.path.join(out_dir, "real_scale.png"))
