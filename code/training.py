@@ -14,31 +14,34 @@ import output_handler
 def train(out_dir, real_img, scale_factor, total_scales, opt):
     real_imgs = image_processing.create_real_imgs_pyramid(real_img, scale_factor, total_scales, opt)
 
-    Generators = []
+    trained_generators = []
     Zs = []
-
+    vgg = torchvision.models.vgg19(pretrained=True).features.to(opt.device).eval()
     for scale in range(total_scales):
         curr_nfc = min(opt.nfc * pow(2, math.floor(scale / 4)), 128)
         curr_min_nfc = min(opt.min_nfc * pow(2, math.floor(scale / 4)), 128)
 
         scale_out_dir = output_handler.gen_scale_dir(out_dir, scale)
-        # TODO-FUTURE Create SCALES (while)
-        #TODO (there's a bug already) plt.imsave(os.path.join(out_dir, "real_scale.png"))
+
+        plotting_helpers.save_im(real_imgs[scale], scale_out_dir, f"real_scale.png", convert=True)
 
         curr_G = init_generator(curr_nfc, curr_min_nfc, opt)
-    vgg = torchvision.models.vgg19(pretrained=True).features.to(opt.device).eval()
 
-    start_time = time.time()
-    ## TODO-FUTURE - use diffrent dir for each scale
-    curr_G, z_curr = train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt)
-    print(f"{len(Generators)} Scale Training Time: {time.time()-start_time}")
+        # TODO load state dict ??
 
-    [p.requires_grad_(False) for p in curr_G.parameters()]
-    curr_G.eval()
-    Generators.append(curr_G)
-    Zs.append(z_curr)
+        start_time = time.time()
+        curr_G, z_curr = train_single_scale(trained_generators, Zs, curr_G, real_imgs, vgg, scale_out_dir, opt)
+        print(f"{scale} Scale Training Time: {time.time()-start_time}")
 
-    return Generators, Zs
+        [p.requires_grad_(False) for p in curr_G.parameters()]
+        curr_G.eval()
+        trained_generators.append(curr_G)
+        Zs.append(z_curr)
+
+        # TODO save trained
+        # TODO -check del curr_G?
+
+    return trained_generators, Zs
 
 
 def init_generator(curr_nfc, curr_min_nfc, opt):
@@ -52,8 +55,8 @@ def init_generator(curr_nfc, curr_min_nfc, opt):
 
 
 
-def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
-    real_img = real_imgs[len(Generators)]
+def train_single_scale(trained_generators, Zs, curr_G, real_imgs, vgg, out_dir, opt):
+    real_img = real_imgs[len(trained_generators)]
     opt.nzx = real_img.shape[2]  # Width of image in current scale
     opt.nzy = real_img.shape[3]  # Height of image in current scale
     # TODO-FUTURE receptive field...
@@ -166,7 +169,7 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
             plotting_helpers.save_im(z_opt_fake, out_dir, f'Zopt_fin', convert=True)
 
         # update prev
-        prev = draw_concat(Generators, 'rand', noise_pad_func, image_pad_func, opt)
+        prev = draw_concat(trained_generators, 'rand', noise_pad_func, image_pad_func, opt)
         prev = image_pad_func(prev)
 
     # TODO save network?
