@@ -17,8 +17,14 @@ Q2 - It seems that the weights of the style loss is always 1.
 
 ## Insights
 ## 02/05/21
-1. Rec Loss is affected by image size!
-2. We achieve similar result w.r.t PDL style-transfer using CNN. 
-3. When alpha is high, we don't get squares. (?)
+* **Image size matters**
+  * ~~When alpha is high, we don't get squares~~
+  * Probably the receptive field of the generator isn't big enough
+  * Probably there are too little parameters
+  * We achieved similar result w.r.t pixel-trained using CNN, and applying `alpha=0`
+*  Rec Loss value is affected by image size! (needed alpha changes with image size)
+*  
+2. 
+3. 
 4. Sanity check worked :) it depened on image size ( only at small scale, when we use fixed noise).
 5. 
