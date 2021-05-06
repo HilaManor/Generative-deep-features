@@ -27,20 +27,18 @@ def weights_init(m):
 
 
 class GeneratorConcatSkip2CleanAdd(nn.Module):
-    def __init__(self, opt):
+    def __init__(self, N, nc, ker_size, padd_size, stride, num_layers, min_nfc):
         super(GeneratorConcatSkip2CleanAdd, self).__init__()
-        N = opt.nfc
-        self.head = ConvBlock(opt.nc, N, opt.ker_size, opt.padd_size,
-                              opt.stride)  # GenConvTransBlock(opt.nc,N,opt.ker_size,opt.padd_size,opt.stride)
+        self.head = ConvBlock(nc, N, ker_size, padd_size, stride)
         self.body = nn.Sequential()
-        for i in range(opt.num_layer - 2):
-            N = int(opt.nfc / pow(2, (i + 1)))
-            block = ConvBlock(max(2 * N, opt.min_nfc), max(N, opt.min_nfc), opt.ker_size,
-                              opt.padd_size, opt.stride)
+        for i in range(num_layers - 2):
+            N = int(nfc / pow(2, (i + 1)))
+            block = ConvBlock(max(2 * N, min_nfc), max(N, min_nfc), ker_size,
+                              padd_size, stride)
             self.body.add_module('block%d' % (i + 1), block)
         self.tail = nn.Sequential(
-            nn.Conv2d(max(N, opt.min_nfc), opt.nc, kernel_size=opt.ker_size, stride=opt.stride,
-                      padding=opt.padd_size),
+            nn.Conv2d(max(N, min_nfc), nc, kernel_size=ker_size, stride=stride,
+                      padding=padd_size),
             nn.Tanh()
         )
 
