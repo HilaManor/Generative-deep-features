@@ -25,5 +25,5 @@ Q2 - It seems that the weights of the style loss is always 1.
 *  Rec Loss value is affected by image size! (needed alpha changes with image size)
 * when introducting alpha, squares re-appear - with really big alpha we can get a reconstruction of the original image
   * But still get an original texture for random noise
-  * When we made the alpha bigger (to get it to the same order of the style loss) the style loss also got bigger :(
+  * When we made the alpha bigger (to get it to the same order of the style loss) the style loss also got bigger 😞
 * ❓ Why is the noise in the first level fixed, not as stated in the paper?
