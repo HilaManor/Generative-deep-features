@@ -14,4 +14,11 @@ Supervised by Tamar Rott-Shaham
 Q1 - How to init noise for image? The color channels are correlated...
 Q2 - It seems that the weights of the style loss is always 1.
 
-Rec Loss is affected by image size!
+
+## Insights
+## 02/05/21
+1. Rec Loss is affected by image size!
+2. We achieve similar result w.r.t PDL style-transfer using CNN. 
+3. When alpha is high, we don't get squares. (?)
+4. Sanity check worked :) it depened on image size ( only at small scale, when we use fixed noise).
+5. 
