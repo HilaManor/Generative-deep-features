@@ -1,6 +1,6 @@
 import models
 import loss_model
-import functions
+import image_processing
 import torchvision
 import torch
 
@@ -8,10 +8,10 @@ import time
 import torch.nn as nn
 import torch.optim as optim
 import plotting_helpers
-import functions
+import image_processing
 
 def train(out_dir, real_img, scale_factor, total_scales, opt):
-    real_imgs = functions.create_real_imgs_pyramid(real_img, scale_factor, total_scales, opt)
+    real_imgs = image_processing.create_real_imgs_pyramid(real_img, scale_factor, total_scales, opt)
 
     Generators = []
     Zs = []
@@ -95,17 +95,17 @@ def train_single_scale(Generators, curr_G, real_imgs, vgg, out_dir, opt):
 
     # z_opt is {Z*, 0, 0, 0, ...}. The specific set of input noise maps
     # which generates the original image xn
-    z_opt = functions.generate_noise([1, opt.nzx, opt.nzy])
+    z_opt = image_processing.generate_noise([1, opt.nzx, opt.nzy])
     z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
     # Notice that the noise for the 3 RGB channels is the same
 
-    example_noise = functions.generate_noise([1, opt.nzx, opt.nzy]).detach()
+    example_noise = image_processing.generate_noise([1, opt.nzx, opt.nzy]).detach()
     example_noise = noise_pad_func(example_noise.expand(1, opt.nc, opt.nzx, opt.nzy))
 
     start_time = time.time()
     for epoch in range(opt.epochs):
         # noise_ is the input noise (before adding the image or changing the variance)
-        noise_ = functions.generate_noise([1, opt.nzx, opt.nzy], device=opt.device)
+        noise_ = image_processing.generate_noise([1, opt.nzx, opt.nzy], device=opt.device)
         noise_ = noise_pad_func(noise_.expand(1, opt.nc, opt.nzx, opt.nzy))
         # Notice that the noise for the 3 RGB channels is the same
 
