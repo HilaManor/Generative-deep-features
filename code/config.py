@@ -14,6 +14,7 @@ def get_arguments():
                            help='Number of channels for the images')
     gen_group.add_argument('--manual_seed', type=int, help='Set a manual seed')
 
+    # ~~~~~~~~~~~~~~~~~~ Visualisation Group ~~~~~~~~~~~~~~~~~~~~
     vis_group = parser.add_argument_group('Visualisation Configuration',
                                           'Configure the visualisation parameters')
     vis_group.add_argument('--epoch_print', type=int, default=50,
@@ -23,6 +24,7 @@ def get_arguments():
     vis_group.add_argument('--epoch_save', type=int, default=300,
                            help='Amount of epochs to wait before saving mid-image')
 
+    # ~~~~~~~~~~~~~~~~~~ Generators HyperParameters Group ~~~~~~~~~~~~~~~~~~~~
     gen_hyper_group = parser.add_argument_group('Generators Hyper-parameters Configuration',
                                             'Set the hyper parameters of the generators')
     gen_hyper_group.add_argument('--ker_size', type=int, default=3, help='kernel size')
@@ -35,7 +37,7 @@ def get_arguments():
     gen_hyper_group.add_argument('--padd_size', type=int, default=0, help='Net pad size')
     gen_hyper_group.add_argument('--stride', default=1, help='stride')
 
-
+    # ~~~~~~~~~~~~~~~~~~ Optimizers HyperParameters Group ~~~~~~~~~~~~~~~~~~~~
     opt_hyper_group = parser.add_argument_group('Optimizers Hyper-parameters Configuration',
                                                 'Set the hyper parameters of the optimization process')
     opt_hyper_group.add_argument('--epochs', type=int, default=2000,
@@ -46,14 +48,14 @@ def get_arguments():
     opt_hyper_group.add_argument('--Gsteps', type=int, default=1, help='Generator inner steps')  # TODO 3
     opt_hyper_group.add_argument('--alpha', type=float, default=10, help='reconstruction loss weight')
 
-
+    # ~~~~~~~~~~~~~~~~~~ Pyramid Group ~~~~~~~~~~~~~~~~~~~~
     pyrmaid_group = parser.add_argument_group('Pyramid Configuration',
                                               'Configure the generators pyramid architecture')
     pyrmaid_group.add_argument('--min_size', type=int, help='image minimal size at the coarser scale',
                         default=25)
     pyrmaid_group.add_argument('--max_size', type=int, help='image minimal size at the coarser scale',
                         default=250)
-
-
+    pyrmaid_group.add_argument('--scale_factor', type=float, default=0.75, help='pyramid scale factor')
+    pyrmaid_group.add_argument('--noise_amp', type=float, default=0.1, help='addative noise cont weight')
 
     return parser

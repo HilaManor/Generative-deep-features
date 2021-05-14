@@ -67,8 +67,6 @@ def train_single_scale(trained_generators, Zs, curr_G, real_imgs, vgg, out_dir, 
     noise_pad_func = nn.ZeroPad2d(int(pad_noise))
     image_pad_func = nn.ZeroPad2d(int(pad_image))
 
-    # TODO-FUTURE create noise (and pad it?)
-
     loss_block, layers_losses = loss_model.generate_loss_block(vgg, real_img, opt.loss_func, opt.chosen_layers, opt)
 
     # Setup Optimizer
@@ -76,7 +74,6 @@ def train_single_scale(trained_generators, Zs, curr_G, real_imgs, vgg, out_dir, 
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[600,1500,2600],
                                                gamma=opt.gamma)
 
-    # TODO arrays for errors for graphs
     style_loss_arr = []
     rec_loss_arr = []
 
@@ -104,8 +101,12 @@ def train_single_scale(trained_generators, Zs, curr_G, real_imgs, vgg, out_dir, 
 
     # z_opt is {Z*, 0, 0, 0, ...}. The specific set of input noise maps
     # which generates the original image xn
-    z_opt = image_processing.generate_noise([1, opt.nzx, opt.nzy])
-    z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
+    if len(trained_generators):
+        z_opt = image_processing.generate_noise([opt.nc, opt.nzx, opt.nzy], device=opt.device)
+        z_opt = noise_pad_func(torch.full(z_opt.shape, 0, device=opt.device))
+    else:
+        z_opt = image_processing.generate_noise([1, opt.nzx, opt.nzy], device=opt.is_cuda)
+        z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
     # Notice that the noise for the 3 RGB channels is the same
 
     example_noise = image_processing.generate_noise([1, opt.nzx, opt.nzy]).detach()
@@ -118,8 +119,11 @@ def train_single_scale(trained_generators, Zs, curr_G, real_imgs, vgg, out_dir, 
         noise_ = noise_pad_func(noise_.expand(1, opt.nc, opt.nzx, opt.nzy))
         # Notice that the noise for the 3 RGB channels is the same
 
-        noise = noise_
-        # TODO-FUTURE if not first scale noise = noise_amp * noise_ + prev
+        # todo - think if separation is necessary
+        if len(trained_generators):
+            noise = noise_*noise_amp + prev
+        else:
+            noise = noise_
 
 
         # TODO-THINK for every step in G steps
@@ -134,13 +138,9 @@ def train_single_scale(trained_generators, Zs, curr_G, real_imgs, vgg, out_dir, 
             style_loss_arr.append(loss.detach())
             loss.backward(retain_graph=True)
 
-            # TODO-FUTUE implement reconstruction-loss using alpha (We want to ensure that there exists a specific set of input
-            #  noise maps, which generates the original image x)
-
             if opt.alpha != 0:
-                Z_opt = z_opt + z_prev
+                Z_opt = noise_amp*z_opt + z_prev
                 #               -->         z_opt = 0 ({Z*,0,0,0,0,0})
-                # Todo-future:    Z_opt = noise_amp * z_opt + z_prev
                 loss_criterion = nn.MSELoss()
                 rec_loss = opt.alpha * loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
                 rec_loss.backward(retain_graph=True)

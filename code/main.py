@@ -4,7 +4,7 @@ import random
 import os
 import image_processing, image_helpers
 import training
-from plotting_helpers import gen_unique_out_dir_path
+from output_handler import gen_unique_out_dir_path
 
 if __name__ == '__main__':
     parser = get_arguments()
