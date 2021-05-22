@@ -33,7 +33,7 @@ def train(out_dir, real_img, scale_factor, total_scales, opt):
 
         start_time = time.time()
         curr_G, z_curr, curr_noise_amp = train_single_scale(trained_generators, Zs, noise_amps,
-                                                            Curr_G, real_imgs, vgg, scale_out_dir,
+                                                            curr_G, real_imgs, vgg, scale_out_dir,
                                                             scale_factor, opt)
         print(f"{scale} Scale Training Time: {time.time()-start_time}")
 
@@ -93,7 +93,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         RMSE = torch.sqrt(criterion(real_img, z_prev))
         noise_amp = opt.noise_amp * RMSE
         z_prev = image_pad_func(z_prev)
-        z_opt = noise_pad_func(torch.full([opt.nc, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device))
+        z_opt = noise_pad_func(torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, dtype=torch.float32, device=opt.device))
     else:
         prev = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
         # TODO in_s = prev
@@ -101,7 +101,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         z_prev = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
         z_prev = noise_pad_func(z_prev)
         noise_amp = 1
-        z_opt = image_processing.generate_noise([1, opt.nzx, opt.nzy], device=opt.is_cuda)
+        z_opt = image_processing.generate_noise([1, opt.nzx, opt.nzy], device=opt.device)
         z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
         # Notice that the noise for the 3 RGB channels is the same
 
@@ -151,13 +151,13 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         if epoch % opt.epoch_show == 0:
             example_fake = curr_G(example_noise, prev)
             plotting_helpers.show_im(example_fake, title=f'e{epoch} epoch')
-            z_opt_fake = curr_G(z_opt, prev)
+            z_opt_fake = curr_G(z_opt, z_prev)
             plotting_helpers.show_im(z_opt_fake, title=f'Zopt_e{epoch} epoch')
         if epoch % opt.epoch_save == 0:
             example_fake = curr_G(example_noise, prev)
             plotting_helpers.save_im(example_fake, out_dir, f'e{epoch}', convert=True)
-            z_opt_fake = curr_G(z_opt, prev)
-            plotting_helpers.save_im(z_opt_fake, out_dir, f'Zopt_fin', convert=True)
+            z_opt_fake = curr_G(z_opt, z_prev)
+            plotting_helpers.save_im(z_opt_fake, out_dir, f'Zopt_e{epoch}', convert=True)
 
         # update prev
         prev = draw_concat(trained_generators, Zs, real_imgs, noise_amps, 'rand', noise_pad_func,
@@ -170,8 +170,9 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
     example_fake = curr_G(example_noise, prev)
     im = plotting_helpers.show_im(example_fake, title='Final Image')
     plotting_helpers.save_im(im, out_dir, 'fin')
-    im = plotting_helpers.show_im(example_fake, title='Final Image')
-    plotting_helpers.save_im(im, out_dir, 'fin')
+    z_opt_fake = curr_G(z_opt, z_prev)
+    im = plotting_helpers.show_im(z_opt_fake, title='Final Zopt Image')
+    plotting_helpers.save_im(im, out_dir, 'zopt_fin')
 
     return curr_G, z_opt, noise_amp
 
@@ -182,12 +183,19 @@ def draw_concat(trained_generators, Zs, real_imgs, noise_amps, mode, noise_pad_f
     if len(trained_generators):
         if mode == 'rand':
             pad_noise = int(((opt.ker_size-1)*opt.num_layer)/2)
-            z = image_processing.generate_noise([1, Zs[0].shape[2] - 2*pad_noise,
-                                                 Zs[0].shape[3] - 2*pad_noise], device=opt.device)
-            z = z.exapnd(1, 3, z.shape[2], z.shape[3])
-            for gen, Z_opt, cur_real_im, next_real_im, noise_amp in zip(trained_generators, Zs,
-                                                                        real_imgs, real_imgs[1:],
-                                                                        noise_amps):
+
+            for i, (gen, Z_opt, cur_real_im, next_real_im, noise_amp) in enumerate(zip(
+                    trained_generators, Zs, real_imgs, real_imgs[1:], noise_amps)):
+                if i:
+                    z = image_processing.generate_noise([opt.nc, Z_opt.shape[2] - 2 * pad_noise,
+                                                         Z_opt.shape[3] - 2 * pad_noise],
+                                                        device=opt.device)
+                else:
+                    z = image_processing.generate_noise([1, Z_opt.shape[2] - 2 * pad_noise,
+                                                         Z_opt.shape[3] - 2 * pad_noise],
+                                                        device=opt.device)
+                    z = z.expand(1, 3, z.shape[2], z.shape[3])
+
                 z = noise_pad_func(z)
                 prev_fake = fake[:,:,:cur_real_im.shape[2], :cur_real_im.shape[3]]
                 prev_fake = image_pad_func(prev_fake)
@@ -195,8 +203,6 @@ def draw_concat(trained_generators, Zs, real_imgs, noise_amps, mode, noise_pad_f
                 fake = gen(z_in.detach(), prev_fake)
                 fake = image_processing.resize(fake, 1 / scale_factor, opt.nc, opt.is_cuda)
                 fake = fake[:, :, :next_real_im.shape[2], :next_real_im.shape[3]]
-                z = image_processing.generate_noise([opt.nc, Z_opt.shape[2] - 2*pad_noise,
-                                                 Z_opt.shape[3] - 2*pad_noise], device=opt.device)
         elif mode == 'rec':
             for gen, Z_opt, cur_real_im, next_real_im, noise_amp in zip(trained_generators, Zs,
                                                                         real_imgs, real_imgs[1:],

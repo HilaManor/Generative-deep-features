@@ -3,6 +3,7 @@ import numpy as np
 import os
 
 import image_processing
+import image_helpers
 
 def plot_losses(style_losses, rec_losses, ignore_first_iter=500):
     fig = plt.figure(figsize=(16, 10))
@@ -38,7 +39,7 @@ def save_fig(fig, out_dir, name):
 
 def show_im(img_tensor, title=None):
     new_image = img_tensor.detach().to(device='cpu', copy=True)
-    new_image = image_processing.convert_image_np(new_image)
+    new_image = image_helpers.convert_image_np(new_image)
     plt.imshow(new_image)
     if title:
         plt.title(title)
@@ -49,7 +50,7 @@ def show_im(img_tensor, title=None):
 def save_im(img, out_dir, name, convert=False):
     if convert:
         img = img.detach().to(device='cpu', copy=True)
-        img = image_processing.convert_image_np(img)
+        img = image_helpers.convert_image_np(img)
 
     path = os.path.join(out_dir, name + ".png")
     plt.imsave(path, img)

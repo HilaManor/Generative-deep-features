@@ -17,7 +17,7 @@ def generate_noise(size,num_samp=1,device='cuda',type='gaussian', scale=1):
         noise = noise1+noise2
     if type == 'uniform':
         noise = torch.randn(num_samp, size[0], size[1], size[2], device=device)
-    return nois
+    return noise
 
 
 def resize(im, scale, nc, is_cuda):

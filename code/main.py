@@ -11,7 +11,7 @@ if __name__ == '__main__':
     opt = parser.parse_args()
 
     opt.loss_func = 'pdl'
-    #opt.loss_func = 'style'
+    # opt.loss_func = 'style'
     opt.layers_weights = [1, 0.75, 0.2, 0.2]
     # opt.layers_weights = [1, 1, 1, 1]
     opt.chosen_layers = ['conv1_1', 'conv2_1', 'conv3_1']#, 'conv4_1']
