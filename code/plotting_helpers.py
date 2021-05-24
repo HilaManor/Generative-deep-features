@@ -20,14 +20,14 @@ def plot_losses(style_losses, rec_losses, ignore_first_iter=500):
     fig.add_subplot(2, 2, 3)
     plt.plot(np.arange(len(style_losses))[ignore_first_iter:],
              (np.array(style_losses) + np.array(rec_losses))[ignore_first_iter:])
-    plt.title('Ingore start: Total loss vs Iter')
+    plt.title('Ignore start: Total loss vs Iter')
 
     fig.add_subplot(2, 2, 4)
     plt.plot(np.arange(len(style_losses))[ignore_first_iter:],
              np.array(style_losses)[ignore_first_iter:], label='Style Loss')
     plt.plot(np.arange(len(rec_losses))[ignore_first_iter:],
              np.array(rec_losses)[ignore_first_iter:], label='Reconstruction Loss')
-    plt.title('Ingore start: Losses vs Iter')
+    plt.title('Ignore start: Losses vs Iter')
 
     plt.show(block=False)
     plt.pause(0.01)
