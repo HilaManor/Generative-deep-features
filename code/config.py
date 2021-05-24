@@ -53,7 +53,7 @@ def get_arguments():
                                               'Configure the generators pyramid architecture')
     pyrmaid_group.add_argument('--min_size', type=int, help='image minimal size at the coarser scale',
                         default=25)
-    pyrmaid_group.add_argument('--max_size', type=int, help='image minimal size at the coarser scale',
+    pyrmaid_group.add_argument('--max_size', type=int, help='image maximal size at the coarser scale',
                         default=250)
     pyrmaid_group.add_argument('--scale_factor', type=float, default=0.75, help='pyramid scale factor')
     pyrmaid_group.add_argument('--noise_amp', type=float, default=0.1, help='addative noise cont weight')
