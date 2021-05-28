@@ -152,7 +152,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
                 f.write(f'{print_line}\n')
 
             start_time = time.time()
-        if epoch % opt.epoch_show == 0:
+        if opt.epoch_show != -1 and epoch % opt.epoch_show == 0:
             example_fake = curr_G(example_noise, prev)
             plotting_helpers.show_im(example_fake, title=f'e{epoch} epoch')
             z_opt_fake = curr_G(z_opt, z_prev)
@@ -172,11 +172,15 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
     fig = plotting_helpers.plot_losses(style_loss_arr, rec_loss_arr)
     plotting_helpers.save_fig(fig, out_dir, 'fin')
     example_fake = curr_G(example_noise, prev)
-    im = plotting_helpers.show_im(example_fake, title='Final Image')
-    plotting_helpers.save_im(im, out_dir, 'fin')
     z_opt_fake = curr_G(z_opt, z_prev)
-    im = plotting_helpers.show_im(z_opt_fake, title='Final Zopt Image')
-    plotting_helpers.save_im(im, out_dir, 'zopt_fin')
+    if opt.epoch_show != -1:
+        fim = plotting_helpers.show_im(example_fake, title='Final Image')
+        zim = plotting_helpers.show_im(z_opt_fake, title='Final Zopt Image')
+        plotting_helpers.save_im(fim, out_dir, 'fin')
+        plotting_helpers.save_im(zim, out_dir, 'zopt_fin')
+    else:
+        plotting_helpers.save_im(example_fake, out_dir, 'fin', convert=True)
+        plotting_helpers.save_im(z_opt_fake, out_dir, 'zopt_fin', convert=True)
 
     return curr_G, z_opt, noise_amp
 

@@ -20,7 +20,7 @@ def get_arguments():
     vis_group.add_argument('--epoch_print', type=int, default=50,
                                help='Amount of epochs to wait before printing status')
     vis_group.add_argument('--epoch_show', type=int, default=250,
-                           help='Amount of epochs to wait before showing mid-image')
+                           help='Amount of epochs to wait before showing mid-image. -1 to not show')
     vis_group.add_argument('--epoch_save', type=int, default=300,
                            help='Amount of epochs to wait before saving mid-image')
 
