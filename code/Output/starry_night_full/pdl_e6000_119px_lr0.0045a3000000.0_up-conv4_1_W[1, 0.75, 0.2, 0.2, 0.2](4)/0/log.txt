@@ -96,3 +96,16 @@ epoch 4700:	pdl:51371.54 	 Rec:214.62 	Time: 0.50
 epoch 4750:	pdl:50773.07 	 Rec:213.16 	Time: 0.48
 epoch 4800:	pdl:48228.59 	 Rec:216.56 	Time: 0.51
 epoch 4850:	pdl:48767.07 	 Rec:217.90 	Time: 0.50
+epoch 4900:	pdl:52231.27 	 Rec:219.87 	Time: 0.49
+epoch 4950:	pdl:50906.53 	 Rec:217.70 	Time: 0.50
+epoch 5000:	pdl:49792.88 	 Rec:216.60 	Time: 0.51
+epoch 5050:	pdl:45805.10 	 Rec:214.41 	Time: 0.50
+epoch 5100:	pdl:50470.50 	 Rec:213.65 	Time: 0.49
+epoch 5150:	pdl:49234.12 	 Rec:214.33 	Time: 0.50
+epoch 5200:	pdl:48489.59 	 Rec:210.85 	Time: 0.51
+epoch 5250:	pdl:55440.26 	 Rec:211.78 	Time: 0.50
+epoch 5300:	pdl:50861.78 	 Rec:213.03 	Time: 0.50
+epoch 5350:	pdl:50037.68 	 Rec:211.57 	Time: 0.49
+epoch 5400:	pdl:49778.76 	 Rec:210.05 	Time: 0.50
+epoch 5450:	pdl:46634.97 	 Rec:210.04 	Time: 0.49
+epoch 5500:	pdl:52644.65 	 Rec:209.25 	Time: 0.51
