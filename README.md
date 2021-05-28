@@ -27,3 +27,6 @@ Q2 - It seems that the weights of the style loss is always 1.
   * But still get an original texture for random noise
   * When we made the alpha bigger (to get it to the same order of the style loss) the style loss also got bigger 😞
 * ❓ Why is the noise in the first level fixed, not as stated in the paper?
+## 28/05/21
+It seems that high noise makes the fake image less grainy, but more blurry.
+The the generator doesn't know how to generate small objects in the picture - maybe vgg min size issue?
