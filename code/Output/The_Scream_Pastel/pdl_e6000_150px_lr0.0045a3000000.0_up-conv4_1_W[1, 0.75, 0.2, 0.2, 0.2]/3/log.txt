@@ -1,0 +1,12 @@
+epoch 0:	pdl:456918.00 	 Rec:160863.22 	Time: 0.02
+epoch 50:	pdl:245654.91 	 Rec:40121.85 	Time: 0.78
+epoch 100:	pdl:149738.53 	 Rec:22888.22 	Time: 0.75
+epoch 150:	pdl:191118.38 	 Rec:24470.88 	Time: 0.79
+epoch 200:	pdl:141445.86 	 Rec:22997.67 	Time: 0.82
+epoch 250:	pdl:163421.16 	 Rec:22891.29 	Time: 0.70
+epoch 300:	pdl:159341.39 	 Rec:20142.77 	Time: 0.66
+epoch 350:	pdl:202544.05 	 Rec:20183.16 	Time: 0.72
+epoch 400:	pdl:249609.02 	 Rec:20260.84 	Time: 0.74
+epoch 450:	pdl:155893.47 	 Rec:18739.43 	Time: 0.81
+epoch 500:	pdl:157288.61 	 Rec:19938.75 	Time: 0.78
+epoch 550:	pdl:200223.62 	 Rec:18873.62 	Time: 0.81
