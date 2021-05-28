@@ -2,7 +2,7 @@ import models
 import loss_model
 import torchvision
 import torch
-
+import os
 import math
 import time
 import torch.nn as nn
@@ -145,8 +145,12 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         rec_loss_arr.append(rec_loss)
 
         if epoch % opt.epoch_print == 0:
-            print(f"epoch {epoch}:\t{opt.loss_func}:%.2f \t Rec:%.2f \tTime: %.2f" %
-                  (style_loss_arr[-1], rec_loss_arr[-1], time.time() - start_time))
+            print_line = f"epoch {epoch}:\t{opt.loss_func}:%.2f \t Rec:%.2f \tTime: %.2f" % \
+                  (style_loss_arr[-1], rec_loss_arr[-1], time.time() - start_time)
+            print(print_line)
+            with open(os.path.join(out_dir, 'log.txt'), 'a') as f:
+                f.write(f'{print_line}\n')
+
             start_time = time.time()
         if epoch % opt.epoch_show == 0:
             example_fake = curr_G(example_noise, prev)
