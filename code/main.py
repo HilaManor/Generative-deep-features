@@ -5,6 +5,7 @@ import os
 import image_processing, image_helpers
 import training
 from output_handler import gen_unique_out_dir_path
+import json
 
 if __name__ == '__main__':
     parser = get_arguments()
@@ -37,6 +38,12 @@ if __name__ == '__main__':
     out_dir = gen_unique_out_dir_path(opt.output_folder, basename, opt)
 
     os.makedirs(out_dir, exist_ok=True)
+    with open(os.path.join(out_dir, 'params.txt'), 'w') as f:
+        opt_dict = opt.__dict__
+        opt_dict['device'] = opt_dict['device'].type
+        json.dump(opt_dict, f)
+    with open(os.path.join(opt.output_folder, basename, 'runs.txt'), 'a') as f:
+        f.write(f'{os.path.basename(out_dir)} {opt}\n')
 
     Generators, Zs = training.train(out_dir, real_resized, scale_factor, total_scales, opt)
 
