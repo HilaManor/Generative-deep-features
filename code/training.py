@@ -25,7 +25,7 @@ def train(out_dir, real_img, scale_factor, total_scales, opt):
 
         scale_out_dir = output_handler.gen_scale_dir(out_dir, scale)
 
-        plotting_helpers.save_im(real_imgs[scale], scale_out_dir, f"real_scale.png", convert=True)
+        plotting_helpers.save_im(real_imgs[scale], scale_out_dir, 'real_scale', convert=True)
 
         curr_G = init_generator(curr_nfc, curr_min_nfc, opt)
 
