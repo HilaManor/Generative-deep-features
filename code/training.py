@@ -155,11 +155,15 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         if opt.epoch_show != -1 and epoch % opt.epoch_show == 0:
             example_fake = curr_G(example_noise, prev)
             plotting_helpers.show_im(example_fake, title=f'e{epoch} epoch')
+            details_fake = curr_G(example_noise, z_prev)
+            plotting_helpers.show_im(details_fake, title=f'Details {epoch} epoch')
             z_opt_fake = curr_G(z_opt, z_prev)
             plotting_helpers.show_im(z_opt_fake, title=f'Zopt_e{epoch} epoch')
         if epoch % opt.epoch_save == 0:
             example_fake = curr_G(example_noise, prev)
             plotting_helpers.save_im(example_fake, out_dir, f'e{epoch}', convert=True)
+            details_fake = curr_G(example_noise, z_prev)
+            plotting_helpers.save_im(details_fake, out_dir, f'Details_e{epoch}', convert=True)
             z_opt_fake = curr_G(z_opt, z_prev)
             plotting_helpers.save_im(z_opt_fake, out_dir, f'Zopt_e{epoch}', convert=True)
 
@@ -172,14 +176,18 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
     fig = plotting_helpers.plot_losses(style_loss_arr, rec_loss_arr)
     plotting_helpers.save_fig(fig, out_dir, 'fin')
     example_fake = curr_G(example_noise, prev)
+    details_fake = curr_G(example_noise, z_prev)
     z_opt_fake = curr_G(z_opt, z_prev)
     if opt.epoch_show != -1:
         fim = plotting_helpers.show_im(example_fake, title='Final Image')
+        dim = plotting_helpers.show_im(details_fake, title='Final Details Image')
         zim = plotting_helpers.show_im(z_opt_fake, title='Final Zopt Image')
         plotting_helpers.save_im(fim, out_dir, 'fin')
+        plotting_helpers.save_im(dim, out_dir, 'details_fin')
         plotting_helpers.save_im(zim, out_dir, 'zopt_fin')
     else:
         plotting_helpers.save_im(example_fake, out_dir, 'fin', convert=True)
+        plotting_helpers.save_im(details_fake, out_dir, 'details_fin', convert=True)
         plotting_helpers.save_im(z_opt_fake, out_dir, 'zopt_fin', convert=True)
 
     return curr_G, z_opt, noise_amp
