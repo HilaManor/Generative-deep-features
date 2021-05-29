@@ -112,3 +112,9 @@ epoch 5500:	pdl:757223.94 	 Rec:94869.94 	Time: 1.72
 epoch 5550:	pdl:897719.12 	 Rec:95169.58 	Time: 1.71
 epoch 5600:	pdl:624743.94 	 Rec:94654.22 	Time: 1.77
 epoch 5650:	pdl:787853.00 	 Rec:94923.77 	Time: 1.76
+epoch 5700:	pdl:658039.88 	 Rec:94678.08 	Time: 1.74
+epoch 5750:	pdl:754005.88 	 Rec:94438.88 	Time: 1.74
+epoch 5800:	pdl:797670.56 	 Rec:94378.52 	Time: 1.78
+epoch 5850:	pdl:1115351.50 	 Rec:94686.80 	Time: 1.75
+epoch 5900:	pdl:657370.06 	 Rec:94819.27 	Time: 1.70
+epoch 5950:	pdl:556636.81 	 Rec:94590.75 	Time: 1.76
