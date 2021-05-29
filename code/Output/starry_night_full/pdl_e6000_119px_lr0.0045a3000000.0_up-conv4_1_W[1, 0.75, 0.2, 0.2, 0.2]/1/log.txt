@@ -18,3 +18,9 @@ epoch 800:	pdl:1162444.50 	 Rec:52519.64 	Time: 1.32
 epoch 850:	pdl:590139.62 	 Rec:50909.95 	Time: 1.33
 epoch 900:	pdl:665761.81 	 Rec:48723.09 	Time: 1.35
 epoch 950:	pdl:1506936.62 	 Rec:51393.53 	Time: 1.34
+epoch 1000:	pdl:882450.88 	 Rec:49035.87 	Time: 1.35
+epoch 1050:	pdl:731540.94 	 Rec:54245.95 	Time: 1.36
+epoch 1100:	pdl:783135.31 	 Rec:51865.25 	Time: 1.36
+epoch 1150:	pdl:853099.62 	 Rec:48350.81 	Time: 1.34
+epoch 1200:	pdl:875124.88 	 Rec:47865.30 	Time: 1.35
+epoch 1250:	pdl:690346.31 	 Rec:49878.39 	Time: 1.35
