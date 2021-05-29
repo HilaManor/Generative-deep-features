@@ -122,6 +122,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
             curr_G.zero_grad()
             fake_im = curr_G(noise.detach(), prev)  # TODO think on detach
 
+            fake_im = loss_model.validate_vgg_im_size(fake_im)
             loss_block(fake_im)
             loss = 0
             for i, sl in enumerate(layers_losses):

@@ -45,7 +45,9 @@ class Normalization(nn.Module):
 
 
 def generate_loss_block(vgg, real_img, mode, chosen_layers, opt):
-    # TODO: vgg = copy.deepcopy(vgg)
+    # TODO - check: vgg = copy.deepcopy(vgg)
+
+    real_img = validate_vgg_im_size(real_img)
 
     # normalization module
     normalization = Normalization(vgg_normalization_mean.to(opt.device),
@@ -100,3 +102,11 @@ def generate_loss_block(vgg, real_img, mode, chosen_layers, opt):
 
     model = model[:(i + 1)]
     return model, layers_losses
+
+
+def validate_vgg_im_size(im):
+    min_d = min(list(im.shape[2:]))
+    if min_d < 224:
+        scale_factor = 224 / min_d
+        im = nn.functional.interpolate(im, scale_factor=(scale_factor, scale_factor), mode='bilinear')
+    return im
