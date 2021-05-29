@@ -81,3 +81,8 @@ epoch 3950:	pdl:672037.44 	 Rec:160171.91 	Time: 2.16
 epoch 4000:	pdl:728635.75 	 Rec:159916.88 	Time: 2.15
 epoch 4050:	pdl:1167951.62 	 Rec:160451.62 	Time: 2.09
 epoch 4100:	pdl:887034.06 	 Rec:160152.22 	Time: 2.10
+epoch 4150:	pdl:779818.56 	 Rec:161843.73 	Time: 2.11
+epoch 4200:	pdl:664475.69 	 Rec:161269.22 	Time: 2.15
+epoch 4250:	pdl:1329642.38 	 Rec:160415.81 	Time: 2.17
+epoch 4300:	pdl:816801.38 	 Rec:160322.70 	Time: 2.12
+epoch 4350:	pdl:820055.56 	 Rec:160637.39 	Time: 2.09
