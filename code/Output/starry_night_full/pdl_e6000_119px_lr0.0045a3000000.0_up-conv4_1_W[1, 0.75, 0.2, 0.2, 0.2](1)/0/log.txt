@@ -2,3 +2,11 @@ epoch 0:	pdl:6987045.00 	 Rec:739695.25 	Time: 0.03
 epoch 50:	pdl:1597631.12 	 Rec:244380.53 	Time: 1.20
 epoch 100:	pdl:1088009.75 	 Rec:184421.94 	Time: 1.18
 epoch 150:	pdl:1272665.50 	 Rec:188106.53 	Time: 1.20
+epoch 200:	pdl:917050.19 	 Rec:125416.87 	Time: 1.21
+epoch 250:	pdl:1063030.88 	 Rec:107030.22 	Time: 1.20
+epoch 300:	pdl:732550.69 	 Rec:92725.81 	Time: 1.21
+epoch 350:	pdl:910491.81 	 Rec:88678.61 	Time: 1.21
+epoch 400:	pdl:870882.06 	 Rec:74547.06 	Time: 1.20
+epoch 450:	pdl:816498.75 	 Rec:103384.80 	Time: 1.20
+epoch 500:	pdl:836377.69 	 Rec:76568.52 	Time: 1.20
+epoch 550:	pdl:625013.12 	 Rec:82474.67 	Time: 1.21
