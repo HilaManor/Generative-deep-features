@@ -75,9 +75,9 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
 
     # Setup Optimizer
     optimizer = optim.Adam(curr_G.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
-    # scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[600,1200,3600],#[600,1500,2600,3000,4500,6000,8000],
-    #                                            gamma=opt.gamma)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=opt.gamma, verbose=True)
+    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[600,1200,3600],#[600,1500,2600,3000,4500,6000,8000],
+                                               gamma=opt.gamma)
+    # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=opt.gamma, verbose=True)
 
 
     style_loss_arr = []
@@ -152,8 +152,8 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
             total_loss = (1-opt.alpha)*loss + opt.alpha*rec_loss
             total_loss.backward(retain_graph=True)
             optimizer.step()
-        # scheduler.step()
-        scheduler.step(total_loss)
+        scheduler.step()
+        # scheduler.step(total_loss)
         rec_loss_arr.append(rec_loss.detach())
 
         if epoch % opt.epoch_print == 0:
