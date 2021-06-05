@@ -134,7 +134,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
                 Z_opt = noise_amp*z_opt + z_prev
                 #               -->         z_opt = 0 ({Z*,0,0,0,0,0})
                 loss_criterion = nn.MSELoss()
-                rec_loss = opt.alpha * loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
+                rec_loss = (len(trained_genertors)+1) * opt.alpha * loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
                 rec_loss.backward(retain_graph=True)
                 rec_loss = rec_loss.detach()
             else:
