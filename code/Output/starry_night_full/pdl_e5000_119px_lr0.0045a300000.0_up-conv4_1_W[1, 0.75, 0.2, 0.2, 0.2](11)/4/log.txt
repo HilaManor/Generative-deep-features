@@ -28,3 +28,8 @@ epoch 1300:	pdl:22457.35 	 Rec:329649.44 	Time: 1.72
 epoch 1350:	pdl:8975.91 	 Rec:327979.69 	Time: 1.73
 epoch 1400:	pdl:12331.17 	 Rec:326301.38 	Time: 1.71
 epoch 1450:	pdl:18270.21 	 Rec:324575.28 	Time: 1.72
+epoch 1500:	pdl:17698.43 	 Rec:322827.97 	Time: 1.72
+epoch 1550:	pdl:9663.17 	 Rec:321062.88 	Time: 1.73
+epoch 1600:	pdl:10801.18 	 Rec:319259.72 	Time: 1.70
+epoch 1650:	pdl:15623.74 	 Rec:317436.38 	Time: 1.71
+epoch 1700:	pdl:17207.27 	 Rec:315582.38 	Time: 1.68
