@@ -1,0 +1,6 @@
+epoch 0:	pdl:45736.41 	 Rec:339664.72 	Time: 0.03
+epoch 50:	pdl:15426.06 	 Rec:40784.39 	Time: 1.49
+epoch 100:	pdl:7389.79 	 Rec:26810.45 	Time: 1.49
+epoch 150:	pdl:13471.71 	 Rec:20630.38 	Time: 1.52
+epoch 200:	pdl:11517.81 	 Rec:16203.08 	Time: 1.48
+epoch 250:	pdl:16465.15 	 Rec:13764.74 	Time: 1.50
