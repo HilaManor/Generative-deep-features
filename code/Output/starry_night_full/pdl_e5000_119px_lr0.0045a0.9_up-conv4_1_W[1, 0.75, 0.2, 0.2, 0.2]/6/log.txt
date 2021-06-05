@@ -34,3 +34,15 @@ epoch 1600:	pdl:8300.04 	 Rec:5160.61 	Time: 2.09
 epoch 1650:	pdl:13875.84 	 Rec:5151.44 	Time: 2.16
 epoch 1700:	pdl:10170.51 	 Rec:5131.53 	Time: 2.12
 epoch 1750:	pdl:10325.86 	 Rec:5115.39 	Time: 2.14
+epoch 1800:	pdl:6425.75 	 Rec:5092.65 	Time: 2.08
+epoch 1850:	pdl:13503.18 	 Rec:5079.69 	Time: 2.11
+epoch 1900:	pdl:6232.94 	 Rec:5055.93 	Time: 2.18
+epoch 1950:	pdl:9727.49 	 Rec:5046.11 	Time: 2.15
+epoch 2000:	pdl:8676.94 	 Rec:5020.89 	Time: 2.20
+epoch 2050:	pdl:9655.64 	 Rec:5015.16 	Time: 2.20
+epoch 2100:	pdl:6792.91 	 Rec:4985.69 	Time: 2.17
+epoch 2150:	pdl:10787.97 	 Rec:4971.08 	Time: 2.22
+epoch 2200:	pdl:6818.05 	 Rec:4964.14 	Time: 2.10
+epoch 2250:	pdl:11460.51 	 Rec:4930.91 	Time: 2.21
+epoch 2300:	pdl:16656.32 	 Rec:4920.10 	Time: 2.18
+epoch 2350:	pdl:9872.66 	 Rec:4892.53 	Time: 2.12
