@@ -110,6 +110,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
     example_noise = noise_pad_func(example_noise.expand(1, opt.nc, opt.nzx, opt.nzy))
 
     start_time = time.time()
+    style_rec_factor = 1
     for epoch in range(opt.epochs):
         # noise_ is the input noise (before adding the image or changing the variance)
         noise_ = image_processing.generate_noise([1, opt.nzx, opt.nzy], device=opt.device)
@@ -117,7 +118,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         # Notice that the noise for the 3 RGB channels is the same
 
         noise = noise_*noise_amp + prev
-        style_rec_factor = 1
+
         # TODO-THINK for every step in G steps
         for j in range(opt.Gsteps):
             curr_G.zero_grad()
@@ -137,7 +138,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
                 loss_criterion = nn.MSELoss()
                 #rec_loss = (5**len(trained_generators)) * opt.alpha * loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
                 rec_loss = loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
-                if j==0:
+                if epoch==0:
                     style_rec_factor = style_loss_arr[0]/rec_loss.detach()
                 rec_loss = style_rec_factor*rec_loss
                 #rec_loss.backward(retain_graph=True)
