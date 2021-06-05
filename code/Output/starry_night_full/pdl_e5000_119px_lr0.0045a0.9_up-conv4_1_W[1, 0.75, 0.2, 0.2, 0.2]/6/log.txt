@@ -46,3 +46,6 @@ epoch 2200:	pdl:6818.05 	 Rec:4964.14 	Time: 2.10
 epoch 2250:	pdl:11460.51 	 Rec:4930.91 	Time: 2.21
 epoch 2300:	pdl:16656.32 	 Rec:4920.10 	Time: 2.18
 epoch 2350:	pdl:9872.66 	 Rec:4892.53 	Time: 2.12
+epoch 2400:	pdl:8689.11 	 Rec:4867.15 	Time: 2.07
+epoch 2450:	pdl:5818.02 	 Rec:4845.40 	Time: 2.12
+epoch 2500:	pdl:7465.61 	 Rec:4830.62 	Time: 2.10
