@@ -152,7 +152,8 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
             total_loss = (1-opt.alpha)*loss + opt.alpha*rec_loss
             total_loss.backward(retain_graph=True)
             optimizer.step()
-        scheduler.step()
+        # scheduler.step()
+        scheduler.step(total_loss)
         rec_loss_arr.append(rec_loss.detach())
 
         if epoch % opt.epoch_print == 0:
