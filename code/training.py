@@ -75,8 +75,9 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
 
     # Setup Optimizer
     optimizer = optim.Adam(curr_G.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
-    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[500],#[600,1500,2600,3000,4500,6000,8000],
+    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[500,501],#[600,1500,2600,3000,4500,6000,8000],
                                                gamma=opt.gamma)
+
 
     style_loss_arr = []
     rec_loss_arr = []
