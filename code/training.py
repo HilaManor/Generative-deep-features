@@ -117,7 +117,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         # Notice that the noise for the 3 RGB channels is the same
 
         noise = noise_*noise_amp + prev
-
+        style_rec_factor = 1
         # TODO-THINK for every step in G steps
         for j in range(opt.Gsteps):
             curr_G.zero_grad()
@@ -129,22 +129,29 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
             for i, sl in enumerate(layers_losses):
                 loss += opt.layers_weights[i] * sl.loss
             style_loss_arr.append(loss.detach())
-            loss.backward(retain_graph=True)
+            #loss.backward(retain_graph=True)
 
             if opt.alpha != 0:
                 Z_opt = noise_amp*z_opt + z_prev
                 #               -->         z_opt = 0 ({Z*,0,0,0,0,0})
                 loss_criterion = nn.MSELoss()
-                rec_loss = (5**len(trained_generators)) * opt.alpha * loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
-                rec_loss.backward(retain_graph=True)
-                rec_loss = rec_loss.detach()
+                #rec_loss = (5**len(trained_generators)) * opt.alpha * loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
+                rec_loss = loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
+                if j==0:
+                    style_rec_factor = style_loss_arr[0]/rec_loss.detach()
+                rec_loss = style_rec_factor*rec_loss
+                #rec_loss.backward(retain_graph=True)
+                #rec_loss = rec_loss.detach()
             else:
                 Z_opt = z_opt
                 rec_loss = 0
 
+
+            total_loss = (1-opt.alpha)*loss + opt.alpha*rec_loss
+            total_loss.backward(retain_graph=True)
             optimizer.step()
         scheduler.step()
-        rec_loss_arr.append(rec_loss)
+        rec_loss_arr.append(rec_loss.detach())
 
         if epoch % opt.epoch_print == 0:
             print_line = f"epoch {epoch}:\t{opt.loss_func}:%.2f \t Rec:%.2f \tTime: %.2f" % \
