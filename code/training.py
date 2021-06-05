@@ -183,7 +183,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         prev = image_pad_func(prev)
 
     # TODO save network?
-    fig = plotting_helpers.plot_losses(style_loss_arr, rec_loss_arr)
+    fig = plotting_helpers.plot_losses(style_loss_arr, rec_loss_arr, show=(opt.epoch_show > -1))
     plotting_helpers.save_fig(fig, out_dir, 'fin')
     example_fake = curr_G(example_noise, prev)
     details_fake = curr_G(example_noise, z_prev)

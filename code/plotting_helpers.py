@@ -5,7 +5,7 @@ import os
 import image_processing
 import image_helpers
 
-def plot_losses(style_losses, rec_losses, ignore_first_iter=500):
+def plot_losses(style_losses, rec_losses, ignore_first_iter=500, show=True):
     fig = plt.figure(figsize=(16, 10))
     fig.add_subplot(2, 2, 1)
     plt.plot(np.array(style_losses) + np.array(rec_losses))
@@ -29,8 +29,9 @@ def plot_losses(style_losses, rec_losses, ignore_first_iter=500):
              np.array(rec_losses)[ignore_first_iter:], label='Reconstruction Loss')
     plt.title('Ignore start: Losses vs Iter')
 
-    plt.show(block=False)
-    plt.pause(0.01)
+    if show:
+        plt.show(block=False)
+        plt.pause(0.01)
     return fig
 
 def save_fig(fig, out_dir, name):
