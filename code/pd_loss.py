@@ -14,8 +14,8 @@ class PDLoss(nn.Module):
         features = PDLoss._vectorize_features(input)
         features, _ = features.sort(dim=0)
         features_losses = torch.sum(torch.abs(features - self.target), dim=0)
-        # self.loss = features_losses.mean()
-        self.loss = features_losses.sum()
+        self.loss = features_losses.mean()
+        #self.loss = features_losses.sum()
         return input
 
     @staticmethod
