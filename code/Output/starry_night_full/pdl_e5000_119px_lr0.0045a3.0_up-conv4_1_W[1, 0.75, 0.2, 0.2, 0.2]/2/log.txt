@@ -28,3 +28,9 @@ epoch 1300:	pdl:0.12 	 Rec:0.01 	Time: 1.45
 epoch 1350:	pdl:0.18 	 Rec:0.01 	Time: 1.47
 epoch 1400:	pdl:0.14 	 Rec:0.01 	Time: 1.44
 epoch 1450:	pdl:0.13 	 Rec:0.01 	Time: 1.44
+epoch 1500:	pdl:0.12 	 Rec:0.01 	Time: 1.50
+epoch 1550:	pdl:0.12 	 Rec:0.01 	Time: 1.51
+epoch 1600:	pdl:0.12 	 Rec:0.01 	Time: 1.52
+epoch 1650:	pdl:0.11 	 Rec:0.01 	Time: 1.54
+epoch 1700:	pdl:0.16 	 Rec:0.01 	Time: 1.48
+epoch 1750:	pdl:0.15 	 Rec:0.01 	Time: 1.53
