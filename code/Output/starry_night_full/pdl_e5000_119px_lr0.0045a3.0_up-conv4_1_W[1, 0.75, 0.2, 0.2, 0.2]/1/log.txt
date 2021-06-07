@@ -1,0 +1,1 @@
+epoch 0:	pdl:0.56 	 Rec:0.56 	Time: 0.03

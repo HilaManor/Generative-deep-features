@@ -95,3 +95,6 @@ epoch 4650:	pdl:0.10 	 Rec:0.00 	Time: 1.24
 epoch 4700:	pdl:0.09 	 Rec:0.00 	Time: 1.25
 epoch 4750:	pdl:0.12 	 Rec:0.00 	Time: 1.25
 epoch 4800:	pdl:0.10 	 Rec:0.00 	Time: 1.24
+epoch 4850:	pdl:0.10 	 Rec:0.00 	Time: 1.25
+epoch 4900:	pdl:0.12 	 Rec:0.00 	Time: 1.24
+epoch 4950:	pdl:0.11 	 Rec:0.00 	Time: 1.25
