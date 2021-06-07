@@ -129,7 +129,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
             loss_block(fake_im)
             loss = 0
             for i, sl in enumerate(layers_losses):
-                loss += opt.layers_weights[i] * sl.loss
+                loss += opt.layers_weights[i] * sl.loss / len(opt.chosen_layers)
             style_loss_arr.append(loss.detach())
             #loss.backward(retain_graph=True)
 
@@ -149,7 +149,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
                 rec_loss = 0
 
 
-            total_loss = (1-opt.alpha)*loss + opt.alpha*rec_loss
+            total_loss = loss + opt.alpha*rec_loss
             total_loss.backward(retain_graph=True)
             optimizer.step()
         scheduler.step()

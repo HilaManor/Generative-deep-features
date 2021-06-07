@@ -2,21 +2,23 @@ import torch
 import torch.nn as nn
 
 
-## ~~~~~~~~~~~~ Projected Distribution ~~~~~~~~~~~~
+# ~~~~~~~~~~~~ Projected Distribution ~~~~~~~~~~~~
 class PDLoss(nn.Module):
     def __init__(self, target_feature, device='cpu'):
         super(PDLoss, self).__init__()
         features = PDLoss._vectorize_features(target_feature).detach()
         self.target, _ = features.sort(dim=0)
         self.device = device
+        self.loss = None
 
-    def forward(self, input):
-        features = PDLoss._vectorize_features(input)
+    def forward(self, input_f):
+        features = PDLoss._vectorize_features(input_f)
         features, _ = features.sort(dim=0)
-        features_losses = torch.sum(torch.abs(features - self.target), dim=0)
+        # features_losses = torch.sum(torch.abs(features - self.target), dim=0)
+        # self.loss = features_losses.sum()
+        features_losses = torch.mean(torch.abs(features - self.target), dim=0)
         self.loss = features_losses.mean()
-        #self.loss = features_losses.sum()
-        return input
+        return input_f
 
     @staticmethod
     def _vectorize_features(features):
