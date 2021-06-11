@@ -18,16 +18,18 @@ def plot_losses(style_losses, rec_losses, ignore_first_iter=500, show=True):
     plt.legend()
 
     fig.add_subplot(2, 2, 3)
+    # plt.plot(np.arange(len(style_losses))[ignore_first_iter:],
+    #          (np.array(style_losses) + np.array(rec_losses))[ignore_first_iter:])
     plt.plot(np.arange(len(style_losses))[ignore_first_iter:],
-             (np.array(style_losses) + np.array(rec_losses))[ignore_first_iter:])
-    plt.title('Ignore start: Total loss vs Iter')
+             np.array(style_losses)[ignore_first_iter:], label='Distribution Loss')
+    plt.title('Ignore start: Distribution Loss vs Iter')
 
     fig.add_subplot(2, 2, 4)
-    plt.plot(np.arange(len(style_losses))[ignore_first_iter:],
-             np.array(style_losses)[ignore_first_iter:], label='Style Loss')
+    # plt.plot(np.arange(len(style_losses))[ignore_first_iter:],
+    #          np.array(style_losses)[ignore_first_iter:], label='Style Loss')
     plt.plot(np.arange(len(rec_losses))[ignore_first_iter:],
-             np.array(rec_losses)[ignore_first_iter:], label='Reconstruction Loss')
-    plt.title('Ignore start: Losses vs Iter')
+             np.array(rec_losses)[ignore_first_iter:], label='Reconstruction Loss', color='orange')
+    plt.title('Ignore start: Reconstruction Loss vs Iter')
 
     if show:
         plt.show(block=False)
