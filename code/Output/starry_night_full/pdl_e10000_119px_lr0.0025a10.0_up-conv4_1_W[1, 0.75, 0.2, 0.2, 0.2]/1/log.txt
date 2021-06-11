@@ -196,3 +196,5 @@ epoch 9700:	pdl:1.21e-01 	 Rec:5.38e-04 	Time: 1.43
 epoch 9750:	pdl:9.83e-02 	 Rec:5.12e-04 	Time: 1.42
 epoch 9800:	pdl:9.38e-02 	 Rec:4.49e-04 	Time: 1.38
 epoch 9850:	pdl:9.46e-02 	 Rec:5.01e-04 	Time: 1.40
+epoch 9900:	pdl:9.41e-02 	 Rec:4.27e-04 	Time: 1.45
+epoch 9950:	pdl:1.14e-01 	 Rec:5.48e-04 	Time: 1.49
