@@ -144,3 +144,8 @@ epoch 7100:	pdl:1.31e-01 	 Rec:3.68e-04 	Time: 1.41
 epoch 7150:	pdl:1.29e-01 	 Rec:2.55e-04 	Time: 1.43
 epoch 7200:	pdl:1.22e-01 	 Rec:3.38e-04 	Time: 1.46
 epoch 7250:	pdl:1.04e-01 	 Rec:3.14e-04 	Time: 1.45
+epoch 7300:	pdl:1.10e-01 	 Rec:2.47e-04 	Time: 1.42
+epoch 7350:	pdl:1.34e-01 	 Rec:3.58e-04 	Time: 1.45
+epoch 7400:	pdl:1.27e-01 	 Rec:3.09e-04 	Time: 1.41
+epoch 7450:	pdl:1.10e-01 	 Rec:2.09e-04 	Time: 1.43
+epoch 7500:	pdl:1.20e-01 	 Rec:2.16e-04 	Time: 1.43
