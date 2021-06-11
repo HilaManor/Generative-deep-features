@@ -82,3 +82,15 @@ epoch 4000:	pdl:1.10e-01 	 Rec:6.35e-04 	Time: 1.25
 epoch 4050:	pdl:1.04e-01 	 Rec:7.01e-04 	Time: 1.28
 epoch 4100:	pdl:1.03e-01 	 Rec:5.35e-04 	Time: 1.29
 epoch 4150:	pdl:8.96e-02 	 Rec:7.13e-04 	Time: 1.30
+epoch 4200:	pdl:1.02e-01 	 Rec:5.74e-04 	Time: 1.32
+epoch 4250:	pdl:1.01e-01 	 Rec:7.82e-04 	Time: 1.31
+epoch 4300:	pdl:1.08e-01 	 Rec:8.75e-04 	Time: 1.33
+epoch 4350:	pdl:1.15e-01 	 Rec:7.87e-04 	Time: 1.29
+epoch 4400:	pdl:1.04e-01 	 Rec:5.94e-04 	Time: 1.29
+epoch 4450:	pdl:1.09e-01 	 Rec:9.79e-04 	Time: 1.31
+epoch 4500:	pdl:1.02e-01 	 Rec:8.36e-04 	Time: 1.30
+epoch 4550:	pdl:1.23e-01 	 Rec:8.99e-04 	Time: 1.33
+epoch 4600:	pdl:1.15e-01 	 Rec:6.61e-04 	Time: 1.30
+epoch 4650:	pdl:1.08e-01 	 Rec:5.41e-04 	Time: 1.31
+epoch 4700:	pdl:9.71e-02 	 Rec:5.44e-04 	Time: 1.31
+epoch 4750:	pdl:1.04e-01 	 Rec:4.93e-04 	Time: 1.31
