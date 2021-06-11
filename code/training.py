@@ -139,9 +139,9 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
                 loss_criterion = nn.MSELoss()
                 #rec_loss = (5**len(trained_generators)) * opt.alpha * loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
                 rec_loss = loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
-                if epoch==0:
-                    style_rec_factor = style_loss_arr[0]/rec_loss.detach()
-                rec_loss = style_rec_factor*rec_loss
+                # if epoch==0:
+                #     style_rec_factor = style_loss_arr[0]/rec_loss.detach()
+                # rec_loss = style_rec_factor*rec_loss
                 #rec_loss.backward(retain_graph=True)
                 #rec_loss = rec_loss.detach()
             else:
