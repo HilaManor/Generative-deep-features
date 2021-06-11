@@ -55,11 +55,14 @@ def init_generator(curr_nfc, curr_min_nfc, opt):
                                                curr_min_nfc).to(opt.device)
     netG.apply(models.weights_init)
     # TODO load from file?
-    print(netG)
+    # print(netG)
     return netG
 
 
 def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vgg, out_dir, scale_factor, opt):
+    print(f"""~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  SCALE {len(trained_generators)}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""")
     real_img = real_imgs[len(trained_generators)]
     opt.nzx = real_img.shape[2]  # Width of image in current scale
     opt.nzy = real_img.shape[3]  # Height of image in current scale
@@ -157,7 +160,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         rec_loss_arr.append(rec_loss.detach())
 
         if epoch % opt.epoch_print == 0:
-            print_line = f"epoch {epoch}:\t{opt.loss_func}:%.2f \t Rec:%.2f \tTime: %.2f" % \
+            print_line = f"epoch {epoch}:\t{opt.loss_func}:%.2e \t Rec:%.2e \tTime: %.2f" % \
                   (style_loss_arr[-1], rec_loss_arr[-1], time.time() - start_time)
             print(print_line)
             with open(os.path.join(out_dir, 'log.txt'), 'a') as f:

@@ -108,5 +108,5 @@ def validate_vgg_im_size(im):
     min_d = min(list(im.shape[2:]))
     if min_d < 224:
         scale_factor = 224 / min_d
-        im = nn.functional.interpolate(im, scale_factor=(scale_factor, scale_factor), mode='bilinear')
+        im = nn.functional.interpolate(im, scale_factor=(scale_factor, scale_factor), mode='bilinear', align_corners=False, recompute_scale_factor=False)
     return im
