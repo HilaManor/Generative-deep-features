@@ -60,9 +60,9 @@ def init_generator(curr_nfc, curr_min_nfc, opt):
 
 
 def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vgg, out_dir, scale_factor, opt):
-    print(f"""~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                  SCALE {len(trained_generators)}
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""")
+    print(f"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+          "\t\tSCALE {len(trained_generators)}\n"
+          "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     real_img = real_imgs[len(trained_generators)]
     opt.nzx = real_img.shape[2]  # Width of image in current scale
     opt.nzy = real_img.shape[3]  # Height of image in current scale
