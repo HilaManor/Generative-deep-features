@@ -294,3 +294,8 @@ epoch 14600:	pdl:1.08e-01 	 Rec:8.09e-05 	Time: 1.39
 epoch 14650:	pdl:9.41e-02 	 Rec:6.73e-05 	Time: 1.44
 epoch 14700:	pdl:1.17e-01 	 Rec:9.46e-05 	Time: 1.42
 epoch 14750:	pdl:9.17e-02 	 Rec:8.77e-05 	Time: 1.45
+epoch 14800:	pdl:9.37e-02 	 Rec:8.03e-05 	Time: 1.46
+epoch 14850:	pdl:1.08e-01 	 Rec:5.64e-05 	Time: 1.46
+epoch 14900:	pdl:1.20e-01 	 Rec:1.10e-04 	Time: 1.46
+epoch 14950:	pdl:1.08e-01 	 Rec:7.18e-05 	Time: 1.46
+epoch 15000:	pdl:1.17e-01 	 Rec:8.30e-05 	Time: 1.46
