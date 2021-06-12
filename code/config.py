@@ -58,4 +58,9 @@ def get_arguments():
     pyrmaid_group.add_argument('--scale_factor', type=float, default=0.75, help='pyramid scale factor')
     pyrmaid_group.add_argument('--noise_amp', type=float, default=0.1, help='addative noise cont weight')
 
+    # ~~~~ TODO
+    oo_group = parser.add_argument_group('Ah ', 'ooh')
+    oo_group.add_argument('--loss_func', type=str, help='style/pdl', default='pdl')
+    oo_group.add_argument('--min_features',type=int, help='aa', default=100)
+
     return parser

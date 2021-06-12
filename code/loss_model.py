@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import math
 import style_loss
 import contextual_loss
 import pd_loss
@@ -47,7 +48,8 @@ class Normalization(nn.Module):
 def generate_loss_block(vgg, real_img, mode, chosen_layers, opt):
     # TODO - check: vgg = copy.deepcopy(vgg)
 
-    real_img = validate_vgg_im_size(real_img)
+    # real_img = validate_vgg_im_size(real_img)
+    chosen_layers = validate_vgg_layers_amount(real_img.shape[2:], chosen_layers, opt.min_features)
 
     # normalization module
     normalization = Normalization(vgg_normalization_mean.to(opt.device),
@@ -110,3 +112,8 @@ def validate_vgg_im_size(im):
         scale_factor = 224 / min_d
         im = nn.functional.interpolate(im, scale_factor=(scale_factor, scale_factor), mode='bilinear', align_corners=False, recompute_scale_factor=False)
     return im
+
+
+def validate_vgg_layers_amount(im_shape, layers, min_features):
+    n = math.floor(1 + math.log(im_shape[0]*im_shape[1] / min_features))
+    return layers[0:n]  # if n > len(layers), returns all layers.
