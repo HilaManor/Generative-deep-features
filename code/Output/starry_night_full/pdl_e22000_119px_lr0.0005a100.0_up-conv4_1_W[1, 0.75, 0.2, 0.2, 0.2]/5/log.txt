@@ -1,0 +1,7 @@
+epoch 0:	pdl:4.47e-01 	 Rec:4.47e-01 	Time: 0.02
+epoch 50:	pdl:3.07e-01 	 Rec:1.64e-01 	Time: 1.32
+epoch 100:	pdl:3.25e-01 	 Rec:1.42e-01 	Time: 1.28
+epoch 150:	pdl:3.15e-01 	 Rec:1.26e-01 	Time: 1.30
+epoch 200:	pdl:3.17e-01 	 Rec:1.15e-01 	Time: 1.29
+epoch 250:	pdl:3.38e-01 	 Rec:1.11e-01 	Time: 1.31
+epoch 300:	pdl:2.97e-01 	 Rec:1.05e-01 	Time: 1.29
