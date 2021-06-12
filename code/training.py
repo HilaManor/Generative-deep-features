@@ -11,6 +11,8 @@ import plotting_helpers
 import image_processing
 import output_handler
 
+G_WEIGHTS_FNAME = 'netG.pth'
+
 
 def train(out_dir, real_img, scale_factor, total_scales, opt):
     real_imgs = image_processing.create_real_imgs_pyramid(real_img, scale_factor, total_scales, opt)
@@ -19,6 +21,8 @@ def train(out_dir, real_img, scale_factor, total_scales, opt):
     Zs = []
     noise_amps = []
     vgg = torchvision.models.vgg19(pretrained=True).features.to(opt.device).eval()
+    nfc_prev = None
+
     for scale in range(total_scales):
         curr_nfc = min(opt.nfc * pow(2, math.floor(scale / 4)), 128)
         curr_min_nfc = min(opt.min_nfc * pow(2, math.floor(scale / 4)), 128)
@@ -29,13 +33,19 @@ def train(out_dir, real_img, scale_factor, total_scales, opt):
 
         curr_G = init_generator(curr_nfc, curr_min_nfc, opt)
 
-        # TODO load state dict ??
+        # Learn initial wrights guess from previous scale
+        if nfc_prev == curr_nfc:
+            print("Initial weights guess is previous scale")
+            prev_out_dir = output_handler.gen_scale_dir(out_dir, scale - 1)
+            curr_G.load_state_dict(torch.load(os.path.join(prev_out_dir, G_WEIGHTS_FNAME)))
 
         start_time = time.time()
         curr_G, z_curr, curr_noise_amp = train_single_scale(trained_generators, Zs, noise_amps,
                                                             curr_G, real_imgs, vgg, scale_out_dir,
                                                             scale_factor, opt)
         print(f"{scale} Scale Training Time: {time.time()-start_time}")
+
+        torch.save(curr_G.state_dict(), os.path.join(scale_out_dir, G_WEIGHTS_FNAME))
 
         [p.requires_grad_(False) for p in curr_G.parameters()]
         curr_G.eval()
@@ -46,6 +56,7 @@ def train(out_dir, real_img, scale_factor, total_scales, opt):
         # TODO save trained
         # TODO -check del curr_G?
 
+        nfc_prev = curr_nfc
     return trained_generators, Zs
 
 
