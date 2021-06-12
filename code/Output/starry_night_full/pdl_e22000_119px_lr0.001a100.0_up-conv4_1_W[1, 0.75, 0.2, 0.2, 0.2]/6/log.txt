@@ -229,3 +229,15 @@ epoch 11350:	pdl:2.32e-01 	 Rec:2.66e-02 	Time: 2.04
 epoch 11400:	pdl:2.35e-01 	 Rec:2.50e-02 	Time: 1.99
 epoch 11450:	pdl:2.37e-01 	 Rec:2.53e-02 	Time: 2.14
 epoch 11500:	pdl:2.37e-01 	 Rec:2.56e-02 	Time: 2.08
+epoch 11550:	pdl:2.27e-01 	 Rec:2.67e-02 	Time: 2.18
+epoch 11600:	pdl:2.56e-01 	 Rec:2.72e-02 	Time: 2.10
+epoch 11650:	pdl:2.44e-01 	 Rec:2.66e-02 	Time: 2.06
+epoch 11700:	pdl:2.56e-01 	 Rec:2.45e-02 	Time: 2.10
+epoch 11750:	pdl:2.38e-01 	 Rec:2.41e-02 	Time: 2.16
+epoch 11800:	pdl:2.49e-01 	 Rec:2.69e-02 	Time: 2.10
+epoch 11850:	pdl:2.49e-01 	 Rec:2.70e-02 	Time: 2.07
+epoch 11900:	pdl:2.29e-01 	 Rec:2.44e-02 	Time: 2.06
+epoch 11950:	pdl:2.70e-01 	 Rec:3.62e-02 	Time: 2.06
+epoch 12000:	pdl:2.43e-01 	 Rec:2.62e-02 	Time: 2.01
+epoch 12050:	pdl:2.35e-01 	 Rec:2.69e-02 	Time: 2.06
+epoch 12100:	pdl:2.24e-01 	 Rec:2.60e-02 	Time: 1.92
