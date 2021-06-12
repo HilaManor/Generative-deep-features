@@ -436,3 +436,5 @@ epoch 21700:	style:1.33e-02 	 Rec:1.25e-05 	 Color:5.50e-02 	Time: 0.55
 epoch 21750:	style:1.41e-02 	 Rec:1.28e-05 	 Color:5.11e-02 	Time: 0.55
 epoch 21800:	style:1.80e-02 	 Rec:1.30e-05 	 Color:5.54e-02 	Time: 0.55
 epoch 21850:	style:1.22e-02 	 Rec:1.34e-05 	 Color:5.61e-02 	Time: 0.55
+epoch 21900:	style:1.54e-02 	 Rec:1.34e-05 	 Color:5.46e-02 	Time: 0.61
+epoch 21950:	style:1.46e-02 	 Rec:1.21e-05 	 Color:5.28e-02 	Time: 0.55

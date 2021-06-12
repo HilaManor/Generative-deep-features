@@ -1,0 +1,7 @@
+epoch 0:	style:8.08e-02 	 Rec:8.08e-02 	 Color:1.91e-01 	Time: 0.01
+epoch 50:	style:3.18e-02 	 Rec:1.19e-02 	 Color:1.82e-01 	Time: 0.69
+epoch 100:	style:2.63e-02 	 Rec:8.38e-03 	 Color:1.82e-01 	Time: 0.69
+epoch 150:	style:3.06e-02 	 Rec:8.43e-03 	 Color:1.75e-01 	Time: 0.63
+epoch 200:	style:2.46e-02 	 Rec:6.62e-03 	 Color:1.67e-01 	Time: 0.62
+epoch 250:	style:2.54e-02 	 Rec:5.65e-03 	 Color:1.67e-01 	Time: 0.63
+epoch 300:	style:2.36e-02 	 Rec:4.82e-03 	 Color:1.66e-01 	Time: 0.62
