@@ -241,3 +241,14 @@ epoch 11950:	pdl:2.70e-01 	 Rec:3.62e-02 	Time: 2.06
 epoch 12000:	pdl:2.43e-01 	 Rec:2.62e-02 	Time: 2.01
 epoch 12050:	pdl:2.35e-01 	 Rec:2.69e-02 	Time: 2.06
 epoch 12100:	pdl:2.24e-01 	 Rec:2.60e-02 	Time: 1.92
+epoch 12150:	pdl:2.52e-01 	 Rec:2.60e-02 	Time: 2.12
+epoch 12200:	pdl:2.26e-01 	 Rec:2.97e-02 	Time: 2.00
+epoch 12250:	pdl:2.36e-01 	 Rec:2.64e-02 	Time: 2.08
+epoch 12300:	pdl:2.32e-01 	 Rec:2.72e-02 	Time: 2.04
+epoch 12350:	pdl:2.32e-01 	 Rec:2.79e-02 	Time: 2.14
+epoch 12400:	pdl:2.45e-01 	 Rec:2.64e-02 	Time: 2.08
+epoch 12450:	pdl:2.49e-01 	 Rec:2.46e-02 	Time: 2.10
+epoch 12500:	pdl:2.25e-01 	 Rec:2.44e-02 	Time: 2.10
+epoch 12550:	pdl:2.34e-01 	 Rec:2.57e-02 	Time: 2.06
+epoch 12600:	pdl:2.40e-01 	 Rec:2.66e-02 	Time: 2.07
+epoch 12650:	pdl:2.40e-01 	 Rec:2.61e-02 	Time: 2.14
