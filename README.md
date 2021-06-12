@@ -14,6 +14,9 @@ Supervised by Tamar Rott-Shaham
 Q1 - How to init noise for image? The color channels are correlated...
 Q2 - It seems that the weights of the style loss is always 1.
 
+## GIT TOKEN:
+how to set token:
+git config --global credential.helper 'cache --timeout=3600'
 
 ## Insights
 ## 02/05/21
