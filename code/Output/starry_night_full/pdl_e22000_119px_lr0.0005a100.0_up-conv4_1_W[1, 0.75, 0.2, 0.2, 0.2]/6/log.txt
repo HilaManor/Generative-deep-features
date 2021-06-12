@@ -164,3 +164,12 @@ epoch 8100:	pdl:2.65e-01 	 Rec:5.37e-02 	Time: 1.58
 epoch 8150:	pdl:2.76e-01 	 Rec:5.39e-02 	Time: 1.75
 epoch 8200:	pdl:2.72e-01 	 Rec:5.65e-02 	Time: 1.57
 epoch 8250:	pdl:2.85e-01 	 Rec:5.27e-02 	Time: 1.56
+epoch 8300:	pdl:2.65e-01 	 Rec:5.38e-02 	Time: 1.62
+epoch 8350:	pdl:3.25e-01 	 Rec:5.89e-02 	Time: 1.59
+epoch 8400:	pdl:2.45e-01 	 Rec:5.35e-02 	Time: 1.60
+epoch 8450:	pdl:3.20e-01 	 Rec:5.60e-02 	Time: 1.73
+epoch 8500:	pdl:2.46e-01 	 Rec:5.26e-02 	Time: 1.58
+epoch 8550:	pdl:2.60e-01 	 Rec:5.73e-02 	Time: 1.59
+epoch 8600:	pdl:2.96e-01 	 Rec:5.17e-02 	Time: 1.57
+epoch 8650:	pdl:2.52e-01 	 Rec:5.03e-02 	Time: 1.59
+epoch 8700:	pdl:2.55e-01 	 Rec:5.04e-02 	Time: 1.59
