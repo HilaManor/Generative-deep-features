@@ -429,3 +429,12 @@ epoch 21350:	pdl:3.71e-01 	 Rec:6.77e-03 	Time: 1.00
 epoch 21400:	pdl:3.37e-01 	 Rec:7.00e-03 	Time: 0.99
 epoch 21450:	pdl:3.91e-01 	 Rec:7.16e-03 	Time: 0.97
 epoch 21500:	pdl:4.38e-01 	 Rec:7.12e-03 	Time: 0.99
+epoch 21550:	pdl:3.53e-01 	 Rec:6.94e-03 	Time: 1.04
+epoch 21600:	pdl:3.73e-01 	 Rec:6.74e-03 	Time: 1.04
+epoch 21650:	pdl:3.49e-01 	 Rec:6.89e-03 	Time: 1.01
+epoch 21700:	pdl:3.54e-01 	 Rec:6.93e-03 	Time: 1.00
+epoch 21750:	pdl:3.96e-01 	 Rec:6.71e-03 	Time: 1.00
+epoch 21800:	pdl:3.75e-01 	 Rec:6.80e-03 	Time: 1.00
+epoch 21850:	pdl:3.52e-01 	 Rec:6.74e-03 	Time: 1.01
+epoch 21900:	pdl:3.34e-01 	 Rec:6.71e-03 	Time: 1.01
+epoch 21950:	pdl:3.36e-01 	 Rec:6.90e-03 	Time: 1.02
