@@ -136,8 +136,7 @@ def generate_c_loss_block(real_img, c_patch_size, mode, device):
 
 
 def split_img_to_patches(im, patch_size):
-    print(im.size())
-    patches = im.unfold(2, patch_size, patch_size).unfold(2, patch_size, patch_size)
+    patches = im.unfold(2, patch_size, patch_size).unfold(3, patch_size, patch_size)
     patches = patches.permute((0, 2, 3, 1, 4, 5))
     patches = patches.reshape(-1, 3, patch_size, patch_size)
     return patches
