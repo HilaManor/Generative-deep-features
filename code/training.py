@@ -34,7 +34,7 @@ def train(out_dir, real_img, scale_factor, total_scales, opt):
         curr_G = init_generator(curr_nfc, curr_min_nfc, opt)
 
         # Learn initial wrights guess from previous scale
-        if nfc_prev == curr_nfc:
+        if nfc_prev == curr_nfc and opt.try_initial_guess:
             print("Initial weights guess is previous scale")
             prev_out_dir = output_handler.gen_scale_dir(out_dir, scale - 1)
             curr_G.load_state_dict(torch.load(os.path.join(prev_out_dir, G_WEIGHTS_FNAME)))
@@ -139,13 +139,17 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
             curr_G.zero_grad()
             fake_im = curr_G(noise.detach(), prev)  # TODO think on detach
 
-            # fake_im = loss_model.validate_vgg_im_size(fake_im)
-            c_layers = loss_model.validate_vgg_layers_amount(fake_im.shape[2:], opt.chosen_layers, opt.min_features)
+            if opt.upsample_for_vgg:
+                fake_im = loss_model.validate_vgg_im_size(fake_im)
+                n_layers = len(opt.chosen_layers)
+            else:
+                n_layers = len(loss_model.validate_vgg_layers_amount(
+                    fake_im.shape[2:], opt.chosen_layers, opt.min_features))
+
             loss_block(fake_im)
             loss = 0
             for i, sl in enumerate(layers_losses):
-                # loss += opt.layers_weights[i] * sl.loss / len(opt.chosen_layers)
-                loss += opt.layers_weights[i] * sl.loss / len(c_layers)
+                loss += opt.layers_weights[i] * sl.loss / n_layers
             style_loss_arr.append(loss.detach())
             #loss.backward(retain_graph=True)
 

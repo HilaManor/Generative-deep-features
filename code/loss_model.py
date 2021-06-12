@@ -48,8 +48,10 @@ class Normalization(nn.Module):
 def generate_loss_block(vgg, real_img, mode, chosen_layers, opt):
     # TODO - check: vgg = copy.deepcopy(vgg)
 
-    # real_img = validate_vgg_im_size(real_img)
-    chosen_layers = validate_vgg_layers_amount(real_img.shape[2:], chosen_layers, opt.min_features)
+    if opt.upsample_for_vgg:
+        real_img = validate_vgg_im_size(real_img)
+    else:
+        chosen_layers = validate_vgg_layers_amount(real_img.shape[2:], chosen_layers, opt.min_features)
 
     # normalization module
     normalization = Normalization(vgg_normalization_mean.to(opt.device),
