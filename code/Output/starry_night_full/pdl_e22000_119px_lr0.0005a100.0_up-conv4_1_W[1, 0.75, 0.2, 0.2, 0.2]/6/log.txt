@@ -180,3 +180,16 @@ epoch 8900:	pdl:2.69e-01 	 Rec:4.92e-02 	Time: 1.56
 epoch 8950:	pdl:2.55e-01 	 Rec:4.96e-02 	Time: 1.54
 epoch 9000:	pdl:2.74e-01 	 Rec:4.74e-02 	Time: 1.56
 epoch 9050:	pdl:2.50e-01 	 Rec:4.96e-02 	Time: 1.64
+epoch 9100:	pdl:3.15e-01 	 Rec:5.15e-02 	Time: 1.56
+epoch 9150:	pdl:2.99e-01 	 Rec:4.95e-02 	Time: 1.56
+epoch 9200:	pdl:2.37e-01 	 Rec:4.97e-02 	Time: 1.53
+epoch 9250:	pdl:2.67e-01 	 Rec:5.14e-02 	Time: 1.54
+epoch 9300:	pdl:2.39e-01 	 Rec:4.88e-02 	Time: 1.56
+epoch 9350:	pdl:2.77e-01 	 Rec:5.02e-02 	Time: 1.63
+epoch 9400:	pdl:2.58e-01 	 Rec:5.07e-02 	Time: 1.58
+epoch 9450:	pdl:3.02e-01 	 Rec:5.07e-02 	Time: 1.57
+epoch 9500:	pdl:2.47e-01 	 Rec:5.02e-02 	Time: 1.57
+epoch 9550:	pdl:2.74e-01 	 Rec:4.91e-02 	Time: 1.58
+epoch 9600:	pdl:2.65e-01 	 Rec:5.12e-02 	Time: 1.58
+epoch 9650:	pdl:2.53e-01 	 Rec:5.15e-02 	Time: 1.74
+epoch 9700:	pdl:2.48e-01 	 Rec:4.76e-02 	Time: 1.58
