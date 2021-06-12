@@ -88,7 +88,8 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
     image_pad_func = nn.ZeroPad2d(int(pad_image))
 
     loss_block, layers_losses = loss_model.generate_loss_block(vgg, real_img, opt.loss_func, opt.chosen_layers, opt)
-    c_loss_block = loss_model.generate_c_loss_block(real_img, opt.c_patch_size, opt.c_loss_func, opt.device)
+    if opt.c_alpha != 0:
+        c_loss_block = loss_model.generate_c_loss_block(real_img, opt.c_patch_size, opt.c_loss_func, opt.device)
 
     # Setup Optimizer
     optimizer = optim.Adam(curr_G.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
@@ -185,7 +186,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         scheduler.step()
         # scheduler.step(total_loss)
         rec_loss_arr.append(rec_loss.detach())
-        color_loss_arr.append(color_loss.detach())
+        color_loss_arr.append(color_loss.detach() if opt.c_alpha else color_loss)
 
         if epoch % opt.epoch_print == 0:
             print_line = f"epoch {epoch}:\t{opt.loss_func}:%.2e \t Rec:%.2e \t Color:%.2e \t" \
