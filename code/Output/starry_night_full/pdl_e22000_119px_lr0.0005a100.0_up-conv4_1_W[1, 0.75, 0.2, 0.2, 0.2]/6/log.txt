@@ -264,3 +264,7 @@ epoch 13100:	pdl:2.40e-01 	 Rec:3.05e-02 	Time: 2.10
 epoch 13150:	pdl:2.30e-01 	 Rec:3.32e-02 	Time: 2.09
 epoch 13200:	pdl:2.65e-01 	 Rec:3.04e-02 	Time: 2.06
 epoch 13250:	pdl:2.38e-01 	 Rec:3.14e-02 	Time: 2.11
+epoch 13300:	pdl:2.32e-01 	 Rec:3.11e-02 	Time: 2.06
+epoch 13350:	pdl:2.39e-01 	 Rec:3.12e-02 	Time: 2.14
+epoch 13400:	pdl:2.57e-01 	 Rec:3.29e-02 	Time: 2.11
+epoch 13450:	pdl:2.72e-01 	 Rec:3.38e-02 	Time: 2.06
