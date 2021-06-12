@@ -10,6 +10,8 @@ import torch.optim as optim
 import plotting_helpers
 import image_processing
 import output_handler
+import pd_loss
+import style_loss
 
 G_WEIGHTS_FNAME = 'netG.pth'
 
@@ -86,6 +88,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
     image_pad_func = nn.ZeroPad2d(int(pad_image))
 
     loss_block, layers_losses = loss_model.generate_loss_block(vgg, real_img, opt.loss_func, opt.chosen_layers, opt)
+    c_loss_block = loss_model.generate_c_loss_block(real_img, opt.c_patch_size, opt.c_loss_func, opt.device)
 
     # Setup Optimizer
     optimizer = optim.Adam(curr_G.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
@@ -96,6 +99,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
 
     style_loss_arr = []
     rec_loss_arr = []
+    color_loss_arr = []
 
     # z_opt is {Z*, 0, 0, 0, ...}. The specific set of input noise maps
     # which generates the original image xn
@@ -162,22 +166,31 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
                 if epoch==0:
                     style_rec_factor = style_loss_arr[0]/rec_loss.detach()
                 rec_loss = style_rec_factor*rec_loss
-                rec_loss.backward(retain_graph=True)
-                rec_loss = rec_loss.detach()
+                # rec_loss.backward(retain_graph=True)
+                # rec_loss = rec_loss.detach()
             else:
                 Z_opt = z_opt
                 rec_loss = 0
 
-            total_loss = loss + opt.alpha*rec_loss
+            if opt.c_alpha != 0:
+                fake_im_patches = loss_model.split_img_to_patches(fake_im, opt.c_patch_size)
+                c_loss_block(fake_im_patches)
+                color_loss = c_loss_block.loss
+            else:
+                color_loss = 0
+
+            total_loss = loss + opt.alpha*rec_loss + opt.c_alpha*color_loss
             total_loss.backward(retain_graph=True)
             optimizer.step()
         scheduler.step()
         # scheduler.step(total_loss)
         rec_loss_arr.append(rec_loss.detach())
+        color_loss_arr.append(color_loss.detach())
 
         if epoch % opt.epoch_print == 0:
-            print_line = f"epoch {epoch}:\t{opt.loss_func}:%.2e \t Rec:%.2e \tTime: %.2f" % \
-                  (style_loss_arr[-1], rec_loss_arr[-1], time.time() - start_time)
+            print_line = f"epoch {epoch}:\t{opt.loss_func}:%.2e \t Rec:%.2e \t Color:%.2e \t" \
+                    "Time: %.2f" % (style_loss_arr[-1], rec_loss_arr[-1], color_loss_arr[-1],
+                                    time.time() - start_time)
             print(print_line)
             with open(os.path.join(out_dir, 'log.txt'), 'a') as f:
                 f.write(f'{print_line}\n')

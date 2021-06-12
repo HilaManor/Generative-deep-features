@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import numpy as np
 import math
 import style_loss
 import contextual_loss
@@ -119,3 +120,23 @@ def validate_vgg_im_size(im):
 def validate_vgg_layers_amount(im_shape, layers, min_features):
     n = math.floor(1 + math.log(im_shape[0]*im_shape[1] / min_features))
     return layers[0:n]  # if n > len(layers), returns all layers.
+
+
+def generate_c_loss_block(real_img, c_patch_size, mode, device):
+    real_img_patches = split_img_to_patches(real_img, c_patch_size)
+
+    if mode.lower() == 'style':
+        loss_f = style_loss.StyleLoss
+    elif mode.lower() == 'contextual':
+        loss_f = contextual_loss.ContextualLoss
+    elif mode.lower() == 'pdl':
+        loss_f = pd_loss.PDLoss
+
+    return loss_f(real_img_patches, device=device)
+
+
+def split_img_to_patches(im, patch_size):
+    patches = im.unfold(2, patch_size, patch_size).unfold(2, patch_size, patch_size)
+    patches = patches.permute((0, 2, 3, 1, 4, 5))
+    patches = patches.reshape(-1, 3, patch_size, patch_size)
+    return patches
