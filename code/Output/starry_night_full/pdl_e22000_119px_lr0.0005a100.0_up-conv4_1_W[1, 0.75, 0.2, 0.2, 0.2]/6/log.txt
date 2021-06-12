@@ -173,3 +173,10 @@ epoch 8550:	pdl:2.60e-01 	 Rec:5.73e-02 	Time: 1.59
 epoch 8600:	pdl:2.96e-01 	 Rec:5.17e-02 	Time: 1.57
 epoch 8650:	pdl:2.52e-01 	 Rec:5.03e-02 	Time: 1.59
 epoch 8700:	pdl:2.55e-01 	 Rec:5.04e-02 	Time: 1.59
+epoch 8750:	pdl:2.71e-01 	 Rec:5.09e-02 	Time: 1.70
+epoch 8800:	pdl:2.49e-01 	 Rec:4.95e-02 	Time: 1.55
+epoch 8850:	pdl:2.51e-01 	 Rec:4.91e-02 	Time: 1.55
+epoch 8900:	pdl:2.69e-01 	 Rec:4.92e-02 	Time: 1.56
+epoch 8950:	pdl:2.55e-01 	 Rec:4.96e-02 	Time: 1.54
+epoch 9000:	pdl:2.74e-01 	 Rec:4.74e-02 	Time: 1.56
+epoch 9050:	pdl:2.50e-01 	 Rec:4.96e-02 	Time: 1.64
