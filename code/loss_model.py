@@ -122,8 +122,9 @@ def validate_vgg_layers_amount(im_shape, layers, min_features):
     return layers[0:n]  # if n > len(layers), returns all layers.
 
 
-def generate_c_loss_block(real_img, c_patch_size, mode, device):
+def generate_c_loss_block(real_img, c_patch_size, mode, nc, device):
     real_img_patches = split_img_to_patches(real_img, c_patch_size)
+    real_img_patches_flattened = real_img_patches.reshape(1, -1, nc * c_patch_size * c_patch_size, 1)
 
     if mode.lower() == 'style':
         loss_f = style_loss.StyleLoss
@@ -132,7 +133,7 @@ def generate_c_loss_block(real_img, c_patch_size, mode, device):
     elif mode.lower() == 'pdl':
         loss_f = pd_loss.PDLoss
 
-    return loss_f(real_img_patches, device=device)
+    return loss_f(real_img_patches_flattened, device=device)
 
 
 def split_img_to_patches(im, patch_size):

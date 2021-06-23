@@ -89,7 +89,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
 
     loss_block, layers_losses = loss_model.generate_loss_block(vgg, real_img, opt.loss_func, opt.chosen_layers, opt)
     if opt.c_alpha != 0:
-        c_loss_block = loss_model.generate_c_loss_block(real_img, opt.c_patch_size, opt.c_loss_func, opt.device)
+        c_loss_block = loss_model.generate_c_loss_block(real_img, opt.c_patch_size, opt.loss_func, opt.device)
 
     # Setup Optimizer
     optimizer = optim.Adam(curr_G.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
@@ -156,9 +156,16 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
                     fake_im.shape[2:], opt.chosen_layers, opt.min_features))
 
             loss_block(fake_im)
-            loss = 0
+            if opt.c_alpha != 0:
+                fake_im_patches = loss_model.split_img_to_patches(fake_im, opt.c_patch_size)
+                c_loss_block(fake_im_patches)
+                color_loss = c_loss_block.loss
+            else:
+                color_loss = 0
+
+            loss = color_loss * opt.c_alpha / (n_layers + 1)
             for i, sl in enumerate(layers_losses):
-                loss += opt.layers_weights[i] * sl.loss / n_layers
+                loss += opt.layers_weights[i] * sl.loss / (n_layers + 1)
             style_loss_arr.append(loss.detach())
             #loss.backward(retain_graph=True)
 
@@ -177,14 +184,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
                 Z_opt = z_opt
                 rec_loss = 0
 
-            if opt.c_alpha != 0:
-                fake_im_patches = loss_model.split_img_to_patches(fake_im, opt.c_patch_size)
-                c_loss_block(fake_im_patches)
-                color_loss = c_loss_block.loss
-            else:
-                color_loss = 0
-
-            total_loss = loss + opt.alpha*rec_loss + opt.c_alpha*color_loss
+            total_loss = loss + opt.alpha*rec_loss
             total_loss.backward(retain_graph=True)
             optimizer.step()
         scheduler.step()
