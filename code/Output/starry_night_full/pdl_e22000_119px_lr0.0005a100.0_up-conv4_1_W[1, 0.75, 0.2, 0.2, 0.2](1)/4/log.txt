@@ -133,3 +133,10 @@ epoch 6550:	pdl:5.69e-01 	 Rec:7.22e-03 	 Color:0.00e+00 	Time: 0.77
 epoch 6600:	pdl:5.62e-01 	 Rec:8.85e-03 	 Color:0.00e+00 	Time: 0.77
 epoch 6650:	pdl:5.72e-01 	 Rec:9.52e-03 	 Color:0.00e+00 	Time: 0.77
 epoch 6700:	pdl:5.04e-01 	 Rec:8.73e-03 	 Color:0.00e+00 	Time: 0.77
+epoch 6750:	pdl:5.20e-01 	 Rec:6.72e-03 	 Color:0.00e+00 	Time: 0.80
+epoch 6800:	pdl:5.69e-01 	 Rec:7.94e-03 	 Color:0.00e+00 	Time: 0.78
+epoch 6850:	pdl:5.74e-01 	 Rec:6.32e-03 	 Color:0.00e+00 	Time: 0.76
+epoch 6900:	pdl:5.39e-01 	 Rec:7.23e-03 	 Color:0.00e+00 	Time: 0.75
+epoch 6950:	pdl:5.97e-01 	 Rec:6.90e-03 	 Color:0.00e+00 	Time: 0.77
+epoch 7000:	pdl:5.93e-01 	 Rec:1.15e-02 	 Color:0.00e+00 	Time: 0.76
+epoch 7050:	pdl:5.31e-01 	 Rec:6.16e-03 	 Color:0.00e+00 	Time: 0.76
