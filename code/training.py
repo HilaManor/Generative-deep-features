@@ -114,7 +114,11 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         RMSE = torch.sqrt(criterion(real_img, z_prev))
         noise_amp = opt.noise_amp * RMSE
         z_prev = image_pad_func(z_prev)
-        z_opt = noise_pad_func(torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, dtype=torch.float32, device=opt.device))
+        if opt.z_opt_zero:
+            z_opt = noise_pad_func(torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, dtype=torch.float32, device=opt.device))
+        else:
+            z_opt = image_processing.generate_noise([1, opt.nzx, opt.nzy], device=opt.device)
+            z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
     else:
         prev = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
         # TODO in_s = prev

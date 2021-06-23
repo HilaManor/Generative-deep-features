@@ -72,5 +72,6 @@ def get_arguments():
     oo_group.add_argument('--c_loss_func', type=str, help='style/pdl', default='pdl')
     oo_group.add_argument('--c_alpha', type=int, help='aa', default=0)
     oo_group.add_argument('--generate_fake_amount', type=int, help='aa', default=5)
+    oo_group.add_argument('--z_opt_zero', action='store_true', help='aa')
 
     return parser
