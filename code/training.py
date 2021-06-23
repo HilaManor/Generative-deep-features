@@ -158,7 +158,8 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
             loss_block(fake_im)
             if opt.c_alpha != 0:
                 fake_im_patches = loss_model.split_img_to_patches(fake_im, opt.c_patch_size)
-                c_loss_block(fake_im_patches)
+                fake_im_patches_flattened = fake_im_patches.reshape(1, -1, opt.nc * opt.c_patch_size * opt.c_patch_size, 1)
+                c_loss_block(fake_im_patches_flattened)
                 color_loss = c_loss_block.loss
             else:
                 color_loss = 0
