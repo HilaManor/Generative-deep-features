@@ -89,7 +89,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
 
     loss_block, layers_losses = loss_model.generate_loss_block(vgg, real_img, opt.loss_func, opt.chosen_layers, opt)
     if opt.c_alpha != 0:
-        c_loss_block = loss_model.generate_c_loss_block(real_img, opt.c_patch_size, opt.loss_func, opt.device)
+        c_loss_block = loss_model.generate_c_loss_block(real_img, opt.c_patch_size, opt.loss_func, opt.nc, opt.device)
 
     # Setup Optimizer
     optimizer = optim.Adam(curr_G.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
