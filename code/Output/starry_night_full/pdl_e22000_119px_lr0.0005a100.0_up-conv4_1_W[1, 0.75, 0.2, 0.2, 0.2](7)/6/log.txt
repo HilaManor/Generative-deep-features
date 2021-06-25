@@ -426,3 +426,15 @@ epoch 21200:	pdl:7.50e-01 	 Rec:1.44e-03 	 Color:2.15e-01 	Time: 2.10
 epoch 21250:	pdl:7.74e-01 	 Rec:1.40e-03 	 Color:2.21e-01 	Time: 2.10
 epoch 21300:	pdl:7.37e-01 	 Rec:1.42e-03 	 Color:2.20e-01 	Time: 2.09
 epoch 21350:	pdl:7.71e-01 	 Rec:1.40e-03 	 Color:2.34e-01 	Time: 2.13
+epoch 21400:	pdl:7.77e-01 	 Rec:1.40e-03 	 Color:2.28e-01 	Time: 2.12
+epoch 21450:	pdl:8.11e-01 	 Rec:1.38e-03 	 Color:2.20e-01 	Time: 2.14
+epoch 21500:	pdl:7.37e-01 	 Rec:1.46e-03 	 Color:2.16e-01 	Time: 2.11
+epoch 21550:	pdl:8.02e-01 	 Rec:1.38e-03 	 Color:2.24e-01 	Time: 2.05
+epoch 21600:	pdl:7.69e-01 	 Rec:1.36e-03 	 Color:2.08e-01 	Time: 2.11
+epoch 21650:	pdl:7.95e-01 	 Rec:1.36e-03 	 Color:2.20e-01 	Time: 2.16
+epoch 21700:	pdl:8.11e-01 	 Rec:1.36e-03 	 Color:2.30e-01 	Time: 2.11
+epoch 21750:	pdl:7.82e-01 	 Rec:1.37e-03 	 Color:2.20e-01 	Time: 2.13
+epoch 21800:	pdl:8.38e-01 	 Rec:1.37e-03 	 Color:2.24e-01 	Time: 2.07
+epoch 21850:	pdl:7.55e-01 	 Rec:1.39e-03 	 Color:2.23e-01 	Time: 2.15
+epoch 21900:	pdl:7.45e-01 	 Rec:1.33e-03 	 Color:2.18e-01 	Time: 2.03
+epoch 21950:	pdl:7.94e-01 	 Rec:1.34e-03 	 Color:2.27e-01 	Time: 2.13
