@@ -1,0 +1,4 @@
+epoch 0:	pdl:1.15e+00 	 Rec:1.15e+00 	 Color:3.08e-01 	Time: 0.02
+epoch 50:	pdl:1.09e+00 	 Rec:1.57e-01 	 Color:2.57e-01 	Time: 2.14
+epoch 100:	pdl:1.04e+00 	 Rec:1.37e-01 	 Color:2.36e-01 	Time: 2.09
+epoch 150:	pdl:9.18e-01 	 Rec:1.26e-01 	 Color:2.72e-01 	Time: 2.08
