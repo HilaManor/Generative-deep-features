@@ -23,3 +23,15 @@ epoch 1050:	pdl:6.28e-01 	 Rec:1.03e-02 	 Color:0.00e+00 	Time: 0.53
 epoch 1100:	pdl:5.37e-01 	 Rec:1.02e-02 	 Color:0.00e+00 	Time: 0.53
 epoch 1150:	pdl:5.43e-01 	 Rec:7.31e-03 	 Color:0.00e+00 	Time: 0.53
 epoch 1200:	pdl:5.59e-01 	 Rec:8.35e-03 	 Color:0.00e+00 	Time: 0.53
+epoch 1250:	pdl:5.98e-01 	 Rec:8.60e-03 	 Color:0.00e+00 	Time: 0.56
+epoch 1300:	pdl:6.58e-01 	 Rec:6.06e-03 	 Color:0.00e+00 	Time: 0.56
+epoch 1350:	pdl:6.02e-01 	 Rec:6.29e-03 	 Color:0.00e+00 	Time: 0.57
+epoch 1400:	pdl:6.20e-01 	 Rec:6.59e-03 	 Color:0.00e+00 	Time: 0.53
+epoch 1450:	pdl:6.17e-01 	 Rec:6.40e-03 	 Color:0.00e+00 	Time: 0.53
+epoch 1500:	pdl:6.40e-01 	 Rec:5.85e-03 	 Color:0.00e+00 	Time: 0.53
+epoch 1550:	pdl:5.62e-01 	 Rec:6.96e-03 	 Color:0.00e+00 	Time: 0.53
+epoch 1600:	pdl:5.65e-01 	 Rec:6.28e-03 	 Color:0.00e+00 	Time: 0.53
+epoch 1650:	pdl:6.29e-01 	 Rec:4.91e-03 	 Color:0.00e+00 	Time: 0.53
+epoch 1700:	pdl:5.33e-01 	 Rec:4.32e-03 	 Color:0.00e+00 	Time: 0.53
+epoch 1750:	pdl:6.69e-01 	 Rec:5.59e-03 	 Color:0.00e+00 	Time: 0.53
+epoch 1800:	pdl:6.74e-01 	 Rec:5.44e-03 	 Color:0.00e+00 	Time: 0.53
