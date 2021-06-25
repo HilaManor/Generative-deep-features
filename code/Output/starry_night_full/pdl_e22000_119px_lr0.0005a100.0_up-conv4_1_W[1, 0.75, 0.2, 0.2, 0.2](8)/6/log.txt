@@ -223,3 +223,16 @@ epoch 11050:	pdl:3.26e-01 	 Rec:8.08e-03 	 Color:2.71e-01 	Time: 2.11
 epoch 11100:	pdl:3.57e-01 	 Rec:7.51e-03 	 Color:2.60e-01 	Time: 2.07
 epoch 11150:	pdl:3.66e-01 	 Rec:8.06e-03 	 Color:2.50e-01 	Time: 2.10
 epoch 11200:	pdl:3.19e-01 	 Rec:9.55e-03 	 Color:2.55e-01 	Time: 2.12
+epoch 11250:	pdl:3.68e-01 	 Rec:8.75e-03 	 Color:2.50e-01 	Time: 2.14
+epoch 11300:	pdl:3.62e-01 	 Rec:8.05e-03 	 Color:2.36e-01 	Time: 2.13
+epoch 11350:	pdl:4.04e-01 	 Rec:8.33e-03 	 Color:2.38e-01 	Time: 2.08
+epoch 11400:	pdl:4.05e-01 	 Rec:7.69e-03 	 Color:2.64e-01 	Time: 2.13
+epoch 11450:	pdl:3.93e-01 	 Rec:9.11e-03 	 Color:2.82e-01 	Time: 2.05
+epoch 11500:	pdl:3.86e-01 	 Rec:5.55e-03 	 Color:2.66e-01 	Time: 2.08
+epoch 11550:	pdl:3.46e-01 	 Rec:6.75e-03 	 Color:2.56e-01 	Time: 2.10
+epoch 11600:	pdl:3.72e-01 	 Rec:7.98e-03 	 Color:2.43e-01 	Time: 2.12
+epoch 11650:	pdl:3.90e-01 	 Rec:7.61e-03 	 Color:2.35e-01 	Time: 2.11
+epoch 11700:	pdl:3.63e-01 	 Rec:6.28e-03 	 Color:2.51e-01 	Time: 2.11
+epoch 11750:	pdl:3.78e-01 	 Rec:5.08e-03 	 Color:2.48e-01 	Time: 2.01
+epoch 11800:	pdl:3.79e-01 	 Rec:7.19e-03 	 Color:2.77e-01 	Time: 2.11
+epoch 11850:	pdl:3.49e-01 	 Rec:6.56e-03 	 Color:2.44e-01 	Time: 2.08

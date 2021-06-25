@@ -385,3 +385,16 @@ epoch 19150:	pdl:8.17e-01 	 Rec:1.65e-03 	 Color:2.24e-01 	Time: 2.11
 epoch 19200:	pdl:7.21e-01 	 Rec:1.64e-03 	 Color:2.03e-01 	Time: 2.05
 epoch 19250:	pdl:7.72e-01 	 Rec:1.64e-03 	 Color:2.27e-01 	Time: 2.10
 epoch 19300:	pdl:7.16e-01 	 Rec:1.63e-03 	 Color:2.13e-01 	Time: 2.14
+epoch 19350:	pdl:7.79e-01 	 Rec:1.63e-03 	 Color:2.25e-01 	Time: 2.12
+epoch 19400:	pdl:7.53e-01 	 Rec:1.62e-03 	 Color:2.24e-01 	Time: 2.11
+epoch 19450:	pdl:7.50e-01 	 Rec:1.62e-03 	 Color:2.13e-01 	Time: 2.12
+epoch 19500:	pdl:7.38e-01 	 Rec:1.61e-03 	 Color:2.23e-01 	Time: 2.09
+epoch 19550:	pdl:7.22e-01 	 Rec:1.60e-03 	 Color:2.13e-01 	Time: 2.04
+epoch 19600:	pdl:7.67e-01 	 Rec:1.60e-03 	 Color:2.29e-01 	Time: 2.10
+epoch 19650:	pdl:7.65e-01 	 Rec:1.59e-03 	 Color:2.26e-01 	Time: 2.10
+epoch 19700:	pdl:7.77e-01 	 Rec:1.58e-03 	 Color:2.23e-01 	Time: 2.12
+epoch 19750:	pdl:7.73e-01 	 Rec:1.59e-03 	 Color:2.19e-01 	Time: 2.08
+epoch 19800:	pdl:7.72e-01 	 Rec:1.57e-03 	 Color:2.27e-01 	Time: 2.11
+epoch 19850:	pdl:7.38e-01 	 Rec:1.56e-03 	 Color:2.10e-01 	Time: 1.97
+epoch 19900:	pdl:7.52e-01 	 Rec:1.56e-03 	 Color:2.32e-01 	Time: 2.11
+epoch 19950:	pdl:7.77e-01 	 Rec:1.56e-03 	 Color:2.24e-01 	Time: 2.10
