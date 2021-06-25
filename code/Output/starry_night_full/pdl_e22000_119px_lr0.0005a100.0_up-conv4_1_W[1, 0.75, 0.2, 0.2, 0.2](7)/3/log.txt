@@ -256,3 +256,16 @@ epoch 12700:	pdl:8.76e-01 	 Rec:1.85e-03 	 Color:1.91e-01 	Time: 0.70
 epoch 12750:	pdl:9.10e-01 	 Rec:1.56e-03 	 Color:2.03e-01 	Time: 0.70
 epoch 12800:	pdl:9.58e-01 	 Rec:4.99e-03 	 Color:1.91e-01 	Time: 0.71
 epoch 12850:	pdl:8.44e-01 	 Rec:3.98e-03 	 Color:1.72e-01 	Time: 0.71
+epoch 12900:	pdl:8.44e-01 	 Rec:1.64e-03 	 Color:1.81e-01 	Time: 0.77
+epoch 12950:	pdl:8.50e-01 	 Rec:3.15e-03 	 Color:1.88e-01 	Time: 0.76
+epoch 13000:	pdl:8.47e-01 	 Rec:2.39e-03 	 Color:1.70e-01 	Time: 0.71
+epoch 13050:	pdl:8.76e-01 	 Rec:1.93e-03 	 Color:1.80e-01 	Time: 0.71
+epoch 13100:	pdl:8.86e-01 	 Rec:2.90e-03 	 Color:1.87e-01 	Time: 0.71
+epoch 13150:	pdl:8.61e-01 	 Rec:3.11e-03 	 Color:1.76e-01 	Time: 0.70
+epoch 13200:	pdl:8.58e-01 	 Rec:2.18e-03 	 Color:1.96e-01 	Time: 0.65
+epoch 13250:	pdl:8.77e-01 	 Rec:2.08e-03 	 Color:1.74e-01 	Time: 0.72
+epoch 13300:	pdl:9.10e-01 	 Rec:1.87e-03 	 Color:2.00e-01 	Time: 0.76
+epoch 13350:	pdl:8.35e-01 	 Rec:2.66e-03 	 Color:1.78e-01 	Time: 0.79
+epoch 13400:	pdl:8.83e-01 	 Rec:1.64e-03 	 Color:1.83e-01 	Time: 0.77
+epoch 13450:	pdl:8.43e-01 	 Rec:2.56e-03 	 Color:1.72e-01 	Time: 0.77
+epoch 13500:	pdl:8.77e-01 	 Rec:2.38e-03 	 Color:1.94e-01 	Time: 0.77
