@@ -69,7 +69,7 @@ def get_arguments():
                           help='Upsample the image to 224 before inserting to VGG instead of '
                                'addaptivley choosing the layers')
     oo_group.add_argument('--c_patch_size', type=int, default=5, help='aa')
-    oo_group.add_argument('--c_alpha', type=int, help='aa', default=0)
+    oo_group.add_argument('--c_alpha', type=float, help='aa', default=0)
     oo_group.add_argument('--generate_fake_amount', type=int, help='aa', default=5)
     oo_group.add_argument('--z_opt_zero', action='store_true', help='aa')
 
