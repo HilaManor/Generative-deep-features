@@ -1,0 +1,106 @@
+
+Random Seed:  42
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		SCALE 0
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+epoch 0:	pdl:1.54e+00 	 Rec:1.54e+00 	 Color:0.00e+00 	Time: 0.01
+epoch 50:	pdl:6.11e-01 	 Rec:1.03e-02 	 Color:0.00e+00 	Time: 0.42
+epoch 100:	pdl:6.55e-01 	 Rec:3.78e-03 	 Color:0.00e+00 	Time: 0.40
+epoch 150:	pdl:5.81e-01 	 Rec:7.13e-04 	 Color:0.00e+00 	Time: 0.42
+epoch 200:	pdl:5.44e-01 	 Rec:2.33e-03 	 Color:0.00e+00 	Time: 0.38
+epoch 250:	pdl:6.06e-01 	 Rec:1.04e-03 	 Color:0.00e+00 	Time: 0.36
+epoch 300:	pdl:5.93e-01 	 Rec:1.70e-03 	 Color:0.00e+00 	Time: 0.40
+epoch 350:	pdl:5.64e-01 	 Rec:4.05e-04 	 Color:0.00e+00 	Time: 0.43
+epoch 400:	pdl:5.66e-01 	 Rec:4.50e-04 	 Color:0.00e+00 	Time: 0.40
+epoch 450:	pdl:5.59e-01 	 Rec:2.53e-04 	 Color:0.00e+00 	Time: 0.38
+epoch 500:	pdl:5.73e-01 	 Rec:1.57e-04 	 Color:0.00e+00 	Time: 0.37
+epoch 550:	pdl:5.67e-01 	 Rec:4.58e-04 	 Color:0.00e+00 	Time: 0.43
+epoch 600:	pdl:5.39e-01 	 Rec:5.45e-04 	 Color:0.00e+00 	Time: 0.38
+epoch 650:	pdl:5.24e-01 	 Rec:1.96e-03 	 Color:0.00e+00 	Time: 0.40
+epoch 700:	pdl:5.39e-01 	 Rec:1.08e-03 	 Color:0.00e+00 	Time: 0.40
+epoch 750:	pdl:5.56e-01 	 Rec:5.85e-04 	 Color:0.00e+00 	Time: 0.40
+epoch 800:	pdl:5.39e-01 	 Rec:6.88e-04 	 Color:0.00e+00 	Time: 0.40
+epoch 850:	pdl:5.42e-01 	 Rec:1.20e-03 	 Color:0.00e+00 	Time: 0.36
+epoch 900:	pdl:5.35e-01 	 Rec:3.35e-04 	 Color:0.00e+00 	Time: 0.40
+epoch 950:	pdl:5.49e-01 	 Rec:3.28e-04 	 Color:0.00e+00 	Time: 0.40
+0 Scale Training Time: 8.172288179397583
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		SCALE 1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+epoch 0:	pdl:8.00e-01 	 Rec:8.00e-01 	 Color:0.00e+00 	Time: 0.01
+epoch 50:	pdl:5.13e-01 	 Rec:3.16e-02 	 Color:0.00e+00 	Time: 0.54
+epoch 100:	pdl:5.24e-01 	 Rec:3.29e-02 	 Color:0.00e+00 	Time: 0.48
+epoch 150:	pdl:5.13e-01 	 Rec:1.92e-02 	 Color:0.00e+00 	Time: 0.45
+epoch 200:	pdl:4.93e-01 	 Rec:1.23e-02 	 Color:0.00e+00 	Time: 0.41
+epoch 250:	pdl:4.86e-01 	 Rec:9.43e-03 	 Color:0.00e+00 	Time: 0.43
+epoch 300:	pdl:5.01e-01 	 Rec:1.12e-02 	 Color:0.00e+00 	Time: 0.45
+epoch 350:	pdl:4.95e-01 	 Rec:7.99e-03 	 Color:0.00e+00 	Time: 0.46
+epoch 400:	pdl:5.67e-01 	 Rec:9.57e-03 	 Color:0.00e+00 	Time: 0.46
+epoch 450:	pdl:5.07e-01 	 Rec:3.63e-03 	 Color:0.00e+00 	Time: 0.46
+epoch 500:	pdl:4.71e-01 	 Rec:2.64e-03 	 Color:0.00e+00 	Time: 0.44
+epoch 550:	pdl:4.84e-01 	 Rec:4.93e-03 	 Color:0.00e+00 	Time: 0.49
+epoch 600:	pdl:4.69e-01 	 Rec:2.94e-03 	 Color:0.00e+00 	Time: 0.48
+epoch 650:	pdl:4.96e-01 	 Rec:3.66e-03 	 Color:0.00e+00 	Time: 0.45
+epoch 700:	pdl:4.79e-01 	 Rec:1.96e-03 	 Color:0.00e+00 	Time: 0.47
+epoch 750:	pdl:4.98e-01 	 Rec:4.40e-03 	 Color:0.00e+00 	Time: 0.47
+epoch 800:	pdl:4.54e-01 	 Rec:4.55e-03 	 Color:0.00e+00 	Time: 0.45
+epoch 850:	pdl:4.97e-01 	 Rec:2.34e-03 	 Color:0.00e+00 	Time: 0.45
+epoch 900:	pdl:4.77e-01 	 Rec:5.83e-03 	 Color:0.00e+00 	Time: 0.45
+epoch 950:	pdl:4.93e-01 	 Rec:3.10e-03 	 Color:0.00e+00 	Time: 0.42
+1 Scale Training Time: 9.486045598983765
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		SCALE 2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+epoch 0:	pdl:1.07e+00 	 Rec:1.07e+00 	 Color:0.00e+00 	Time: 0.02
+epoch 50:	pdl:8.83e-01 	 Rec:6.65e-02 	 Color:0.00e+00 	Time: 0.69
+epoch 100:	pdl:7.69e-01 	 Rec:4.53e-02 	 Color:0.00e+00 	Time: 0.62
+epoch 150:	pdl:8.10e-01 	 Rec:4.99e-02 	 Color:0.00e+00 	Time: 0.60
+epoch 200:	pdl:7.68e-01 	 Rec:3.80e-02 	 Color:0.00e+00 	Time: 0.58
+epoch 250:	pdl:7.58e-01 	 Rec:3.65e-02 	 Color:0.00e+00 	Time: 0.57
+epoch 300:	pdl:8.19e-01 	 Rec:2.11e-02 	 Color:0.00e+00 	Time: 0.63
+epoch 350:	pdl:7.19e-01 	 Rec:2.17e-02 	 Color:0.00e+00 	Time: 0.59
+epoch 400:	pdl:7.65e-01 	 Rec:1.41e-02 	 Color:0.00e+00 	Time: 0.59
+epoch 450:	pdl:7.82e-01 	 Rec:1.48e-02 	 Color:0.00e+00 	Time: 0.57
+epoch 500:	pdl:7.60e-01 	 Rec:1.21e-02 	 Color:0.00e+00 	Time: 0.57
+epoch 550:	pdl:7.38e-01 	 Rec:1.52e-02 	 Color:0.00e+00 	Time: 0.60
+epoch 600:	pdl:7.33e-01 	 Rec:1.37e-02 	 Color:0.00e+00 	Time: 0.57
+epoch 650:	pdl:7.33e-01 	 Rec:1.25e-02 	 Color:0.00e+00 	Time: 0.60
+epoch 700:	pdl:7.24e-01 	 Rec:8.31e-03 	 Color:0.00e+00 	Time: 0.61
+epoch 750:	pdl:6.66e-01 	 Rec:1.06e-02 	 Color:0.00e+00 	Time: 0.61
+epoch 800:	pdl:7.39e-01 	 Rec:6.86e-03 	 Color:0.00e+00 	Time: 0.59
+epoch 850:	pdl:7.24e-01 	 Rec:6.91e-03 	 Color:0.00e+00 	Time: 0.59
+epoch 900:	pdl:6.87e-01 	 Rec:8.54e-03 	 Color:0.00e+00 	Time: 0.58
+epoch 950:	pdl:7.42e-01 	 Rec:6.72e-03 	 Color:0.00e+00 	Time: 0.59
+2 Scale Training Time: 12.279564619064331
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		SCALE 3
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+epoch 0:	pdl:1.22e+00 	 Rec:1.22e+00 	 Color:0.00e+00 	Time: 0.01
+epoch 50:	pdl:9.07e-01 	 Rec:9.48e-02 	 Color:0.00e+00 	Time: 0.77
+epoch 100:	pdl:7.83e-01 	 Rec:7.80e-02 	 Color:0.00e+00 	Time: 0.69
+epoch 150:	pdl:7.46e-01 	 Rec:6.91e-02 	 Color:0.00e+00 	Time: 0.67
+epoch 200:	pdl:6.86e-01 	 Rec:5.32e-02 	 Color:0.00e+00 	Time: 0.65
+epoch 250:	pdl:7.03e-01 	 Rec:4.68e-02 	 Color:0.00e+00 	Time: 0.64
+epoch 300:	pdl:6.73e-01 	 Rec:3.63e-02 	 Color:0.00e+00 	Time: 0.67
+epoch 350:	pdl:7.02e-01 	 Rec:3.08e-02 	 Color:0.00e+00 	Time: 0.65
+epoch 400:	pdl:7.22e-01 	 Rec:2.92e-02 	 Color:0.00e+00 	Time: 0.68
+epoch 450:	pdl:6.48e-01 	 Rec:2.66e-02 	 Color:0.00e+00 	Time: 0.68
+epoch 500:	pdl:6.23e-01 	 Rec:2.28e-02 	 Color:0.00e+00 	Time: 0.65
+epoch 550:	pdl:6.54e-01 	 Rec:2.02e-02 	 Color:0.00e+00 	Time: 0.70
+epoch 600:	pdl:6.66e-01 	 Rec:1.98e-02 	 Color:0.00e+00 	Time: 0.63
+epoch 650:	pdl:6.60e-01 	 Rec:2.43e-02 	 Color:0.00e+00 	Time: 0.63
+epoch 700:	pdl:7.21e-01 	 Rec:1.72e-02 	 Color:0.00e+00 	Time: 0.65
+epoch 750:	pdl:6.33e-01 	 Rec:1.66e-02 	 Color:0.00e+00 	Time: 0.63
+epoch 800:	pdl:7.08e-01 	 Rec:1.48e-02 	 Color:0.00e+00 	Time: 0.63
+epoch 850:	pdl:6.03e-01 	 Rec:1.58e-02 	 Color:0.00e+00 	Time: 0.64
+epoch 900:	pdl:6.50e-01 	 Rec:1.65e-02 	 Color:0.00e+00 	Time: 0.64
+epoch 950:	pdl:6.44e-01 	 Rec:1.28e-02 	 Color:0.00e+00 	Time: 0.66
+3 Scale Training Time: 13.562450885772705
+Traceback (most recent call last):
+  File "main.py", line 52, in <module>
+    run_tests(Generators, Zs, scale_factor, noise_amps, out_dir, opt)
+  File "/home/hila.manor@staff.technion.ac.il/Generative-deep-features/code/tests.py", line 10, in run_tests
+    results = generate_random_samples(Generators, Zs, scale_factor, noise_amps, opt, n=5)
+  File "/home/hila.manor@staff.technion.ac.il/Generative-deep-features/code/tests.py", line 44, in generate_random_samples
+    z_in = noise_amp * z + prev_fake
+RuntimeError: The size of tensor a (42) must match the size of tensor b (52) at non-singleton dimension 3
