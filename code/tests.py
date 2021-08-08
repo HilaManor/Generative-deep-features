@@ -38,7 +38,7 @@ def generate_random_samples(Generators, Zs, scale_factor, noise_amps, opt, n=5):
                 z = z.expand(1, 3, z.shape[2], z.shape[3])
             z = pad_func(z)
 
-            prev_fake = fake[:, :, :Zs.shape[2], :Zs.shape[3]]
+            prev_fake = fake[:, :, :Z_opt.shape[2], :Z_opt.shape[3]]
             prev_fake = pad_func(prev_fake)
 
             z_in = noise_amp * z + prev_fake
