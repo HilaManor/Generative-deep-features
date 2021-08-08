@@ -94,7 +94,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
 
     # Setup Optimizer
     optimizer = optim.Adam(curr_G.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
-    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[40000],#[600,1500,2600,3000,4500,6000,8000],
+    scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[int(0.8*opt.epochs)],#[600,1500,2600,3000,4500,6000,8000],
                                                gamma=opt.gamma)
     # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=opt.gamma, verbose=True)
 
@@ -180,9 +180,6 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
                 loss_criterion = nn.MSELoss()
                 #rec_loss = (5**len(trained_generators)) * opt.alpha * loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
                 rec_loss = loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
-                if epoch==0:
-                    style_rec_factor = style_loss_arr[0]/rec_loss.detach()
-                rec_loss = style_rec_factor*rec_loss
                 # rec_loss.backward(retain_graph=True)
                 # rec_loss = rec_loss.detach()
             else:
@@ -197,8 +194,8 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         rec_loss_arr.append(rec_loss.detach())
         color_loss_arr.append(color_loss.detach() if opt.c_alpha else color_loss)
 
-        logging_dict = {f'scale_{len(trained_generators)}': {'loss': loss, 'rec_loss': rec_loss, 'total_loss': total_loss, 'epoch': epoch},
-                        'running_total_loss': total_loss, 'running_rec_loss': rec_loss, 'running_loss': loss}
+        logging_dict = {f'scale_{len(trained_generators)}': {'loss': style_loss_arr[-1], 'rec_loss': rec_loss_arr[-1], 'total_loss': total_loss.detach(), 'epoch': epoch},
+                        'running_total_loss': total_loss.detach(), 'running_rec_loss': rec_loss_arr[-1], 'running_loss': style_loss_arr[-1]}
 
         if epoch % opt.epoch_print == 0:
             print_line = f"epoch {epoch}:\t{opt.loss_func}:%.2e \t Rec:%.2e \t Color:%.2e \t" \
