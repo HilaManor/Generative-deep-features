@@ -197,7 +197,8 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         rec_loss_arr.append(rec_loss.detach())
         color_loss_arr.append(color_loss.detach() if opt.c_alpha else color_loss)
 
-        logging_dict = {f'scale_{len(trained_generators)}': {'loss': loss, 'rec_loss': rec_loss, 'total_loss': total_loss, 'epoch': epoch}}
+        logging_dict = {f'scale_{len(trained_generators)}': {'loss': loss, 'rec_loss': rec_loss, 'total_loss': total_loss, 'epoch': epoch},
+                        'running_total_loss': total_loss, 'running_rec_loss': rec_loss, 'running_loss': loss}
 
         if epoch % opt.epoch_print == 0:
             print_line = f"epoch {epoch}:\t{opt.loss_func}:%.2e \t Rec:%.2e \t Color:%.2e \t" \

@@ -5,7 +5,7 @@ def get_arguments():
 
     gen_group = parser.add_argument_group('General Configuration',
                                           'Define the general running configuration of the project')
-    gen_group.add_argument('image_path',
+    gen_group.add_argument('--image_path', required=True,
                            help='Input image path. Relevant output will be created inside '
                                 '<output_folder>/<image basename>')
     gen_group.add_argument('--no_cuda', dest='is_cuda', action='store_false', help='Disable cuda')
