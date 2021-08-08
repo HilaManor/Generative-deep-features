@@ -48,8 +48,8 @@ if __name__ == '__main__':
         f.write(f'{os.path.basename(out_dir)} {opt}\n')
 
     try:
-        Generators, Zs, noise_amps = training.train(out_dir, real_resized, scale_factor, total_scales, opt)
-        run_tests(Generators, Zs, scale_factor, noise_amps, out_dir, opt)
+        Generators, Zs, noise_amps, real_imgs = training.train(out_dir, real_resized, scale_factor, total_scales, opt)
+        run_tests(Generators, Zs, scale_factor, noise_amps, real_imgs, out_dir, opt)
         print('Done Training')
     except KeyboardInterrupt:
         print('done')

@@ -60,7 +60,7 @@ def train(out_dir, real_img, scale_factor, total_scales, opt):
         # TODO -check del curr_G?
 
         nfc_prev = curr_nfc
-    return trained_generators, Zs, noise_amps
+    return trained_generators, Zs, noise_amps,  real_imgs
 
 
 def init_generator(curr_nfc, curr_min_nfc, opt):
