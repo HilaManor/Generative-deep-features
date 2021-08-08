@@ -264,6 +264,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
     #wandb.log({'example_fake_wandb': images_wandb, 'example_fake_all_wandb': images_wandb_all})
     logging_dict[f'scale_{len(trained_generators)}']['example_fake_wandb']= images_wandb
     logging_dict[f'scale_{len(trained_generators)}']['example_fake_all_wandb'] = images_wandb_all
+    wandb.log(logging_dict)
 
     # details_fake = curr_G(example_noise, z_prev)
     z_opt_fake = curr_G(z_opt, z_prev)
