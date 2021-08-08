@@ -1,0 +1,135 @@
+wandb_version: 1
+
+Gsteps:
+  desc: null
+  value: 1
+_wandb:
+  desc: null
+  value:
+    cli_version: 0.11.2
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    python_version: 3.8.5
+    t:
+      1:
+      - 1
+      2:
+      - 1
+      3:
+      - 2
+      4: 3.8.5
+      5: 0.11.2
+      8:
+      - 5
+alpha:
+  desc: null
+  value: 100.0
+beta1:
+  desc: null
+  value: 0.5
+c_alpha:
+  desc: null
+  value: 0
+c_patch_size:
+  desc: null
+  value: 5
+chosen_layers:
+  desc: null
+  value:
+  - conv1_1
+  - conv2_1
+  - conv3_1
+  - conv4_1
+device:
+  desc: null
+  value: cuda:0
+epoch_print:
+  desc: null
+  value: 50
+epoch_save:
+  desc: null
+  value: 1000
+epoch_show:
+  desc: null
+  value: -1
+epochs:
+  desc: null
+  value: 50000
+gamma:
+  desc: null
+  value: 0.1
+generate_fake_amount:
+  desc: null
+  value: 5
+image_path:
+  desc: null
+  value: ../images/1/starry_night_full.jpg
+is_cuda:
+  desc: null
+  value: true
+ker_size:
+  desc: null
+  value: 3
+layers_weights:
+  desc: null
+  value:
+  - 1
+  - 0.75
+  - 0.2
+  - 0.2
+  - 0.2
+loss_func:
+  desc: null
+  value: pdl
+lr:
+  desc: null
+  value: 0.0005
+manual_seed:
+  desc: null
+  value: 42
+max_size:
+  desc: null
+  value: 69
+min_features:
+  desc: null
+  value: 100
+min_nfc:
+  desc: null
+  value: 32
+min_size:
+  desc: null
+  value: 25
+nc:
+  desc: null
+  value: 3
+nfc:
+  desc: null
+  value: 32
+noise_amp:
+  desc: null
+  value: 0.02
+num_layer:
+  desc: null
+  value: 5
+output_folder:
+  desc: null
+  value: Output
+padd_size:
+  desc: null
+  value: 0
+scale_factor:
+  desc: null
+  value: 0.75
+stride:
+  desc: null
+  value: 1
+try_initial_guess:
+  desc: null
+  value: false
+upsample_for_vgg:
+  desc: null
+  value: false
+z_opt_zero:
+  desc: null
+  value: false

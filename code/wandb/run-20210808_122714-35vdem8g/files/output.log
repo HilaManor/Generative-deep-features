@@ -1,0 +1,106 @@
+
+Random Seed:  42
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		SCALE 0
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+epoch 0:	pdl:1.54e+00 	 Rec:1.54e+00 	 Color:0.00e+00 	Time: 0.01
+epoch 50:	pdl:6.10e-01 	 Rec:1.45e-02 	 Color:0.00e+00 	Time: 0.39
+epoch 100:	pdl:6.59e-01 	 Rec:2.18e-03 	 Color:0.00e+00 	Time: 0.40
+epoch 150:	pdl:5.84e-01 	 Rec:1.63e-03 	 Color:0.00e+00 	Time: 0.39
+epoch 200:	pdl:5.42e-01 	 Rec:4.54e-04 	 Color:0.00e+00 	Time: 0.40
+epoch 250:	pdl:6.20e-01 	 Rec:3.36e-03 	 Color:0.00e+00 	Time: 0.37
+epoch 300:	pdl:5.87e-01 	 Rec:9.24e-04 	 Color:0.00e+00 	Time: 0.34
+epoch 350:	pdl:5.62e-01 	 Rec:1.85e-04 	 Color:0.00e+00 	Time: 0.37
+epoch 400:	pdl:5.68e-01 	 Rec:1.76e-03 	 Color:0.00e+00 	Time: 0.38
+epoch 450:	pdl:5.61e-01 	 Rec:1.57e-03 	 Color:0.00e+00 	Time: 0.39
+epoch 500:	pdl:5.71e-01 	 Rec:4.40e-04 	 Color:0.00e+00 	Time: 0.38
+epoch 550:	pdl:5.65e-01 	 Rec:1.60e-04 	 Color:0.00e+00 	Time: 0.41
+epoch 600:	pdl:5.45e-01 	 Rec:2.18e-03 	 Color:0.00e+00 	Time: 0.38
+epoch 650:	pdl:5.21e-01 	 Rec:1.05e-03 	 Color:0.00e+00 	Time: 0.38
+epoch 700:	pdl:5.42e-01 	 Rec:1.13e-03 	 Color:0.00e+00 	Time: 0.38
+epoch 750:	pdl:5.55e-01 	 Rec:6.20e-04 	 Color:0.00e+00 	Time: 0.38
+epoch 800:	pdl:5.38e-01 	 Rec:1.73e-03 	 Color:0.00e+00 	Time: 0.39
+epoch 850:	pdl:5.48e-01 	 Rec:1.31e-03 	 Color:0.00e+00 	Time: 0.38
+epoch 900:	pdl:5.26e-01 	 Rec:5.56e-04 	 Color:0.00e+00 	Time: 0.38
+epoch 950:	pdl:5.49e-01 	 Rec:1.02e-03 	 Color:0.00e+00 	Time: 0.36
+0 Scale Training Time: 7.9570629596710205
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		SCALE 1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+epoch 0:	pdl:7.94e-01 	 Rec:7.94e-01 	 Color:0.00e+00 	Time: 0.01
+epoch 50:	pdl:5.12e-01 	 Rec:3.61e-02 	 Color:0.00e+00 	Time: 0.51
+epoch 100:	pdl:5.18e-01 	 Rec:2.15e-02 	 Color:0.00e+00 	Time: 0.49
+epoch 150:	pdl:5.31e-01 	 Rec:2.08e-02 	 Color:0.00e+00 	Time: 0.44
+epoch 200:	pdl:4.87e-01 	 Rec:1.22e-02 	 Color:0.00e+00 	Time: 0.44
+epoch 250:	pdl:4.94e-01 	 Rec:1.15e-02 	 Color:0.00e+00 	Time: 0.45
+epoch 300:	pdl:4.94e-01 	 Rec:8.44e-03 	 Color:0.00e+00 	Time: 0.45
+epoch 350:	pdl:5.05e-01 	 Rec:8.39e-03 	 Color:0.00e+00 	Time: 0.44
+epoch 400:	pdl:5.65e-01 	 Rec:5.23e-03 	 Color:0.00e+00 	Time: 0.44
+epoch 450:	pdl:5.14e-01 	 Rec:3.38e-03 	 Color:0.00e+00 	Time: 0.41
+epoch 500:	pdl:4.75e-01 	 Rec:6.62e-03 	 Color:0.00e+00 	Time: 0.44
+epoch 550:	pdl:4.85e-01 	 Rec:6.40e-03 	 Color:0.00e+00 	Time: 0.45
+epoch 600:	pdl:4.78e-01 	 Rec:3.13e-03 	 Color:0.00e+00 	Time: 0.50
+epoch 650:	pdl:5.09e-01 	 Rec:3.26e-03 	 Color:0.00e+00 	Time: 0.45
+epoch 700:	pdl:4.95e-01 	 Rec:4.89e-03 	 Color:0.00e+00 	Time: 0.48
+epoch 750:	pdl:5.06e-01 	 Rec:3.51e-03 	 Color:0.00e+00 	Time: 0.44
+epoch 800:	pdl:4.57e-01 	 Rec:1.38e-03 	 Color:0.00e+00 	Time: 0.44
+epoch 850:	pdl:5.01e-01 	 Rec:4.13e-03 	 Color:0.00e+00 	Time: 0.44
+epoch 900:	pdl:4.96e-01 	 Rec:2.90e-03 	 Color:0.00e+00 	Time: 0.47
+epoch 950:	pdl:4.80e-01 	 Rec:3.82e-03 	 Color:0.00e+00 	Time: 0.46
+1 Scale Training Time: 9.40327501296997
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		SCALE 2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+epoch 0:	pdl:1.08e+00 	 Rec:1.08e+00 	 Color:0.00e+00 	Time: 0.02
+epoch 50:	pdl:8.99e-01 	 Rec:6.72e-02 	 Color:0.00e+00 	Time: 0.68
+epoch 100:	pdl:7.52e-01 	 Rec:4.61e-02 	 Color:0.00e+00 	Time: 0.63
+epoch 150:	pdl:8.33e-01 	 Rec:4.05e-02 	 Color:0.00e+00 	Time: 0.63
+epoch 200:	pdl:7.80e-01 	 Rec:3.14e-02 	 Color:0.00e+00 	Time: 0.58
+epoch 250:	pdl:7.79e-01 	 Rec:2.55e-02 	 Color:0.00e+00 	Time: 0.58
+epoch 300:	pdl:8.24e-01 	 Rec:2.48e-02 	 Color:0.00e+00 	Time: 0.58
+epoch 350:	pdl:7.52e-01 	 Rec:1.97e-02 	 Color:0.00e+00 	Time: 0.58
+epoch 400:	pdl:7.69e-01 	 Rec:1.48e-02 	 Color:0.00e+00 	Time: 0.58
+epoch 450:	pdl:7.84e-01 	 Rec:1.81e-02 	 Color:0.00e+00 	Time: 0.63
+epoch 500:	pdl:7.39e-01 	 Rec:1.30e-02 	 Color:0.00e+00 	Time: 0.58
+epoch 550:	pdl:7.54e-01 	 Rec:9.34e-03 	 Color:0.00e+00 	Time: 0.61
+epoch 600:	pdl:7.38e-01 	 Rec:7.91e-03 	 Color:0.00e+00 	Time: 0.58
+epoch 650:	pdl:7.19e-01 	 Rec:1.02e-02 	 Color:0.00e+00 	Time: 0.60
+epoch 700:	pdl:7.55e-01 	 Rec:6.84e-03 	 Color:0.00e+00 	Time: 0.64
+epoch 750:	pdl:7.06e-01 	 Rec:7.09e-03 	 Color:0.00e+00 	Time: 0.59
+epoch 800:	pdl:7.15e-01 	 Rec:6.94e-03 	 Color:0.00e+00 	Time: 0.59
+epoch 850:	pdl:7.17e-01 	 Rec:6.12e-03 	 Color:0.00e+00 	Time: 0.59
+epoch 900:	pdl:7.22e-01 	 Rec:5.26e-03 	 Color:0.00e+00 	Time: 0.57
+epoch 950:	pdl:7.76e-01 	 Rec:7.09e-03 	 Color:0.00e+00 	Time: 0.57
+2 Scale Training Time: 12.358173370361328
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		SCALE 3
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+epoch 0:	pdl:1.20e+00 	 Rec:1.20e+00 	 Color:0.00e+00 	Time: 0.01
+epoch 50:	pdl:8.96e-01 	 Rec:1.14e-01 	 Color:0.00e+00 	Time: 0.75
+epoch 100:	pdl:7.68e-01 	 Rec:6.86e-02 	 Color:0.00e+00 	Time: 0.69
+epoch 150:	pdl:7.72e-01 	 Rec:5.86e-02 	 Color:0.00e+00 	Time: 0.64
+epoch 200:	pdl:6.82e-01 	 Rec:5.19e-02 	 Color:0.00e+00 	Time: 0.65
+epoch 250:	pdl:7.09e-01 	 Rec:4.98e-02 	 Color:0.00e+00 	Time: 0.66
+epoch 300:	pdl:7.10e-01 	 Rec:3.76e-02 	 Color:0.00e+00 	Time: 0.67
+epoch 350:	pdl:7.00e-01 	 Rec:3.51e-02 	 Color:0.00e+00 	Time: 0.65
+epoch 400:	pdl:7.52e-01 	 Rec:2.77e-02 	 Color:0.00e+00 	Time: 0.66
+epoch 450:	pdl:6.66e-01 	 Rec:2.73e-02 	 Color:0.00e+00 	Time: 0.64
+epoch 500:	pdl:6.61e-01 	 Rec:2.47e-02 	 Color:0.00e+00 	Time: 0.64
+epoch 550:	pdl:6.65e-01 	 Rec:2.06e-02 	 Color:0.00e+00 	Time: 0.68
+epoch 600:	pdl:7.00e-01 	 Rec:2.10e-02 	 Color:0.00e+00 	Time: 0.64
+epoch 650:	pdl:6.88e-01 	 Rec:1.73e-02 	 Color:0.00e+00 	Time: 0.64
+epoch 700:	pdl:7.23e-01 	 Rec:1.74e-02 	 Color:0.00e+00 	Time: 0.66
+epoch 750:	pdl:6.89e-01 	 Rec:1.42e-02 	 Color:0.00e+00 	Time: 0.64
+epoch 800:	pdl:7.01e-01 	 Rec:1.48e-02 	 Color:0.00e+00 	Time: 0.64
+epoch 850:	pdl:6.32e-01 	 Rec:1.18e-02 	 Color:0.00e+00 	Time: 0.65
+epoch 900:	pdl:6.37e-01 	 Rec:1.31e-02 	 Color:0.00e+00 	Time: 0.64
+epoch 950:	pdl:6.65e-01 	 Rec:1.39e-02 	 Color:0.00e+00 	Time: 0.65
+3 Scale Training Time: 13.518165111541748
+Traceback (most recent call last):
+  File "main.py", line 52, in <module>
+    run_tests(Generators, Zs, scale_factor, noise_amps, out_dir, opt)
+  File "/home/hila.manor@staff.technion.ac.il/Generative-deep-features/code/tests.py", line 10, in run_tests
+    results = generate_random_samples(Generators, Zs, scale_factor, noise_amps, opt, n=5)
+  File "/home/hila.manor@staff.technion.ac.il/Generative-deep-features/code/tests.py", line 41, in generate_random_samples
+    prev_fake = fake[:, :, :Zs.shape[2], :Zs.shape[3]]
+AttributeError: 'list' object has no attribute 'shape'
