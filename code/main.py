@@ -20,7 +20,7 @@ if __name__ == '__main__':
     opt.is_cuda = opt.is_cuda and torch.cuda.is_available()
     opt.device = torch.device("cuda:0" if opt.is_cuda else "cpu")
 
-    run_wandb = wandb.init(project='summer_project', config={})
+    run_wandb = wandb.init(project='summer-project', config={})
     wandb.config.update(opt)
 
     if opt.manual_seed is None:
