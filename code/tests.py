@@ -38,13 +38,13 @@ def generate_random_samples(Generators, Zs, scale_factor, noise_amps, opt, n=5):
                 z = z.expand(1, 3, z.shape[2], z.shape[3])
             z = pad_func(z)
 
-            # prev_fake = fake[:, :, :cur_real_im.shape[2], :cur_real_im.shape[3]]
+            prev_fake = fake[:, :, :Zs.shape[2], :Zs.shape[3]]
             prev_fake = pad_func(prev_fake)
 
             z_in = noise_amp * z + prev_fake
             fake = G(z_in.detach(), prev_fake)
             ims.append(fake)
             fake = image_processing.resize(fake, 1 / scale_factor, opt.nc, opt.is_cuda)
-            # fake = fake[:, :, :next_real_im.shape[2], :next_real_im.shape[3]]
+            #fake = fake[:, :, :next_real_im.shape[2], :next_real_im.shape[3]]
         results.append(ims)
     return results
