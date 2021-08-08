@@ -221,7 +221,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
             # plotting_helpers.save_im(details_fake, out_dir, f'Details_e{epoch}', convert=True)
             z_opt_fake = curr_G(z_opt, z_prev)
             z_opt_fake_wandb = wandb.Image(plotting_helpers.convert_im(z_opt_fake), caption=f'Zopt_e{epoch}')
-            wandb.log({'Z_opt': z_opt_fake_wandb, 'Details_fake': details_fake_wandb}, commit=False)
+            wandb.log({f'scale_{len(trained_generators)}': {'Z_opt': z_opt_fake_wandb, 'Details_fake': details_fake_wandb}}, commit=False)
             plotting_helpers.save_im(z_opt_fake, out_dir, f'Zopt_e{epoch}', convert=True)
 
         #wandb.log({'loss': loss, 'rec_loss': rec_loss, 'total_loss': total_loss, 'epoch': epoch,
