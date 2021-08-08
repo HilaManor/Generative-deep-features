@@ -20,7 +20,7 @@ if __name__ == '__main__':
     opt.is_cuda = opt.is_cuda and torch.cuda.is_available()
     opt.device = torch.device("cuda:0" if opt.is_cuda else "cpu")
 
-    wandb.init(project='summer_project', config={})
+    run_wandb = wandb.init(project='summer_project', config={})
     wandb.config.update(opt)
 
     if opt.manual_seed is None:
@@ -46,10 +46,10 @@ if __name__ == '__main__':
     with open(os.path.join(opt.output_folder, basename, 'runs.txt'), 'a') as f:
         f.write(f'{os.path.basename(out_dir)} {opt}\n')
 
-    Generators, Zs = training.train(out_dir, real_resized, scale_factor, total_scales, opt)
+    try:
+        Generators, Zs = training.train(out_dir, real_resized, scale_factor, total_scales, opt)
+        print('Done Training')
+    except KeyboardInterrupt:
+        print('done')
 
-    print('Done Training')
-
-
-
-
+    run_wandb.finish()
