@@ -229,8 +229,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
 
         #wandb.log({'loss': loss, 'rec_loss': rec_loss, 'total_loss': total_loss, 'epoch': epoch,
         #           'scale': len(trained_generators)})
-        if epoch != opt.epochs-1:
-            wandb.log(logging_dict)
+        wandb.log(logging_dict)
 
         # update prev
         prev = draw_concat(trained_generators, Zs, real_imgs, noise_amps, 'rand', noise_pad_func,
@@ -261,10 +260,8 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
             plotting_helpers.save_im(example_fake_all, out_dir, f'fake_{i}', convert=True)
         images_wandb.append(wandb.Image(plotting_helpers.convert_im(example_fake), caption=f'fake_samePrev{i}'))
         images_wandb_all.append(wandb.Image(plotting_helpers.convert_im(example_fake_all), caption=f'fake_{i}'))
-    #wandb.log({'example_fake_wandb': images_wandb, 'example_fake_all_wandb': images_wandb_all})
-    logging_dict[f'scale_{len(trained_generators)}']['example_fake_wandb']= images_wandb
-    logging_dict[f'scale_{len(trained_generators)}']['example_fake_all_wandb'] = images_wandb_all
-    wandb.log(logging_dict)
+    wandb.log({'example_fake_wandb': images_wandb, 'example_fake_all_wandb': images_wandb_all})
+    #wandb.log({f'scale_{len(trained_generators)}': {'example_fake_wandb': images_wandb, 'example_fake_all_wandb': images_wandb_all}})
 
     # details_fake = curr_G(example_noise, z_prev)
     z_opt_fake = curr_G(z_opt, z_prev)
