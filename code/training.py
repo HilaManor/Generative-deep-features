@@ -197,6 +197,8 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         rec_loss_arr.append(rec_loss.detach())
         color_loss_arr.append(color_loss.detach() if opt.c_alpha else color_loss)
 
+        logging_dict = {f'scale_{len(trained_generators)}': {'loss': loss, 'rec_loss': rec_loss, 'total_loss': total_loss, 'epoch': epoch}}
+
         if epoch % opt.epoch_print == 0:
             print_line = f"epoch {epoch}:\t{opt.loss_func}:%.2e \t Rec:%.2e \t Color:%.2e \t" \
                     "Time: %.2f" % (style_loss_arr[-1], rec_loss_arr[-1], color_loss_arr[-1],
@@ -221,12 +223,13 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
             # plotting_helpers.save_im(details_fake, out_dir, f'Details_e{epoch}', convert=True)
             z_opt_fake = curr_G(z_opt, z_prev)
             z_opt_fake_wandb = wandb.Image(plotting_helpers.convert_im(z_opt_fake), caption=f'Zopt_e{epoch}')
-            wandb.log({f'scale_{len(trained_generators)}': {'Z_opt': z_opt_fake_wandb, 'Details_fake': details_fake_wandb}}, commit=False)
+            logging_dict[f'scale_{len(trained_generators)}']['Z_opt']= z_opt_fake_wandb
+            logging_dict[f'scale_{len(trained_generators)}']['Details_fake'] = details_fake_wandb
             plotting_helpers.save_im(z_opt_fake, out_dir, f'Zopt_e{epoch}', convert=True)
 
         #wandb.log({'loss': loss, 'rec_loss': rec_loss, 'total_loss': total_loss, 'epoch': epoch,
         #           'scale': len(trained_generators)})
-        wandb.log({f'scale_{len(trained_generators)}': {'loss': loss, 'rec_loss': rec_loss, 'total_loss': total_loss, 'epoch': epoch}})
+        wandb.log(logging_dict)
 
         # update prev
         prev = draw_concat(trained_generators, Zs, real_imgs, noise_amps, 'rand', noise_pad_func,
