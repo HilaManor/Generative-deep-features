@@ -7,3 +7,4 @@
 */.idea/*
 /SinGAN-master/*
 .ipynb_checkpoints/*
+/code/wandb/*
