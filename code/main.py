@@ -6,6 +6,7 @@ import image_processing, image_helpers
 import training
 from output_handler import gen_unique_out_dir_path
 import json
+import wandb
 
 if __name__ == '__main__':
     parser = get_arguments()
@@ -19,12 +20,14 @@ if __name__ == '__main__':
     opt.is_cuda = opt.is_cuda and torch.cuda.is_available()
     opt.device = torch.device("cuda:0" if opt.is_cuda else "cpu")
 
+    wandb.init(project='summer_project', config={})
+    wandb.config.update(opt)
+
     if opt.manual_seed is None:
         opt.manual_seed = random.randint(1, 10000)
     print("Random Seed: ", opt.manual_seed)
     random.seed(opt.manual_seed)
     torch.manual_seed(opt.manual_seed)
-
 
     basename = os.path.basename(opt.image_path)
     basename = basename[:basename.rfind('.')]

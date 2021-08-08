@@ -52,8 +52,11 @@ def show_im(img_tensor, title=None):
 
 def save_im(img, out_dir, name, convert=False):
     if convert:
-        img = img.detach().to(device='cpu', copy=True)
-        img = image_helpers.convert_image_np(img)
+        img = convert_im(img)
 
     path = os.path.join(out_dir, name + ".png")
     plt.imsave(path, img)
+
+def convert_im(img):
+    img = img.detach().to(device='cpu', copy=True)
+    return image_helpers.convert_image_np(img)

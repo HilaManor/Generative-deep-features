@@ -10,6 +10,7 @@ import torch.optim as optim
 import plotting_helpers
 import image_processing
 import output_handler
+import wandb
 import pd_loss
 import style_loss
 
@@ -144,6 +145,9 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         noise = noise_*noise_amp + prev
 
         # TODO-THINK for every step in G steps
+        loss = 0
+        total_loss = 0
+        rec_loss = 0
         for j in range(opt.Gsteps):
             curr_G.zero_grad()
             fake_im = curr_G(noise.detach(), prev)  # TODO think on detach
@@ -212,10 +216,15 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         if epoch % opt.epoch_save == 0:
             # example_fake = curr_G(example_noise, prev)
             # plotting_helpers.save_im(example_fake, out_dir, f'e{epoch}', convert=True)
-            # details_fake = curr_G(example_noise, z_prev)
+            details_fake = curr_G(example_noise, z_prev)
+            details_fake_wandb = wandb.Image(plotting_helpers.convert_im(details_fake), caption=f'Details_e{epoch}')
             # plotting_helpers.save_im(details_fake, out_dir, f'Details_e{epoch}', convert=True)
             z_opt_fake = curr_G(z_opt, z_prev)
+            z_opt_fake_wandb = wandb.Image(plotting_helpers.convert_im(z_opt_fake), caption=f'Zopt_e{epoch}')
+            wandb.log({'Z_opt': z_opt_fake_wandb, 'Details_fake': details_fake_wandb}, commit=False)
             plotting_helpers.save_im(z_opt_fake, out_dir, f'Zopt_e{epoch}', convert=True)
+
+        wandb.log({'loss': loss, 'rec_loss': rec_loss, 'total_loss': total_loss, 'epoch': epoch})
 
         # update prev
         prev = draw_concat(trained_generators, Zs, real_imgs, noise_amps, 'rand', noise_pad_func,
