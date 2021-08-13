@@ -37,6 +37,7 @@ if __name__ == '__main__':
     real_resized, scale_factor, total_scales = image_processing.preprocess_image(real_img, opt)
 
     opt.nzx = real_resized.shape[2]
+    opt.nzy = real_resized.shape[1]
     out_dir = gen_unique_out_dir_path(opt.output_folder, basename, opt)
 
     os.makedirs(out_dir, exist_ok=True)
