@@ -241,14 +241,19 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
     images_wandb = []
     images_wandb_all = []
     for i in range(opt.generate_fake_amount):
+        # Generate an image using the same "prev" image (i.e., only the last layer changes stuff)
         example_noise = image_processing.generate_noise([1, opt.nzx, opt.nzy]).detach()
         example_noise = noise_pad_func(example_noise.expand(1, opt.nc, opt.nzx, opt.nzy))
-        example_fake = curr_G(example_noise, prev)
+        z_in = noise_amp * example_noise + prev
+        example_fake = curr_G(z_in, prev)
 
+        # Generate an image using a random "prev" image (i.e., the entire image should be different)
         example_prev = draw_concat(trained_generators, Zs, real_imgs, noise_amps, 'rand',
                                    noise_pad_func, image_pad_func, scale_factor, opt)
         example_prev = image_pad_func(example_prev)
-        example_fake_all = curr_G(example_noise, example_prev)
+        z_in = noise_amp * example_noise + example_prev
+        example_fake_all = curr_G(z_in, example_prev)
+
         if opt.epoch_show != -1:
             fim = plotting_helpers.show_im(example_fake, title=f'Final Image - Same prev {i}')
             plotting_helpers.save_im(fim, out_dir, f'fake_samePrev{i}')
