@@ -184,7 +184,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
                 # rec_loss.backward(retain_graph=True)
                 # rec_loss = rec_loss.detach()
             else:
-                Z_opt = z_opt
+                Z_opt = noise_amp*z_opt
                 rec_loss = 0
 
             total_loss = loss + opt.alpha*rec_loss
@@ -208,19 +208,22 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
 
             start_time = time.time()
         if opt.epoch_show != -1 and epoch % opt.epoch_show == 0:
+            # ==== SOME BUGS IN COMMENTS (INPUT TO CURR_G SHOULD BE NOISEAMP*NOISE+PREV)  ====
+            # ====                  UNCOMMENT CAREFULLY                                   ====
             # example_fake = curr_G(example_noise, prev)
             # plotting_helpers.show_im(example_fake, title=f'e{epoch} epoch')
             # details_fake = curr_G(example_noise, z_prev)
             # plotting_helpers.show_im(details_fake, title=f'Details {epoch} epoch')
-            z_opt_fake = curr_G(z_opt, z_prev)
+            z_opt_fake = curr_G(Z_opt, z_prev)
             plotting_helpers.show_im(z_opt_fake, title=f'Zopt_e{epoch} epoch')
         if epoch % opt.epoch_save == 0:
             # example_fake = curr_G(example_noise, prev)
             # plotting_helpers.save_im(example_fake, out_dir, f'e{epoch}', convert=True)
-            details_fake = curr_G(example_noise, z_prev)
+            ex_noise = example_noise*noise_amp + z_prev
+            details_fake = curr_G(ex_noise, z_prev)
             details_fake_wandb = wandb.Image(plotting_helpers.convert_im(details_fake), caption=f'Details_e{epoch}')
             # plotting_helpers.save_im(details_fake, out_dir, f'Details_e{epoch}', convert=True)
-            z_opt_fake = curr_G(z_opt, z_prev)
+            z_opt_fake = curr_G(Z_opt, z_prev)
             z_opt_fake_wandb = wandb.Image(plotting_helpers.convert_im(z_opt_fake), caption=f'Zopt_e{epoch}')
             logging_dict[f'scale_{cur_scale}']['Z_opt']= z_opt_fake_wandb
             logging_dict[f'scale_{cur_scale}']['Details_fake'] = details_fake_wandb
@@ -235,11 +238,13 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
                            image_pad_func, scale_factor, opt)
         prev = image_pad_func(prev)
 
+    # ========================================== END OF ALL EPOCHS ================================================
     # TODO save network?
     fig = plotting_helpers.plot_losses(style_loss_arr, rec_loss_arr, show=(opt.epoch_show > -1))
     plotting_helpers.save_fig(fig, out_dir, 'fin')
     images_wandb = []
     images_wandb_all = []
+    # ======== GENERATE THIS SCALE'S RANDOM SAMPLES =========
     for i in range(opt.generate_fake_amount):
         # Generate an image using the same "prev" image (i.e., only the last layer changes stuff)
         example_noise = image_processing.generate_noise([1, opt.nzx, opt.nzy]).detach()
@@ -267,7 +272,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
     wandb.log({f'example_fake_{cur_scale}': images_wandb, f'example_fake_all_{cur_scale}': images_wandb_all})
 
     # details_fake = curr_G(example_noise, z_prev)
-    z_opt_fake = curr_G(z_opt, z_prev)
+    z_opt_fake = curr_G(Z_opt, z_prev)
     if opt.epoch_show != -1:
         # fim = plotting_helpers.show_im(example_fake, title='Final Image')
         # dim = plotting_helpers.show_im(details_fake, title='Final Details Image')
