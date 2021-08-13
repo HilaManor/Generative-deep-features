@@ -132,8 +132,12 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         z_opt = noise_pad_func(z_opt.expand(1, opt.nc, opt.nzx, opt.nzy))
         # Notice that the noise for the 3 RGB channels is the same
 
-    example_noise = image_processing.generate_noise([1, opt.nzx, opt.nzy]).detach()
-    example_noise = noise_pad_func(example_noise.expand(1, opt.nc, opt.nzx, opt.nzy))
+    if cur_scale == 0:
+        example_noise = image_processing.generate_noise([1, opt.nzx, opt.nzy]).detach()
+        example_noise = example_noise.expand(1, opt.nc, opt.nzx, opt.nzy)
+    else:
+        example_noise = image_processing.generate_noise([opt.nc, opt.nzx, opt.nzy]).detach()
+    example_noise = noise_pad_func(example_noise)
 
     start_time = time.time()
     style_rec_factor = 1
@@ -247,8 +251,12 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
     # ======== GENERATE THIS SCALE'S RANDOM SAMPLES =========
     for i in range(opt.generate_fake_amount):
         # Generate an image using the same "prev" image (i.e., only the last layer changes stuff)
-        example_noise = image_processing.generate_noise([1, opt.nzx, opt.nzy]).detach()
-        example_noise = noise_pad_func(example_noise.expand(1, opt.nc, opt.nzx, opt.nzy))
+        if cur_scale == 0:
+            example_noise = image_processing.generate_noise([1, opt.nzx, opt.nzy]).detach()
+            example_noise = example_noise.expand(1, opt.nc, opt.nzx, opt.nzy)
+        else:
+            example_noise = image_processing.generate_noise([opt.nc, opt.nzx, opt.nzy]).detach()
+        example_noise = noise_pad_func(example_noise)
         z_in = noise_amp * example_noise + prev
         example_fake = curr_G(z_in, prev)
 
@@ -295,15 +303,15 @@ def draw_concat(trained_generators, Zs, real_imgs, noise_amps, mode, noise_pad_f
         if mode == 'rand':
             pad_noise = int(((opt.ker_size-1)*opt.num_layer)/2)
 
-            for i, (gen, Z_opt, cur_real_im, next_real_im, noise_amp) in enumerate(zip(
+            for i, (gen, z_opt, cur_real_im, next_real_im, noise_amp) in enumerate(zip(
                     trained_generators, Zs, real_imgs, real_imgs[1:], noise_amps)):
                 if i:
-                    z = image_processing.generate_noise([opt.nc, Z_opt.shape[2] - 2 * pad_noise,
-                                                         Z_opt.shape[3] - 2 * pad_noise],
+                    z = image_processing.generate_noise([opt.nc, z_opt.shape[2] - 2 * pad_noise,
+                                                         z_opt.shape[3] - 2 * pad_noise],
                                                         device=opt.device)
                 else:
-                    z = image_processing.generate_noise([1, Z_opt.shape[2] - 2 * pad_noise,
-                                                         Z_opt.shape[3] - 2 * pad_noise],
+                    z = image_processing.generate_noise([1, z_opt.shape[2] - 2 * pad_noise,
+                                                         z_opt.shape[3] - 2 * pad_noise],
                                                         device=opt.device)
                     z = z.expand(1, 3, z.shape[2], z.shape[3])
 
@@ -315,12 +323,12 @@ def draw_concat(trained_generators, Zs, real_imgs, noise_amps, mode, noise_pad_f
                 fake = image_processing.resize(fake, 1 / scale_factor, opt.nc, opt.is_cuda)
                 fake = fake[:, :, :next_real_im.shape[2], :next_real_im.shape[3]]
         elif mode == 'rec':
-            for gen, Z_opt, cur_real_im, next_real_im, noise_amp in zip(trained_generators, Zs,
+            for gen, z_opt, cur_real_im, next_real_im, noise_amp in zip(trained_generators, Zs,
                                                                         real_imgs, real_imgs[1:],
                                                                         noise_amps):
                 prev_fake = fake[:,:,:cur_real_im.shape[2], :cur_real_im.shape[3]]  # Todo -check
                 prev_fake = image_pad_func(prev_fake)
-                z_in = noise_amp*Z_opt + prev_fake
+                z_in = noise_amp*z_opt + prev_fake
                 fake = gen(z_in.detach(), prev_fake)
                 fake = image_processing.resize(fake, 1/scale_factor, opt.nc, opt.is_cuda)
                 fake = fake[:,:,:next_real_im.shape[2], :next_real_im.shape[3]]
