@@ -44,6 +44,8 @@ def get_arguments():
                                  help='Number of epochs to train each scale')
     opt_hyper_group.add_argument('--gamma', type=float, default=0.1, help='Scheduler gamma')
     opt_hyper_group.add_argument('--lr', type=float, default=0.0005, help='Learning rate. default=0.0005')
+    opt_hyper_group.add_argument('--lr_factor', type=float, default=1.41,  # sqrt(2)
+                                 help='Learning rate factor between scales. default=1.41')
     opt_hyper_group.add_argument('--beta1', type=float, default=0.5, help='beta1 for adam. default=0.5')
     opt_hyper_group.add_argument('--Gsteps', type=int, default=1, help='Generator inner steps')  # TODO 3
     opt_hyper_group.add_argument('--alpha', type=float, default=10, help='reconstruction loss weight')

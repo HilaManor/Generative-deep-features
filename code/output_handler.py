@@ -29,7 +29,7 @@ def gen_unique_out_dir_path(base_out, baseim_name, opt):
     return possible_path
 
 def __generate_out_name(opt):
-    base_name = f"{opt.loss_func}_e{opt.epochs}_{opt.nzx}px_lr{opt.lr}" \
+    base_name = f"{opt.loss_func}_e{opt.epochs}_{opt.nzy}px_lr{opt.lr}" \
                  f"a{opt.alpha}_up-{opt.chosen_layers[-1]}_W{opt.layers_weights}"
     return base_name
 

@@ -74,10 +74,11 @@ def init_generator(curr_nfc, curr_min_nfc, opt):
 
 
 def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vgg, out_dir, scale_factor, opt):
+    cur_scale = len(trained_generators)
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
-          f"\t\tSCALE {len(trained_generators)}\n"
+          f"\t\tSCALE {cur_scale}\n"
           "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-    real_img = real_imgs[len(trained_generators)]
+    real_img = real_imgs[cur_scale]
     opt.nzx = real_img.shape[2]  # Width of image in current scale
     opt.nzy = real_img.shape[3]  # Height of image in current scale
     # TODO-FUTURE receptive field...
@@ -93,7 +94,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         c_loss_block = loss_model.generate_c_loss_block(real_img, opt.c_patch_size, opt.loss_func, opt.nc, opt.device)
 
     # Setup Optimizer
-    optimizer = optim.Adam(curr_G.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
+    optimizer = optim.Adam(curr_G.parameters(), lr=(opt.lr*(opt.lr_factor**cur_scale)), betas=(opt.beta1, 0.999))
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[int(0.8*opt.epochs)],#[600,1500,2600,3000,4500,6000,8000],
                                                gamma=opt.gamma)
     # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=opt.gamma, verbose=True)
@@ -105,7 +106,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
 
     # z_opt is {Z*, 0, 0, 0, ...}. The specific set of input noise maps
     # which generates the original image xn
-    if len(trained_generators):
+    if cur_scale != 0:
         prev = draw_concat(trained_generators, Zs, real_imgs, noise_amps, 'rand', noise_pad_func,
                            image_pad_func, scale_factor, opt)
         prev = image_pad_func(prev)
@@ -178,7 +179,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
                 Z_opt = noise_amp*z_opt + z_prev
                 #               -->         z_opt = 0 ({Z*,0,0,0,0,0})
                 loss_criterion = nn.MSELoss()
-                #rec_loss = (5**len(trained_generators)) * opt.alpha * loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
+                #rec_loss = (5**cur_scale) * opt.alpha * loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
                 rec_loss = loss_criterion(curr_G(Z_opt.detach(), z_prev), real_img)
                 # rec_loss.backward(retain_graph=True)
                 # rec_loss = rec_loss.detach()
@@ -194,7 +195,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
         rec_loss_arr.append(rec_loss.detach())
         color_loss_arr.append(color_loss.detach() if opt.c_alpha else color_loss)
 
-        logging_dict = {f'scale_{len(trained_generators)}': {'loss': style_loss_arr[-1], 'rec_loss': rec_loss_arr[-1], 'total_loss': total_loss.detach(), 'epoch': epoch},
+        logging_dict = {f'scale_{cur_scale}': {'loss': style_loss_arr[-1], 'rec_loss': rec_loss_arr[-1], 'total_loss': total_loss.detach(), 'epoch': epoch},
                         'running_total_loss': total_loss.detach(), 'running_rec_loss': rec_loss_arr[-1], 'running_loss': style_loss_arr[-1]}
 
         if epoch % opt.epoch_print == 0:
@@ -221,12 +222,12 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
             # plotting_helpers.save_im(details_fake, out_dir, f'Details_e{epoch}', convert=True)
             z_opt_fake = curr_G(z_opt, z_prev)
             z_opt_fake_wandb = wandb.Image(plotting_helpers.convert_im(z_opt_fake), caption=f'Zopt_e{epoch}')
-            logging_dict[f'scale_{len(trained_generators)}']['Z_opt']= z_opt_fake_wandb
-            logging_dict[f'scale_{len(trained_generators)}']['Details_fake'] = details_fake_wandb
+            logging_dict[f'scale_{cur_scale}']['Z_opt']= z_opt_fake_wandb
+            logging_dict[f'scale_{cur_scale}']['Details_fake'] = details_fake_wandb
             plotting_helpers.save_im(z_opt_fake, out_dir, f'Zopt_e{epoch}', convert=True)
 
         #wandb.log({'loss': loss, 'rec_loss': rec_loss, 'total_loss': total_loss, 'epoch': epoch,
-        #           'scale': len(trained_generators)})
+        #           'scale': cur_scale})
         wandb.log(logging_dict)
 
         # update prev
@@ -258,7 +259,7 @@ def train_single_scale(trained_generators, Zs, noise_amps, curr_G, real_imgs, vg
             plotting_helpers.save_im(example_fake_all, out_dir, f'fake_{i}', convert=True)
         images_wandb.append(wandb.Image(plotting_helpers.convert_im(example_fake), caption=f'fake_samePrev{i}'))
         images_wandb_all.append(wandb.Image(plotting_helpers.convert_im(example_fake_all), caption=f'fake_{i}'))
-    wandb.log({f'example_fake_{len(trained_generators)}': images_wandb, f'example_fake_all_{len(trained_generators)}': images_wandb_all})
+    wandb.log({f'example_fake_{cur_scale}': images_wandb, f'example_fake_all_{cur_scale}': images_wandb_all})
 
     # details_fake = curr_G(example_noise, z_prev)
     z_opt_fake = curr_G(z_opt, z_prev)
