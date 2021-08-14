@@ -50,3 +50,7 @@ class GeneratorConcatSkip2CleanAdd(nn.Module):
         ind = int((y.shape[2] - x.shape[2]) / 2)
         y = y[:, :, ind:(y.shape[2] - ind), ind:(y.shape[3] - ind)]
         return x + y
+
+# the padding amount is determined by the generators amount of layers
+def get_pad_amount(ker_size, num_layer):
+    return int(((ker_size - 1) * num_layer) / 2)
