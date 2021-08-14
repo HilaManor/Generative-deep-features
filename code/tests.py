@@ -33,7 +33,7 @@ def run_tests(generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, 
     # Test 1 - Propagate an image through the different scales
     wandb_res = {}
     for sample_i in range(5):
-        results = _generate_random_sample(generators, Zs, scale_factor, noise_amps, real_imgs, opt)
+        results = _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt)
         wandb_res[f'Generated Sample {sample_i}'] = []
         for scale, res in enumerate(results):
             save_im(res, tests_path, f'Sample{sample_i}_S{scale}', convert=True)
