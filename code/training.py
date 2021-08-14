@@ -1,5 +1,5 @@
-"""
-
+"""Create and training functions for the model.
+function train - train the entire model
 """
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Imports ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
