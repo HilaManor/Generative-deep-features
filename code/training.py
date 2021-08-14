@@ -347,7 +347,8 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
 
 def _draw_concat(trained_generators, z_opts, real_imgs, noise_amps, mode, pad_func,
                  scale_factor, opt):
-    """Generates a fake image using all the given scales generators
+    """Generates an upscaled fake previous image using all the given scales generators
+    For the first scale (no trained generators) will output a zeros image
 
     :param trained_generators: list of trained generators
     :param z_opts: list of padded optimal reconstruction noise(z)
@@ -359,16 +360,19 @@ def _draw_concat(trained_generators, z_opts, real_imgs, noise_amps, mode, pad_fu
     :param pad_func: the padding function for each image and noise image inputted to the generators
     :param scale_factor: the actual (calculated) scaling factor between scales
     :param opt: the configuration parameters for the network
-    :return: a fake image generated given the mode
+    :return: a fake previous image generated given the mode (already upscaled)
     """
 
     fake = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
     if len(trained_generators):
-        if mode == 'rand':
-            pad_amount = models.get_pad_amount(opt.ker_size, opt.num_layer)
+        pad_amount = models.get_pad_amount(opt.ker_size, opt.num_layer)
+        for i, (gen, z_opt, cur_real_im, next_real_im, noise_amp) in enumerate(zip(
+                trained_generators, z_opts, real_imgs, real_imgs[1:], noise_amps)):
+            prev_fake = fake[:, :, :cur_real_im.shape[2], :cur_real_im.shape[3]]
+            prev_fake = pad_func(prev_fake)
 
-            for i, (gen, z_opt, cur_real_im, next_real_im, noise_amp) in enumerate(zip(
-                    trained_generators, z_opts, real_imgs, real_imgs[1:], noise_amps)):
+            # The noise is either random or the optimal recon noise the generator was trained for
+            if mode == 'rand':
                 if i:
                     z = image_processing.generate_noise([opt.nc, z_opt.shape[2] - 2 * pad_amount,
                                                          z_opt.shape[3] - 2 * pad_amount],
@@ -378,22 +382,12 @@ def _draw_concat(trained_generators, z_opts, real_imgs, noise_amps, mode, pad_fu
                                                          z_opt.shape[3] - 2 * pad_amount],
                                                         device=opt.device)
                     z = z.expand(1, 3, z.shape[2], z.shape[3])
-
                 z = pad_func(z)
-                prev_fake = fake[:,:,:cur_real_im.shape[2], :cur_real_im.shape[3]]
-                prev_fake = pad_func(prev_fake)
-                z_in = noise_amp * z + prev_fake
-                fake = gen(z_in.detach(), prev_fake)
-                fake = image_processing.resize(fake, 1 / scale_factor, opt.nc, opt.is_cuda)
-                fake = fake[:, :, :next_real_im.shape[2], :next_real_im.shape[3]]
-        elif mode == 'rec':
-            for gen, z_opt, cur_real_im, next_real_im, noise_amp in zip(trained_generators, z_opts,
-                                                                        real_imgs, real_imgs[1:],
-                                                                        noise_amps):
-                prev_fake = fake[:,:,:cur_real_im.shape[2], :cur_real_im.shape[3]]  # Todo -check
-                prev_fake = pad_func(prev_fake)
-                z_in = noise_amp*z_opt + prev_fake
-                fake = gen(z_in.detach(), prev_fake)
-                fake = image_processing.resize(fake, 1/scale_factor, opt.nc, opt.is_cuda)
-                fake = fake[:,:,:next_real_im.shape[2], :next_real_im.shape[3]]
+            elif mode == 'rec':
+                z = z_opt
+
+            z_in = noise_amp * z + prev_fake
+            fake = gen(z_in.detach(), prev_fake)
+            fake = image_processing.resize(fake, 1 / scale_factor, opt.nc, opt.is_cuda)
+            fake = fake[:, :, :next_real_im.shape[2], :next_real_im.shape[3]]
     return fake
