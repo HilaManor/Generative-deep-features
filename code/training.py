@@ -185,14 +185,14 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
     prev_rand = pad_func(prev_rand)
     prev_recon = pad_func(prev_recon)
 
-    # new noise to generate examples from over the epochs
-    if not cur_scale:
-        # In the first scale it should be constant across the channels
-        example_noise = image_processing.generate_noise([1, opt.nzx, opt.nzy]).detach()
-        example_noise = example_noise.expand(1, opt.nc, opt.nzx, opt.nzy)
-    else:
-        example_noise = image_processing.generate_noise([opt.nc, opt.nzx, opt.nzy]).detach()
-    example_noise = pad_func(example_noise)
+    # # new noise to generate details-examples from over the epochs
+    # if not cur_scale:
+    #     # In the first scale it should be constant across the channels
+    #     example_noise = image_processing.generate_noise([1, opt.nzx, opt.nzy]).detach()
+    #     example_noise = example_noise.expand(1, opt.nc, opt.nzx, opt.nzy)
+    # else:
+    #     example_noise = image_processing.generate_noise([opt.nc, opt.nzx, opt.nzy]).detach()
+    # example_noise = pad_func(example_noise)
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MAIN TRAINING LOOP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     start_time = time.time()
@@ -209,7 +209,6 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
         noise = noise_*noise_amp + prev_rand
 
         total_loss = 0
-        rec_loss = 0
         for j in range(opt.Gsteps):
             curr_g.zero_grad()
             fake_im = curr_g(noise.detach(), prev_rand)  # Generate a fake image
@@ -230,9 +229,9 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
                                                                     opt.c_patch_size, 1)
                 c_loss_block(fake_im_patches_flattened)
                 color_loss = c_loss_block.loss
-                color_loss_arr.append(color_loss.detach() if opt.c_alpha else color_loss)
             else:
                 color_loss = 0
+            color_loss_arr.append(color_loss.detach() if opt.c_alpha else color_loss)
 
             loss = color_loss * opt.c_alpha / (n_layers + 1)
             for i, sl in enumerate(layers_losses):
@@ -264,65 +263,60 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
                         'running_rec_loss': rec_loss_arr[-1],
                         'running_loss': distribution_loss_arr[-1]}
 
+        # Print to stdout and log file
         if epoch % opt.epoch_print == 0:
             print_line = f"epoch {epoch}:\t{opt.loss_func}:%.2e \t Rec:%.2e \t Color:%.2e \t" \
-                    "Time: %.2f" % (distribution_loss_arr[-1], rec_loss_arr[-1], color_loss_arr[-1],
-                                    time.time() - start_time)
+                         "Time: %.2f" % (distribution_loss_arr[-1], rec_loss_arr[-1],
+                                         color_loss_arr[-1], time.time() - start_time)
             print(print_line)
             with open(os.path.join(out_dir, 'log.txt'), 'a') as f:
                 f.write(f'{print_line}\n')
 
             start_time = time.time()
-        if opt.epoch_show != -1 and epoch % opt.epoch_show == 0:
-            # ==== SOME BUGS IN COMMENTS (INPUT TO CURR_G SHOULD BE NOISEAMP*NOISE+PREV)  ====
-            # ====                  UNCOMMENT CAREFULLY                                   ====
-            # example_fake = curr_G(example_noise, prev_rand)
-            # plotting_helpers.show_im(example_fake, title=f'e{epoch} epoch')
-            # details_fake = curr_G(example_noise, prev_recon)
-            # plotting_helpers.show_im(details_fake, title=f'Details {epoch} epoch')
-            z_opt_fake = curr_g(Z_opt, prev_recon)
-            plotting_helpers.show_im(z_opt_fake, title=f'Zopt_e{epoch} epoch')
+
+        # Save each configured "save epoch" the current reconstruction
         if epoch % opt.epoch_save == 0:
-            # example_fake = curr_G(example_noise, prev_rand)
-            # plotting_helpers.save_im(example_fake, out_dir, f'e{epoch}', convert=True)
-            ex_noise = example_noise*noise_amp + prev_recon
-            details_fake = curr_g(ex_noise, prev_recon)
-            details_fake_wandb = wandb.Image(plotting_helpers.convert_im(details_fake), caption=f'Details_e{epoch}')
+            # ex_noise = example_noise*noise_amp + prev_recon
+            # details_fake = curr_g(ex_noise, prev_recon)
+            # details_fake_wandb = wandb.Image(plotting_helpers.convert_im(details_fake),
+            #                                  caption=f'Details_e{epoch}')
             # plotting_helpers.save_im(details_fake, out_dir, f'Details_e{epoch}', convert=True)
+            # logging_dict[f'scale_{cur_scale}']['Details_fake'] = details_fake_wandb
             z_opt_fake = curr_g(Z_opt, prev_recon)
-            z_opt_fake_wandb = wandb.Image(plotting_helpers.convert_im(z_opt_fake), caption=f'Zopt_e{epoch}')
-            logging_dict[f'scale_{cur_scale}']['Z_opt']= z_opt_fake_wandb
-            logging_dict[f'scale_{cur_scale}']['Details_fake'] = details_fake_wandb
+            z_opt_fake_wandb = wandb.Image(plotting_helpers.convert_im(z_opt_fake),
+                                           caption=f'Zopt_e{epoch}')
+            logging_dict[f'scale_{cur_scale}']['Z_opt'] = z_opt_fake_wandb
             plotting_helpers.save_im(z_opt_fake, out_dir, f'Zopt_e{epoch}', convert=True)
 
-        #wandb.log({'loss': loss, 'rec_loss': rec_loss, 'total_loss': total_loss, 'epoch': epoch,
-        #           'scale': cur_scale})
         wandb.log(logging_dict)
 
         # update prev_rand
-        prev_rand = _draw_concat(trained_generators, z_opts, real_imgs, noise_amps, 'rand', pad_func,
-                            scale_factor, opt)
+        prev_rand = _draw_concat(trained_generators, z_opts, real_imgs, noise_amps, 'rand',
+                                 pad_func, scale_factor, opt)
         prev_rand = pad_func(prev_rand)
 
-    # ========================================== END OF ALL EPOCHS ================================================
-    # TODO save network?
-    fig = plotting_helpers.plot_losses(distribution_loss_arr, rec_loss_arr, show=(opt.epoch_show > -1))
+    # ===================================== END OF ALL EPOCHS =====================================
+    fig = plotting_helpers.plot_losses(distribution_loss_arr, rec_loss_arr,
+                                       show=(opt.epoch_show > -1))
     plotting_helpers.save_fig(fig, out_dir, 'fin')
+
     images_wandb = []
     images_wandb_all = []
     # ======== GENERATE THIS SCALE'S RANDOM SAMPLES =========
     for i in range(opt.generate_fake_amount):
-        # Generate an image using the same "prev_rand" image (i.e., only the last layer changes stuff)
-        if cur_scale == 0:
+        # Generate an image using the same "prev_rand" image
+        #   (i.e., only the last layer changes stuff)
+        if cur_scale > 0:
+            example_noise = image_processing.generate_noise([opt.nc, opt.nzx, opt.nzy]).detach()
+        else:
             example_noise = image_processing.generate_noise([1, opt.nzx, opt.nzy]).detach()
             example_noise = example_noise.expand(1, opt.nc, opt.nzx, opt.nzy)
-        else:
-            example_noise = image_processing.generate_noise([opt.nc, opt.nzx, opt.nzy]).detach()
         example_noise = pad_func(example_noise)
         z_in = noise_amp * example_noise + prev_rand
         example_fake = curr_g(z_in, prev_rand)
 
-        # Generate an image using a random "prev_rand" image (i.e., the entire image should be different)
+        # Generate an image using a random "prev_rand" image
+        #   (i.e., the entire image should be different)
         example_prev = _draw_concat(trained_generators, z_opts, real_imgs, noise_amps, 'rand',
                                     pad_func, scale_factor, opt)
         example_prev = pad_func(example_prev)
@@ -337,29 +331,37 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
         else:
             plotting_helpers.save_im(example_fake, out_dir, f'fake_samePrev{i}', convert=True)
             plotting_helpers.save_im(example_fake_all, out_dir, f'fake_{i}', convert=True)
-        images_wandb.append(wandb.Image(plotting_helpers.convert_im(example_fake), caption=f'fake_samePrev{i}'))
-        images_wandb_all.append(wandb.Image(plotting_helpers.convert_im(example_fake_all), caption=f'fake_{i}'))
-    wandb.log({f'example_fake_{cur_scale}': images_wandb, f'example_fake_all_{cur_scale}': images_wandb_all})
+        images_wandb.append(wandb.Image(plotting_helpers.convert_im(example_fake),
+                                        caption=f'fake_samePrev{i}'))
+        images_wandb_all.append(wandb.Image(plotting_helpers.convert_im(example_fake_all),
+                                            caption=f'fake_{i}'))
+    wandb.log({f'example_fake_{cur_scale}': images_wandb,
+               f'example_fake_all_{cur_scale}': images_wandb_all})
 
-    # details_fake = curr_G(example_noise, prev_recon)
+    # Save the final reconstruction image
     z_opt_fake = curr_g(Z_opt, prev_recon)
-    if opt.epoch_show != -1:
-        # fim = plotting_helpers.show_im(example_fake, title='Final Image')
-        # dim = plotting_helpers.show_im(details_fake, title='Final Details Image')
-        zim = plotting_helpers.show_im(z_opt_fake, title='Final Zopt Image')
-        # plotting_helpers.save_im(fim, out_dir, 'fin')
-        # plotting_helpers.save_im(dim, out_dir, 'details_fin')
-        plotting_helpers.save_im(zim, out_dir, 'zopt_fin')
-    else:
-        # plotting_helpers.save_im(example_fake, out_dir, 'fin', convert=True)
-        # plotting_helpers.save_im(details_fake, out_dir, 'details_fin', convert=True)
-        plotting_helpers.save_im(z_opt_fake, out_dir, 'zopt_fin', convert=True)
+    plotting_helpers.save_im(z_opt_fake, out_dir, 'zopt_fin', convert=True)
 
     return curr_g, z_opt, noise_amp
 
 
 def _draw_concat(trained_generators, z_opts, real_imgs, noise_amps, mode, pad_func,
                  scale_factor, opt):
+    """Generates a fake image using all the given scales generators
+
+    :param trained_generators: list of trained generators
+    :param z_opts: list of padded optimal reconstruction noise(z)
+    :param real_imgs: list of the real image downscaled at each scale
+    :param noise_amps: list of noise multipliers (amplitudes) with which each scale's generator was
+                       trained
+    :param mode: 'rand' - create a completely new image by using random noise samples
+                 'rec' - create a reconstruction image (using the z_opts)
+    :param pad_func: the padding function for each image and noise image inputted to the generators
+    :param scale_factor: the actual (calculated) scaling factor between scales
+    :param opt: the configuration parameters for the network
+    :return: a fake image generated given the mode
+    """
+
     fake = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
     if len(trained_generators):
         if mode == 'rand':
