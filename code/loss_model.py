@@ -1,3 +1,4 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Imports ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import torch
 import torch.nn as nn
 import numpy as np
@@ -5,7 +6,7 @@ import math
 import gram_loss
 import contextual_loss
 import pd_loss
-
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constants ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 vgg_normalization_mean = torch.tensor([0.485, 0.456, 0.406])
 vgg_normalization_std = torch.tensor([0.229, 0.224, 0.225])
 
@@ -30,10 +31,15 @@ STYLE_LAYERS_TRANSLATION = {'conv_1': 'conv1_1',
                             'conv_15': 'conv5_3',
                             'conv_16': 'conv5_4'}
 
-
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Code ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class Normalization(nn.Module):
     """create a module to normalize input image so we can easily put it in a nn.Sequential"""
     def __init__(self, mean, std):
+        """
+        Create Normalization object with given mean and std values.
+        :param mean: the desired mean value.
+        :param std: the desired std value.
+        """
         super(Normalization, self).__init__()
         # .view the mean and std to make them [C x 1 x 1] so that they can
         # directly work with image Tensor of shape [B x C x H x W].
@@ -42,7 +48,12 @@ class Normalization(nn.Module):
         self.std = std.clone().detach().view(-1, 1, 1)
 
     def forward(self, img):
-        """normalize img"""
+        """
+        normalize img
+        :param img: the image to normalize, assumes 4D image tensor.
+        :return: normalized image.
+        """
+
         return (img - self.mean) / self.std
 
 
