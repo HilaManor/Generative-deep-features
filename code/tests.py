@@ -27,7 +27,7 @@ def generate_random_samples(Generators, Zs, scale_factor, noise_amps, real_imgs,
     for sample in range(n):
         ims = []
         fake = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
-        for i, (G, Z_opt, real_img, next_real_img, noise_amp) in enumerate(zip(Generators, Zs, real_imgs, real_imgs[1:], noise_amps)):
+        for i, (G, Z_opt, real_img, noise_amp) in enumerate(zip(Generators, Zs, real_imgs, noise_amps)):
             nzx = Z_opt.shape[2] - pad_noise*2
             nzy = Z_opt.shape[3] - pad_noise*2
 
@@ -44,7 +44,8 @@ def generate_random_samples(Generators, Zs, scale_factor, noise_amps, real_imgs,
             z_in = noise_amp * z + prev_fake
             fake = G(z_in.detach(), prev_fake)
             ims.append(fake)
-            fake = image_processing.resize(fake, 1 / scale_factor, opt.nc, opt.is_cuda)
-            fake = fake[:, :, :next_real_img.shape[2], :next_real_img.shape[3]]
+            if i < len(Generators) - 1:
+                fake = image_processing.resize(fake, 1 / scale_factor, opt.nc, opt.is_cuda)
+                fake = fake[:, :, :real_imgs[i+1].shape[2], :real_imgs[i+1].shape[3]]
         results.append(ims)
     return results
