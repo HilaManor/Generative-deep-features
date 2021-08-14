@@ -62,7 +62,7 @@ def get_arguments():
 
     # ~~~~ TODO
     oo_group = parser.add_argument_group('Ah ', 'ooh')
-    oo_group.add_argument('--loss_func', type=str, help='style/pdl', default='pdl')
+    oo_group.add_argument('--loss_func', type=str, help='gram/pdl', default='pdl')
     oo_group.add_argument('--min_features', type=int, help='aa', default=100)
     oo_group.add_argument('--try_initial_guess', action='store_true',
                           help='Try loading the previous scale\'s weights as an initial guess if '

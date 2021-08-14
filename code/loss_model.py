@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 import math
-import style_loss
+import gram_loss
 import contextual_loss
 import pd_loss
 
@@ -88,7 +88,7 @@ def generate_loss_block(vgg, real_img, mode, chosen_layers, opt):
         if name.startswith('conv') and STYLE_LAYERS_TRANSLATION[name] in chosen_layers:
             target_feature = model(real_img).detach()
             if mode.lower() == 'style':
-                loss_f = style_loss.StyleLoss
+                loss_f = gram_loss.GramLoss
             elif mode.lower() == 'contextual':
                 loss_f = contextual_loss.ContextualLoss
             elif mode.lower() == 'pdl':
@@ -126,8 +126,8 @@ def generate_c_loss_block(real_img, c_patch_size, mode, nc, device):
     real_img_patches = split_img_to_patches(real_img, c_patch_size)
     real_img_patches_flattened = real_img_patches.reshape(1, -1, nc * c_patch_size * c_patch_size, 1)
 
-    if mode.lower() == 'style':
-        loss_f = style_loss.StyleLoss
+    if mode.lower() == 'gram':
+        loss_f = gram_loss.GramLoss
     elif mode.lower() == 'contextual':
         loss_f = contextual_loss.ContextualLoss
     elif mode.lower() == 'pdl':

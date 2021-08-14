@@ -12,7 +12,7 @@ import image_processing
 import output_handler
 import wandb
 import pd_loss
-import style_loss
+import gram_loss
 
 G_WEIGHTS_FNAME = 'netG.pth'
 
