@@ -20,6 +20,17 @@ def run_tests(Generators, Zs, scale_factor, noise_amps, real_imgs, out_dir, opt)
     wandb.log(wandb_res)
 
 def generate_random_samples(Generators, Zs, scale_factor, noise_amps, real_imgs, opt, n=5):
+    """
+
+    :param Generators:
+    :param Zs:
+    :param scale_factor:
+    :param noise_amps:
+    :param real_imgs:
+    :param opt:
+    :param n:
+    :return:
+    """
     pad_noise = int(((opt.ker_size - 1) * opt.num_layer) / 2)
     pad_func = nn.ZeroPad2d(int(pad_noise))
 
