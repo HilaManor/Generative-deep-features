@@ -7,22 +7,23 @@ import os
 import torch
 from torch import nn
 import wandb
+
 import image_processing
 from plotting_helpers import convert_im, save_im
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Code ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def run_tests(generators, Zs, scale_factor, noise_amps, real_imgs, out_dir, opt):
+def run_tests(generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, opt):
     """Run all the available tests on the trained generators.
     Results are outputted at '<out_dir>/tests'
 
     :param generators: list of trained generators
-    :param Zs: list of padded optimal reconstruction noise(z)
+    :param z_opts: list of padded optimal reconstruction noise(z)
     :param scale_factor: the actual (calculated) scaling factor between scales
     :param noise_amps: list of noise multipliers (amplitudes) with which each scale's generator was
                        trained
     :param real_imgs: list of the real image downscaled at each scale
-    :param out_dir: the output base  folder tto  create the test dir in
+    :param out_dir: the output base folder to create the test dir in
     :param opt: the configuration parameters for the network
     :return: None
     """
@@ -32,7 +33,7 @@ def run_tests(generators, Zs, scale_factor, noise_amps, real_imgs, out_dir, opt)
     # Test 1 - Propagate an image through the different scales
     wandb_res = {}
     for sample_i in range(5):
-        results = _generate_random_sample(generators, Zs, scale_factor, noise_amps, real_imgs, opt)
+        results = _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt)
         wandb_res[f'Generated Sample {sample_i}'] = []
         for scale, res in enumerate(results):
             save_im(res, tests_path, f'Sample{sample_i}_S{scale}', convert=True)
@@ -41,11 +42,11 @@ def run_tests(generators, Zs, scale_factor, noise_amps, real_imgs, out_dir, opt)
     wandb.log(wandb_res)
 
 
-def _generate_random_sample(generators, Zs, scale_factor, noise_amps, real_imgs, opt):
+def _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt):
     """Generate a single sample, and track it through the scales
 
     :param generators: list of trained generators
-    :param Zs: list of padded optimal reconstruction noise(z)
+    :param z_opts: list of padded optimal reconstruction noise(z)
     :param scale_factor: the actual (calculated) scaling factor between scales
     :param noise_amps: list of noise multipliers (amplitudes) with which each scale's generator was
                        trained
@@ -60,10 +61,10 @@ def _generate_random_sample(generators, Zs, scale_factor, noise_amps, real_imgs,
     results = []
     # the initial prev is a zero image (add nothing to the noise...)
     fake = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
-    for i, (G, Z_opt, real_img, noise_amp) in enumerate(zip(generators, Zs, real_imgs,
+    for i, (G, z_opt, real_img, noise_amp) in enumerate(zip(generators, z_opts, real_imgs,
                                                             noise_amps)):
-        nzx = Z_opt.shape[2] - pad_noise * 2
-        nzy = Z_opt.shape[3] - pad_noise * 2
+        nzx = z_opt.shape[2] - pad_noise * 2
+        nzy = z_opt.shape[3] - pad_noise * 2
 
         # Only in the first scale the noise should be equal in all the color channels
         if i:
