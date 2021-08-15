@@ -1,0 +1,15 @@
+epoch 0:	gram:5.53e-02 	 Rec:1.23e-01 	 Color:0.00e+00 	Time: 0.02
+epoch 50:	gram:5.85e-03 	 Rec:6.41e-03 	 Color:0.00e+00 	Time: 1.29
+epoch 100:	gram:4.23e-03 	 Rec:5.87e-03 	 Color:0.00e+00 	Time: 1.22
+epoch 150:	gram:3.69e-03 	 Rec:5.99e-03 	 Color:0.00e+00 	Time: 1.21
+epoch 200:	gram:3.40e-03 	 Rec:5.43e-03 	 Color:0.00e+00 	Time: 1.20
+epoch 250:	gram:2.56e-03 	 Rec:5.38e-03 	 Color:0.00e+00 	Time: 1.20
+epoch 300:	gram:3.35e-03 	 Rec:4.84e-03 	 Color:0.00e+00 	Time: 1.19
+epoch 350:	gram:3.40e-03 	 Rec:4.75e-03 	 Color:0.00e+00 	Time: 1.21
+epoch 400:	gram:3.24e-03 	 Rec:4.38e-03 	 Color:0.00e+00 	Time: 1.23
+epoch 450:	gram:3.11e-03 	 Rec:4.47e-03 	 Color:0.00e+00 	Time: 1.22
+epoch 500:	gram:2.73e-03 	 Rec:3.90e-03 	 Color:0.00e+00 	Time: 1.22
+epoch 550:	gram:3.67e-03 	 Rec:3.61e-03 	 Color:0.00e+00 	Time: 1.20
+epoch 600:	gram:2.24e-03 	 Rec:3.43e-03 	 Color:0.00e+00 	Time: 1.20
+epoch 650:	gram:3.11e-03 	 Rec:3.78e-03 	 Color:0.00e+00 	Time: 1.20
+epoch 700:	gram:3.80e-03 	 Rec:3.41e-03 	 Color:0.00e+00 	Time: 1.21
