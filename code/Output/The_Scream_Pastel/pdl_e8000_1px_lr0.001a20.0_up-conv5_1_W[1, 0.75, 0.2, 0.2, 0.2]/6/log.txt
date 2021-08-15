@@ -1,0 +1,9 @@
+epoch 0:	pdl:7.75e-01 	 Rec:1.39e-01 	 Color:0.00e+00 	Time: 0.02
+epoch 50:	pdl:4.08e-01 	 Rec:5.69e-03 	 Color:0.00e+00 	Time: 1.99
+epoch 100:	pdl:3.21e-01 	 Rec:3.97e-03 	 Color:0.00e+00 	Time: 1.96
+epoch 150:	pdl:2.95e-01 	 Rec:5.54e-03 	 Color:0.00e+00 	Time: 1.92
+epoch 200:	pdl:3.07e-01 	 Rec:4.54e-03 	 Color:0.00e+00 	Time: 1.91
+epoch 250:	pdl:3.40e-01 	 Rec:3.76e-03 	 Color:0.00e+00 	Time: 2.00
+epoch 300:	pdl:2.92e-01 	 Rec:3.23e-03 	 Color:0.00e+00 	Time: 1.96
+epoch 350:	pdl:2.91e-01 	 Rec:3.40e-03 	 Color:0.00e+00 	Time: 1.95
+epoch 400:	pdl:4.16e-01 	 Rec:3.39e-03 	 Color:0.00e+00 	Time: 1.94
