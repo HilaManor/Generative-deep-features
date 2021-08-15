@@ -15,7 +15,7 @@ class GramLoss(nn.Module):
     loss is MLE between thetarget and the input gram matrixes.
 
     """
-    def __init__(self, target_feature): #TODO: removed device=None from input, it doesn't use it?
+    def __init__(self, target_feature,device='cpu'): #device for loss_model.generate_loss_block
         """
         Creates gram loss object, with given target feature.
         :param target_feature: The target feature for calculating the loss. Assumes 4D.
