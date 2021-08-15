@@ -30,8 +30,8 @@ def run_tests(generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, 
     tests_path = os.path.join(out_dir, 'tests')
     os.makedirs(tests_path, exist_ok=True)
 
-    # Test 1 - Propagate an image through the different scales
     wandb_res = {}
+    # Test 1 - Propagate an image through the different scales
     for sample_i in range(5):
         results = _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt)
         wandb_res[f'Generated Sample {sample_i}'] = []
@@ -39,10 +39,24 @@ def run_tests(generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, 
             save_im(res, tests_path, f'Sample{sample_i}_S{scale}', convert=True)
             im = wandb.Image(convert_im(res), caption=f'Sample{sample_i}_S{scale}')
             wandb_res[f'Generated Sample {sample_i}'].append(im)
+
+    # Test 2 - Propegate an image only from some scale upwards
+    for gen_start_scale in [1, 2, 3]:
+        wandb_res[f'Generated from Scale {gen_start_scale}'] = []
+        for sample_i in range(3):
+            results = _generate_random_sample(generators, z_opts, scale_factor, noise_amps,
+                                              real_imgs, opt, gen_start_scale=gen_start_scale)
+            res = results[-1]
+            save_im(res, tests_path, f'Sample_startGen{gen_start_scale}_{sample_i}', convert=True)
+            im = wandb.Image(convert_im(res),
+                             caption=f'Sample_startGen{gen_start_scale}_{sample_i}')
+            wandb_res[f'Generated from Scale {gen_start_scale}'].append(im)
+
     wandb.log(wandb_res)
 
 
-def _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt):
+def _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt,
+                            gen_start_scale=0):
     """Generate a single sample, and track it through the scales
 
     :param generators: list of trained generators
@@ -52,6 +66,7 @@ def _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_i
                        trained
     :param real_imgs: list of the real image downscaled at each scale
     :param opt: the configuration parameters for the network
+    :param gen_start_scale: the scale to start the "fresh" generation from
     :return: list of fake images of the same sample at different scales
     """
 
@@ -73,6 +88,9 @@ def _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_i
             z = image_processing.generate_noise([1, nzx, nzy], device=opt.device)
             z = z.expand(1, 3, z.shape[2], z.shape[3])
         z = pad_func(z)
+
+        if i < gen_start_scale:
+            z = z_opt
 
         # the last fake image has been upscaled, and so we cut it to fit perfectly the cur image
         prev_fake = fake[:, :, :real_img.shape[2], :real_img.shape[3]]
