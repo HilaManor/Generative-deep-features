@@ -67,9 +67,9 @@ def get_arguments():
     oo_group.add_argument('--try_initial_guess', action='store_true',
                           help='Try loading the previous scale\'s weights as an initial guess if '
                                'the dimensions match')
-    oo_group.add_argument('--upsample_for_vgg', action='store_true',
-                          help='Upsample the image to 224 before inserting to VGG instead of '
-                               'addaptivley choosing the layers')
+    oo_group.add_argument('--upsample_for_vgg', type=str, choices=['true', 'false'],
+                          default='false', help='Upsample the image to 224 before inserting to VGG'
+                                                'instead of addaptivley choosing the layers')
     oo_group.add_argument('--c_patch_size', type=int, default=5, help='aa')
     oo_group.add_argument('--c_alpha', type=float, help='aa', default=0)
     oo_group.add_argument('--generate_fake_amount', type=int, help='aa', default=5)
