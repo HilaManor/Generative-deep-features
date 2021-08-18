@@ -24,11 +24,17 @@ if __name__ == '__main__':
     run_wandb = wandb.init(project='summer-project', config={})
     wandb.config.update(opt)
 
+    # preprocess parameters
     if opt.manual_seed is None:
         opt.manual_seed = random.randint(1, 10000)
     print("Random Seed: ", opt.manual_seed)
     random.seed(opt.manual_seed)
     torch.manual_seed(opt.manual_seed)
+
+    opt.upsample_for_vgg = True if opt.upsample_for_vgg == 'true' else False
+    if opt.upsample_for_vgg:
+        print('Using upsampling for vgg')
+
 
     basename = os.path.basename(opt.image_path)
     basename = basename[:basename.rfind('.')]
@@ -40,8 +46,6 @@ if __name__ == '__main__':
     opt.nzy = real_resized.shape[0]
     out_dir = gen_unique_out_dir_path(opt.output_folder, basename, opt)
 
-    if opt.upsample_for_vgg:
-        print('Using upsampling for vgg')
 
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, 'params.txt'), 'w') as f:
