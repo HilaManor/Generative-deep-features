@@ -213,15 +213,7 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
             curr_g.zero_grad()
             fake_im = curr_g(noise.detach(), prev_rand)  # Generate a fake image
 
-            if opt.upsample_for_vgg:
-                fake_im = loss_model.validate_vgg_im_size(fake_im)
-                n_layers = len(opt.chosen_layers)
-            else:
-                n_layers = len(loss_model.validate_vgg_layers_amount(
-                    fake_im.shape[2:], opt.chosen_layers, opt.min_features))
-
             # Calculate loss
-            loss_block(fake_im)
             if opt.c_alpha != 0:
                 fake_im_patches = loss_model.split_img_to_patches(fake_im, opt.c_patch_size)
                 fake_im_patches_flattened = fake_im_patches.reshape(1, -1, opt.nc *
@@ -232,6 +224,14 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
             else:
                 color_loss = 0
             color_loss_arr.append(color_loss.detach() if opt.c_alpha else color_loss)
+
+            if opt.upsample_for_vgg:
+                fake_im = loss_model.validate_vgg_im_size(fake_im)
+                n_layers = len(opt.chosen_layers)
+            else:
+                n_layers = len(loss_model.validate_vgg_layers_amount(
+                    fake_im.shape[2:], opt.chosen_layers, opt.min_features))
+            loss_block(fake_im)
 
             loss = color_loss * opt.c_alpha / (n_layers + 1)
             for i, sl in enumerate(layers_losses):
