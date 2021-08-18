@@ -40,6 +40,9 @@ if __name__ == '__main__':
     opt.nzy = real_resized.shape[0]
     out_dir = gen_unique_out_dir_path(opt.output_folder, basename, opt)
 
+    if opt.upsample_for_vgg:
+        print('Using upsampling for vgg')
+
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, 'params.txt'), 'w') as f:
         opt_dict = opt.__dict__
