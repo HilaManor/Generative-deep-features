@@ -41,7 +41,7 @@ def run_tests(generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, 
             wandb_res[f'Generated Sample {sample_i}'].append(im)
 
     # Test 2 - Propegate an image only from some scale upwards
-    for gen_start_scale in [1, 2, 3]:
+    for gen_start_scale in [1]:
         wandb_res[f'Generated from Scale {gen_start_scale}'] = []
         for sample_i in range(3):
             results = _generate_random_sample(generators, z_opts, scale_factor, noise_amps,
