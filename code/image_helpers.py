@@ -27,7 +27,7 @@ def np2torch(x, im_channels_num, is_cuda):
         x = x.transpose(3, 2, 0, 1)
     x = torch.from_numpy(x)
     if is_cuda:
-        x = x.to(torch.device('cuda')) # todo do we need to reassign
+        x = x.to(torch.device('cuda'))  # todo do we need to reassign
     x = x.type(torch.cuda.FloatTensor) if is_cuda else x.type(torch.FloatTensor)
     x = norm(x)
     return x

@@ -1,11 +1,11 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Imports ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import torch
 import torch.nn as nn
-import numpy as np
 import math
 import gram_loss
 import contextual_loss
 import pd_loss
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Constants ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 vgg_normalization_mean = torch.tensor([0.485, 0.456, 0.406])
 vgg_normalization_std = torch.tensor([0.229, 0.224, 0.225])
@@ -30,6 +30,7 @@ VGG19_LAYERS_TRANSLATION = {'conv_1': 'conv1_1',
                             'conv_14': 'conv5_2',
                             'conv_15': 'conv5_3',
                             'conv_16': 'conv5_4'}
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Code ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class Normalization(nn.Module):
@@ -72,7 +73,6 @@ def generate_loss_block(vgg, real_img, mode, chosen_layers, opt):
         model is the object for forwarding through the vgg19 and update the activation maps.
         layers_losses contains a list with each layer loss function.
     """
-    # TODO - check: vgg = copy.deepcopy(vgg)
 
     if opt.upsample_for_vgg:
         real_img = validate_vgg_im_size(real_img)
@@ -92,6 +92,7 @@ def generate_loss_block(vgg, real_img, mode, chosen_layers, opt):
     model = nn.Sequential(normalization)
 
     i = 0  # increment every time we see a conv
+    loss_f = None
     for layer in vgg.children():
         if isinstance(layer, nn.Conv2d):
             i += 1
@@ -147,7 +148,9 @@ def validate_vgg_im_size(im):
     min_d = min(list(im.shape[2:]))
     if min_d < 224:
         scale_factor = 224 / min_d
-        im = nn.functional.interpolate(im, scale_factor=(scale_factor, scale_factor), mode='bilinear', align_corners=False, recompute_scale_factor=False)
+        im = nn.functional.interpolate(im, scale_factor=(scale_factor, scale_factor),
+                                       mode='bilinear', align_corners=False,
+                                       recompute_scale_factor=False)
     return im
 
 
@@ -177,7 +180,8 @@ def generate_c_loss_block(real_img, c_patch_size, mode, nc, device):
     :return: The function return loss object with the given parameters.
     """
     real_img_patches = split_img_to_patches(real_img, c_patch_size)
-    real_img_patches_flattened = real_img_patches.reshape(1, -1, nc * c_patch_size * c_patch_size, 1)
+    real_img_patches_flattened = real_img_patches.reshape(1, -1,
+                                                          nc * c_patch_size * c_patch_size, 1)
 
     if mode.lower() == 'gram':
         loss_f = gram_loss.GramLoss
@@ -185,17 +189,19 @@ def generate_c_loss_block(real_img, c_patch_size, mode, nc, device):
         loss_f = contextual_loss.ContextualLoss
     elif mode.lower() == 'pdl':
         loss_f = pd_loss.PDLoss
+    else:
+        raise NotImplementedError
 
     return loss_f(real_img_patches_flattened, device=device)
 
 
 def split_img_to_patches(im, patch_size):
-    """
-    The function splits an image for patch_size*patch_size squares.
+    """The function splits an image for patch_size*patch_size squares.
 
     :param im: The input image, the function will split this image.
     :param patch_size: The size of each patch: atch_size*patch_size square.
-    :return: The function returns patches tensor: num_patchesX3Xpatch_sizeXpatch_size. #TODO: why 3 and not opt.nc?
+    :return: The function returns patches tensor: num_patches X 3 X patch_size X patch_size.
+    # TODO: why 3 and not opt.nc?
     """
     patches = im.unfold(2, patch_size, patch_size).unfold(3, patch_size, patch_size)
     patches = patches.permute((0, 2, 3, 1, 4, 5))
