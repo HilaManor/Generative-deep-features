@@ -13,7 +13,8 @@ if __name__ == '__main__':
     parser = get_arguments()
     opt = parser.parse_args()
 
-    opt.layers_weights = [1, 0.75, 0.2, 0.2, 0.2]
+    opt.layers_weights = [opt.vgg_w1, opt.vgg_w2, opt.vgg_w3, opt.vgg_w4, opt.vgg_w5]
+    #opt.layers_weights = [1, 0.75, 0.2, 0.2, 0.2]
     # opt.layers_weights = [1, 1, 1, 1]
     opt.chosen_layers = ['conv1_1', 'conv2_1', 'conv3_1', 'conv4_1', 'conv5_1']
     if torch.cuda.is_available() and not opt.is_cuda:
@@ -31,6 +32,7 @@ if __name__ == '__main__':
     random.seed(opt.manual_seed)
     torch.manual_seed(opt.manual_seed)
 
+    opt.try_initial_guess = True if opt.try_initial_guess == 'true' else False
     opt.upsample_for_vgg = True if opt.upsample_for_vgg == 'true' else False
     if opt.upsample_for_vgg:
         print('Using upsampling for vgg')
