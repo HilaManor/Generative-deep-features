@@ -33,7 +33,7 @@ def run_tests(generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, 
     wandb_res = {}
     # Test 1 - Propagate an image through the different scales
     for sample_i in range(5):
-        results = _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt)
+        results = generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt)
         wandb_res[f'Generated Sample {sample_i}'] = []
         for scale, res in enumerate(results):
             save_im(res, tests_path, f'Sample{sample_i}_S{scale}', convert=True)
@@ -44,8 +44,8 @@ def run_tests(generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, 
     for gen_start_scale in [1]:
         wandb_res[f'Generated from Scale {gen_start_scale}'] = []
         for sample_i in range(3):
-            results = _generate_random_sample(generators, z_opts, scale_factor, noise_amps,
-                                              real_imgs, opt, gen_start_scale=gen_start_scale)
+            results = generate_random_sample(generators, z_opts, scale_factor, noise_amps,
+                                             real_imgs, opt, gen_start_scale=gen_start_scale)
             res = results[-1]
             save_im(res, tests_path, f'Sample_startGen{gen_start_scale}_{sample_i}', convert=True)
             im = wandb.Image(convert_im(res),
@@ -54,9 +54,8 @@ def run_tests(generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, 
 
     wandb.log(wandb_res)
 
-
-def _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt,
-                            gen_start_scale=0):
+def generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt,
+                           gen_start_scale=0, n=0, fake=None):
     """Generate a single sample, and track it through the scales
 
     :param generators: list of trained generators
@@ -74,8 +73,11 @@ def _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_i
     pad_func = nn.ZeroPad2d(int(pad_noise))
 
     results = []
-    # the initial prev is a zero image (add nothing to the noise...)
-    fake = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
+
+    if fake is None:
+        # the initial prev is a zero image (add nothing to the noise...)
+        fake = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
+
     for i, (G, z_opt, real_img, noise_amp) in enumerate(zip(generators, z_opts, real_imgs,
                                                             noise_amps)):
         nzx = z_opt.shape[2] - pad_noise * 2
@@ -89,7 +91,7 @@ def _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_i
             z = z.expand(1, 3, z.shape[2], z.shape[3])
         z = pad_func(z)
 
-        if i < gen_start_scale:
+        if n < gen_start_scale:
             z = z_opt
 
         # the last fake image has been upscaled, and so we cut it to fit perfectly the cur image
@@ -102,5 +104,6 @@ def _generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_i
 
         # prepare for next scale
         fake = image_processing.resize(fake, 1 / scale_factor, opt.nc, opt.is_cuda)
+        n += 1
 
     return results

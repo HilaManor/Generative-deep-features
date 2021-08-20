@@ -5,7 +5,7 @@ import torch
 import math
 import image_helpers
 import imresize
-
+from skimage import morphology, filters
 
 def generate_noise(size,num_samp=1,device='cuda',type='gaussian', scale=1):
     if type == 'gaussian':
@@ -26,6 +26,12 @@ def resize(im, scale, nc, is_cuda):
     im = image_helpers.np2torch(im, nc, is_cuda)
     return im
 
+
+def resize_to_shape(im, output_shape, nc, is_cuda):
+    im = image_helpers.torch2uint8(im)
+    im = imresize.imresize_in(im, output_shape=output_shape)
+    im = image_helpers.np2torch(im, nc, is_cuda)
+    return im
 
 def preprocess_image(real_img, opt):
     n_scales_curr2min = math.ceil(math.log(opt.min_size /
@@ -52,3 +58,15 @@ def create_real_imgs_pyramid(real_img, scale_factor, total_scales, opt):
         resized_real = resize(real_img, scale, opt.nc, opt.is_cuda)
         pyramid.append(resized_real)
     return pyramid
+
+
+def dilate_mask(mask, is_cuda, radius=7, sigma=5):
+    element = morphology.disk(radius=radius)
+    mask = image_helpers.torch2uint8(mask)
+    mask = mask[:, :, 0]
+    mask = morphology.binary_dilation(mask, selem=element)
+    mask = filters.gaussian(mask, sigma=sigma)
+    mask = image_helpers.np2torch(mask, 1, is_cuda)
+    mask = mask.expand(1, 3, mask.shape[2], mask.shape[3])
+    mask = (mask - mask.min()) / (mask.max() - mask.min())
+    return mask

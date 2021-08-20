@@ -4,7 +4,7 @@ import random
 import os
 import image_processing, image_helpers
 import training
-from output_handler import gen_unique_out_dir_path
+from output_handler import gen_unique_out_dir_path, save_network
 from tests import run_tests
 import json
 import wandb
@@ -58,8 +58,9 @@ if __name__ == '__main__':
         f.write(f'{os.path.basename(out_dir)} {opt}\n')
 
     try:
-        Generators, Zs, noise_amps, real_imgs = training.train(out_dir, real_resized, scale_factor, total_scales, opt)
-        run_tests(Generators, Zs, scale_factor, noise_amps, real_imgs, out_dir, opt)
+        Generators, z_opts, noise_amps, real_imgs = training.train(out_dir, real_resized, scale_factor, total_scales, opt)
+        save_network(Generators, z_opts, noise_amps, real_imgs, out_dir)
+        run_tests(Generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, opt)
         print('Done Training')
     except KeyboardInterrupt:
         print('done')

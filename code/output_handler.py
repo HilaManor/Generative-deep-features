@@ -1,6 +1,6 @@
 import os
 import re
-
+import torch
 
 def __generate_out_name(opt):
     base_name = f"{opt.loss_func}_e{opt.epochs}_{opt.nzx}px_lr{opt.lr}" \
@@ -59,3 +59,18 @@ def gen_scale_dir(out_dir, scale):
     path = os.path.join(out_dir, str(scale))
     os.makedirs(path, exist_ok=True)
     return path
+
+def save_network(Generators, z_opts, noise_amps, real_imgs, out_dir):
+    torch.save(Generators, os.path.join(out_dir, 'Generators.pth'))
+    torch.save(z_opts, os.path.join(out_dir, 'z_opts.pth'))
+    torch.save(noise_amps, os.path.join(out_dir, 'noise_amps.pth'))
+    torch.save(real_imgs, os.path.join(out_dir, 'real_imgs.pth'))
+
+
+def load_network(input_dir):
+    Generators = torch.load(os.path.join(input_dir, 'Generators.pth'))
+    z_opts = torch.load(os.path.join(input_dir, 'z_opts.pth'))
+    noise_amps = torch.load(os.path.join(input_dir, 'noise_amps.pth'))
+    real_imgs = torch.load(os.path.join(input_dir, 'real_imgs.pth'))
+    return Generators, z_opts, noise_amps, real_imgs
+
