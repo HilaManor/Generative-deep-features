@@ -30,7 +30,7 @@ if __name__ == '__main__':
     real_resized, scale_factor, total_scales = image_processing.preprocess_image(real_img, opt)
 
     out_dir = os.path.join(opt.output_folder, 'Harmonization', basename)
-    os.mkdir(out_dir, exist_ok=True)
+    os.makedirs(out_dir, exist_ok=True)
 
     Generators, Zs, reals, NoiseAmp = output_handler.load_network(opt.trained_net_dir)
 
