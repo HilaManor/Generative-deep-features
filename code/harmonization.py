@@ -9,7 +9,8 @@ import output_handler
 if __name__ == '__main__':
     parser = get_arguments()
     parser.add_argument('--trained_net_dir', help='trained network folder', required=True)
-    parser.add_argument('--ref_path', help='reference image name', required=True)
+    parser.add_argument('--ref_path', help='reference image path', required=True)
+    parser.add_argument('--mask_path', help='mask image path', required=True)
     parser.add_argument('--harmonization_start_scale', help='harmonization injection scale',
                         type=int, required=True)
     opt = parser.parse_args()
@@ -37,13 +38,14 @@ if __name__ == '__main__':
     if (opt.harmonization_start_scale < 1) | (opt.harmonization_start_scale > (len(Generators) - 1)):
         raise Exception("injection scale should be between 1 and %d" % (len(Generators) - 1))
     else:
-        ref = functions.read_image_dir('%s/%s' % (opt.ref_dir, opt.ref_name), opt)
-        mask = functions.read_image_dir(
-            '%s/%s_mask%s' % (opt.ref_dir, opt.ref_name[:-4], opt.ref_name[-4:]), opt)
-        if ref.shape[3] != real.shape[3]:
-            mask = imresize_to_shape(mask, [real.shape[2], real.shape[3]], opt)
-            mask = mask[:, :, :real.shape[2], :real.shape[3]]
-            ref = imresize_to_shape(ref, [real.shape[2], real.shape[3]], opt)
+        ref_img = image_helpers.read_image(opt.ref_path, opt.nc, opt.is_cuda)
+        mask = image_helpers.read_image(opt.mask_path, opt.nc, opt.is_cuda)
+        if ref_img.shape[3] != real_img.shape[3]:
+            mask = image_processing.resize_to_shape(mask,
+                                                    [real_img.shape[2], real_img.shape[3]],
+                                                    opt.nc, opt.is_cuda)
+            mask = mask[:, :, :real_img.shape[2], :real_img.shape[3]]
+            ref_img = image_processing.resize_to_shape(ref_img, [real_img.shape[2], real_img.shape[3]], opt.nc, opt.is_cuda))
             ref = ref[:, :, :real.shape[2], :real.shape[3]]
         mask = functions.dilate_mask(mask, opt)
 

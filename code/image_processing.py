@@ -27,6 +27,12 @@ def resize(im, scale, nc, is_cuda):
     return im
 
 
+def resize_to_shape(im, output_shape, nc, is_cuda):
+    im = image_helpers.torch2uint8(im)
+    im = imresize.imresize_in(im, output_shape=output_shape)
+    im = image_helpers.np2torch(im, nc, is_cuda)
+    return im
+
 def preprocess_image(real_img, opt):
     n_scales_curr2min = math.ceil(math.log(opt.min_size /
                                            (min(real_img.shape[2], real_img.shape[3])),
