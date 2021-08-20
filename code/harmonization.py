@@ -5,6 +5,8 @@ import os
 import image_helpers
 import image_processing
 import output_handler
+import plotting_helpers
+import tests
 
 if __name__ == '__main__':
     parser = get_arguments()
@@ -30,10 +32,10 @@ if __name__ == '__main__':
     real_img = image_helpers.read_image(opt.image_path, opt.nc, opt.is_cuda)
     real_resized, scale_factor, total_scales = image_processing.preprocess_image(real_img, opt)
 
-    out_dir = os.path.join(opt.output_folder, 'Harmonization', basename)
+    out_dir = os.path.join(opt.trained_net_dir, 'Harmonization')
     os.makedirs(out_dir, exist_ok=True)
 
-    Generators, Zs, reals, NoiseAmp = output_handler.load_network(opt.trained_net_dir)
+    Generators, z_outs, reals, NoiseAmp = output_handler.load_network(opt.trained_net_dir)
 
     if (opt.harmonization_start_scale < 1) | (opt.harmonization_start_scale > (len(Generators) - 1)):
         raise Exception("injection scale should be between 1 and %d" % (len(Generators) - 1))
@@ -45,18 +47,17 @@ if __name__ == '__main__':
                                                     [real_img.shape[2], real_img.shape[3]],
                                                     opt.nc, opt.is_cuda)
             mask = mask[:, :, :real_img.shape[2], :real_img.shape[3]]
-            ref_img = image_processing.resize_to_shape(ref_img, [real_img.shape[2], real_img.shape[3]], opt.nc, opt.is_cuda))
-            ref = ref[:, :, :real.shape[2], :real.shape[3]]
-        mask = functions.dilate_mask(mask, opt)
+            ref_img = image_processing.resize_to_shape(ref_img, [real_img.shape[2], real_img.shape[3]], opt.nc, opt.is_cuda)
+            ref_img = ref_img[:, :, :real_img.shape[2], :real_img.shape[3]]
+        mask = image_processing.dilate_mask(mask, opt.is_cuda)
 
         N = len(reals) - 1
         n = opt.harmonization_start_scale
-        in_s = imresize(ref, pow(opt.scale_factor, (N - n + 1)), opt)
+        in_s = image_processing.resize(ref_img, pow(opt.scale_factor, (N - n + 1)), opt.nc, opt.is_cuda)
         in_s = in_s[:, :, :reals[n - 1].shape[2], :reals[n - 1].shape[3]]
-        in_s = imresize(in_s, 1 / opt.scale_factor, opt)
+        in_s = image_processing.resize(in_s, 1 / opt.scale_factor, opt.nc, opt.is_cuda)
         in_s = in_s[:, :, :reals[n].shape[2], :reals[n].shape[3]]
-        out = SinGAN_generate(Gs[n:], Zs[n:], reals, NoiseAmp[n:], opt, in_s, n=n,
-                              num_samples=1)
-        out = (1 - mask) * real + mask * out
-        plt.imsave('%s/start_scale=%d.png' % (dir2save, opt.harmonization_start_scale),
-                   functions.convert_image_np(out.detach()), vmin=0, vmax=1)
+        out = tests.generate_random_sample(Generators[n:], z_outs[n:], scale_factor,NoiseAmp[n:],
+                                           reals, opt=opt, in_s=in_s, n=n)
+        out = (1 - mask) * real_img + mask * out[-1]
+        plotting_helpers.save_im(out, out_dir, f'Harmonized_start{n}', convert=True)
