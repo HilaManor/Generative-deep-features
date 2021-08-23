@@ -1,2 +1,0 @@
-epoch 0:	pdl:1.30e+00 	 Rec:1.30e+00 	 Color:0.00e+00 	Time: 0.02
-epoch 50:	pdl:8.55e-01 	 Rec:6.66e-02 	 Color:0.00e+00 	Time: 1.35
