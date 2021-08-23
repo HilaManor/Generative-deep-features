@@ -7,7 +7,7 @@ import numpy as np
 import output_handler
 import random
 
-def generate_gif(Generators,Zs,reals,NoiseAmp,opt,alpha=0.1,beta=0.9,start_scale=2,fps=10, num_frames=100):
+def generate_gif(Generators,Zs,reals,NoiseAmp,opt, scale_factor, alpha=0.1,beta=0.9,start_scale=2,fps=10, num_frames=100):
     """
     The funciton generate gif video from trained generators, and saves it.
     :param Generators: List of trained generators.
@@ -41,7 +41,7 @@ def generate_gif(Generators,Zs,reals,NoiseAmp,opt,alpha=0.1,beta=0.9,start_scale
             z_prev1 = 0.95*Z_opt +0.05*z_rand
             z_prev2 = Z_opt
         else:
-            z_prev1 = 0.95*Z_opt +0.05*image_processing.generate_noise([opt.nc_z,nzx,nzy], device=opt.device)
+            z_prev1 = 0.95*Z_opt +0.05*image_processing.generate_noise([opt.nc,nzx,nzy], device=opt.device)
             z_prev2 = Z_opt
         # Generate all the frames for the current scale:
         for i_frame in range(0,num_frames,1):
@@ -51,7 +51,7 @@ def generate_gif(Generators,Zs,reals,NoiseAmp,opt,alpha=0.1,beta=0.9,start_scale
                 z_rand = z_rand.expand(1,3,Z_opt.shape[2],Z_opt.shape[3])
                 diff_curr = beta*(z_prev1-z_prev2)+(1-beta)*z_rand
             else:
-                diff_curr = beta*(z_prev1-z_prev2)+(1-beta)*(image_processing.generate_noise([opt.nc_z,nzx,nzy], device=opt.device))
+                diff_curr = beta*(z_prev1-z_prev2)+(1-beta)*(image_processing.generate_noise([opt.nc,nzx,nzy], device=opt.device))
 
             z_curr = alpha*Z_opt+(1-alpha)*(z_prev1+diff_curr)
             z_prev2 = z_prev1
@@ -62,7 +62,7 @@ def generate_gif(Generators,Zs,reals,NoiseAmp,opt,alpha=0.1,beta=0.9,start_scale
                 I_prev = torch.full(Zs[0].shape, 0, device=opt.device)
             else:
                 I_prev = images_prev[i_frame]
-                I_prev = image_processing.resize(I_prev, 1 / opt.scale_factor, opt.nc, opt.is_cuda)
+                I_prev = image_processing.resize(I_prev, 1 / scale_factor, opt.nc, opt.is_cuda)
                 I_prev = I_prev[:, :, 0:real.shape[2], 0:real.shape[3]]
                 I_prev = m_image(I_prev)
             #generation of new images is only done for the relevant scales
@@ -116,6 +116,8 @@ if __name__ == '__main__':
     basename = os.path.basename(opt.image_path)
     basename = basename[:basename.rfind('.')]
 
+    real_img = image_helpers.read_image(opt.image_path, opt.nc, opt.is_cuda)
+    real_resized, scale_factor, total_scales = image_processing.preprocess_image(real_img, opt)
 
     # dir2save = output_handler.gen_unique_out_dir_path(opt.output_folder, basename, opt)
     # opt.min_size = 20
@@ -129,8 +131,10 @@ if __name__ == '__main__':
     # else:
     #     train(opt, Gs, Zs, reals, NoiseAmp)
     #     opt.mode = 'animation'
-    Generators, Zs, reals, NoiseAmp = output_handler.load_network(opt.trained_net_dir)
+    Generators, z_opts, NoiseAmp, reals = output_handler.load_network(opt.trained_net_dir)
     for start_scale in range(opt.animation_initial_start_scale_sweep, opt.animation_final_start_scale_sweep, 1):
         for b in np.arange(opt.animation_initial_beta_sweep, opt.animation_final_beta_sweep, 0.05):
-            generate_gif(Generators, Zs, reals, NoiseAmp, opt, opt.animation_alpha ,beta=b, start_scale=start_scale,fps=opt.animation_fps, num_frames=opt.animation_num_frames)
+            generate_gif(Generators, z_opts, reals, NoiseAmp, opt, scale_factor,
+                         alpha=opt.animation_alpha, beta=b, start_scale=start_scale, fps=opt.animation_fps,
+                         num_frames=opt.animation_num_frames)
 

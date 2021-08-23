@@ -52,7 +52,7 @@ def run_tests(generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, 
                              caption=f'Sample_startGen{gen_start_scale}_{sample_i}')
             wandb_res[f'Generated from Scale {gen_start_scale}'].append(im)
 
-    wandb.log(wandb_res)
+    # wandb.log(wandb_res)
 
 def generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt,
                            gen_start_scale=0, n=0, fake=None):
@@ -76,7 +76,7 @@ def generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_im
 
     if fake is None:
         # the initial prev is a zero image (add nothing to the noise...)
-        fake = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
+        fake = torch.full(real_imgs[0].shape, 0, device=opt.device)
 
     for i, (G, z_opt, real_img, noise_amp) in enumerate(zip(generators, z_opts, real_imgs,
                                                             noise_amps)):
@@ -84,7 +84,7 @@ def generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_im
         nzy = z_opt.shape[3] - pad_noise * 2
 
         # Only in the first scale the noise should be equal in all the color channels
-        if i:
+        if n:
             z = image_processing.generate_noise([opt.nc, nzx, nzy], device=opt.device)
         else:
             z = image_processing.generate_noise([1, nzx, nzy], device=opt.device)
