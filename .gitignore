@@ -9,3 +9,5 @@
 .ipynb_checkpoints/*
 /code/wandb/*
 core
+/code/Output/dont_track
+/code/Output/*.zip
