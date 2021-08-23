@@ -155,3 +155,6 @@ epoch 7650:	pdl:8.98e-02 	 Rec:2.31e-03 	 Color:0.00e+00 	Time: 3.93
 epoch 7700:	pdl:9.15e-02 	 Rec:2.29e-03 	 Color:0.00e+00 	Time: 3.93
 epoch 7750:	pdl:9.89e-02 	 Rec:2.29e-03 	 Color:0.00e+00 	Time: 3.94
 epoch 7800:	pdl:9.48e-02 	 Rec:2.31e-03 	 Color:0.00e+00 	Time: 3.92
+epoch 7850:	pdl:9.35e-02 	 Rec:2.29e-03 	 Color:0.00e+00 	Time: 3.96
+epoch 7900:	pdl:9.31e-02 	 Rec:2.28e-03 	 Color:0.00e+00 	Time: 3.92
+epoch 7950:	pdl:1.00e-01 	 Rec:2.36e-03 	 Color:0.00e+00 	Time: 3.98
