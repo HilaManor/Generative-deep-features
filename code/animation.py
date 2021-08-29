@@ -135,5 +135,5 @@ if __name__ == '__main__':
 
             out_dir = os.path.join(opt.trained_net_dir, 'Animation', f"start_scale{start_scale}")
             os.makedirs(out_dir, exist_ok=True)
-            gif_save_dir = os.path.join(out_dir, f"alpha={opt.animation_alpha}_beta={b}_fps={opt.animation_fps}.gif")
+            gif_save_dir = os.path.join(out_dir, f"alpha={opt.animation_alpha}_beta=%.2f_fps={opt.animation_fps}.gif" % b)
             imageio.mimsave(gif_save_dir, frames, fps=opt.animation_fps)
