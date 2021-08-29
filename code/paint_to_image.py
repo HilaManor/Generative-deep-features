@@ -62,4 +62,4 @@ if __name__ == '__main__':
         out = tests.generate_random_sample(Generators[n:], z_opts[n:], scale_factor, NoiseAmp[n:],
                                            reals[n:], opt=opt, fake=in_s, n=n)
         plotting_helpers.show_im(out[-1])
-        plotting_helpers.save_im(out[-1], out_dir, f'paint2_started{n}', convert=True)
+        plotting_helpers.save_im(out[-1], out_dir, f'paint_started_at{n}', convert=True)
