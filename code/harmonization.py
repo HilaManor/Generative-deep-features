@@ -15,6 +15,8 @@ if __name__ == '__main__':
     parser.add_argument('--mask_path', help='mask image path', required=True)
     parser.add_argument('--harmonization_start_scale', help='harmonization injection scale',
                         type=int, required=True)
+    parser.add_argument('--editing', action='store_true',
+                        help='specify if to perform color editing (different mask dilate)')
     opt = parser.parse_args()
 
     opt.is_cuda = opt.is_cuda and torch.cuda.is_available()
@@ -51,7 +53,8 @@ if __name__ == '__main__':
             mask = mask[:, :, :real_resized.shape[2], :real_resized.shape[3]]
             ref_img = image_processing.resize_to_shape(ref_img, [real_resized.shape[2], real_resized.shape[3]], opt.nc, opt.is_cuda)
             ref_img = ref_img[:, :, :real_resized.shape[2], :real_resized.shape[3]]
-        mask = image_processing.dilate_mask(mask, opt.is_cuda)
+        r = 20 if opt.editing else 7
+        mask = image_processing.dilate_mask(mask, opt.is_cuda, radius=r)
 
         N = len(reals) - 1
         n = opt.harmonization_start_scale
@@ -64,4 +67,4 @@ if __name__ == '__main__':
                                            reals[n:], opt=opt, fake=in_s, n=n)
         out = (1 - mask) * real_resized + mask * out[-1]
         plotting_helpers.show_im(out)
-        plotting_helpers.save_im(out, out_dir, f'Harmonized_start{n}', convert=True)
+        plotting_helpers.save_im(out, out_dir, f'Harmonized_{basename}_at{n}_r{r}', convert=True)

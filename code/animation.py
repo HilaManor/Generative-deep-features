@@ -7,7 +7,7 @@ import numpy as np
 import output_handler
 import random
 
-def generate_gif(Generators,Zs,reals,NoiseAmp,opt, scale_factor, alpha=0.1,beta=0.9,start_scale=2,fps=10, num_frames=100):
+def generate_gif(Generators,Zs,reals,NoiseAmp,opt, scale_factor, alpha=0.1,beta=0.9,start_scale=2, num_frames=100):
     """
     The funciton generate gif video from trained generators, and saves it.
     :param Generators: List of trained generators.
@@ -82,11 +82,8 @@ def generate_gif(Generators,Zs,reals,NoiseAmp,opt, scale_factor, alpha=0.1,beta=
             images_cur.append(I_curr)
         current_scale += 1
 
-    out_dir = os.path.join(opt.output_folder, 'Animation', basename,f"start_scale{start_scale}")
-    os.makedirs(out_dir, exist_ok=True)
-    gif_save_dir = os.path.join(out_dir,f"alpha={alpha}_beta={beta}_fps={fps}.gif")
-    imageio.mimsave(gif_save_dir,images_cur,fps=fps)
-    del images_cur
+    return images_cur
+
 
 if __name__ == '__main__':
     parser = get_arguments()
@@ -101,9 +98,6 @@ if __name__ == '__main__':
     parser.add_argument('--animation_num_frames', help='The number of frames in the output gif.', type = int, default=100)
     #parser.add_argument('--alpha_animation', type=float, help='animation random walk first moment', default=0.1)
     #parser.add_argument('--beta_animation', type=float, help='animation random walk second moment', default=0.9)
-    # parser.add_argument('--input_dir', help='input image dir', default='Input/Images')
-    # parser.add_argument('--input_name', help='input image name', required=True)
-    # parser.add_argument('--mode', help='task to be done', default='animation')
     opt = parser.parse_args()
     opt.is_cuda = opt.is_cuda and torch.cuda.is_available()
     opt.device = torch.device("cuda:0" if opt.is_cuda else "cpu")
@@ -113,6 +107,7 @@ if __name__ == '__main__':
     print("Random Seed: ", opt.manual_seed)
     random.seed(opt.manual_seed)
     torch.manual_seed(opt.manual_seed)
+
     basename = os.path.basename(opt.image_path)
     basename = basename[:basename.rfind('.')]
 
@@ -134,7 +129,11 @@ if __name__ == '__main__':
     Generators, z_opts, NoiseAmp, reals = output_handler.load_network(opt.trained_net_dir)
     for start_scale in range(opt.animation_initial_start_scale_sweep, opt.animation_final_start_scale_sweep, 1):
         for b in np.arange(opt.animation_initial_beta_sweep, opt.animation_final_beta_sweep, 0.05):
-            generate_gif(Generators, z_opts, reals, NoiseAmp, opt, scale_factor,
-                         alpha=opt.animation_alpha, beta=b, start_scale=start_scale, fps=opt.animation_fps,
-                         num_frames=opt.animation_num_frames)
+            frames = generate_gif(Generators, z_opts, reals, NoiseAmp, opt, scale_factor,
+                                  alpha=opt.animation_alpha, beta=b, start_scale=start_scale,
+                                  num_frames=opt.animation_num_frames)
 
+            out_dir = os.path.join(opt.trained_net_dir, 'Animation', f"start_scale{start_scale}")
+            os.makedirs(out_dir, exist_ok=True)
+            gif_save_dir = os.path.join(out_dir, f"alpha={opt.animation_alpha}_beta={b}_fps={opt.animation_fps}.gif")
+            imageio.mimsave(gif_save_dir, frames, fps=opt.animation_fps)
