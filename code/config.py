@@ -38,6 +38,7 @@ def get_arguments():
     gen_hyper_group.add_argument('--min_nfc', type=int, default=32,
                                  help='The minimum output depth of any layer')
     gen_hyper_group.add_argument('--padd_size', type=int, default=0, help='Generator pad size')
+    gen_hyper_group.add_argument('--pad_type', type=str, default='pre-padding', help='***')
     gen_hyper_group.add_argument('--stride', default=1, help='Generator stride')
 
     # ~~~~~~~~~~~~~~~~~~ Optimizers HyperParameters Group ~~~~~~~~~~~~~~~~~~~~

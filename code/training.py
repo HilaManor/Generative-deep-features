@@ -133,7 +133,7 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
     opt.nzy = real_img.shape[3]  # Height of image in current scale
 
     # Create the padding layer
-    pad_amount = models.get_pad_amount(opt.ker_size, opt.num_layer)
+    pad_amount = models.get_pad_amount(opt.ker_size, opt.num_layer, opt.pad_type)
     pad_func = nn.ZeroPad2d(int(pad_amount))
 
     # Create and initialize the chosen loss block
@@ -365,7 +365,7 @@ def _draw_concat(trained_generators, z_opts, real_imgs, noise_amps, mode, pad_fu
 
     fake = torch.full([1, opt.nc, opt.nzx, opt.nzy], 0, device=opt.device)
     if len(trained_generators):
-        pad_amount = models.get_pad_amount(opt.ker_size, opt.num_layer)
+        pad_amount = models.get_pad_amount(opt.ker_size, opt.num_layer, opt.pad_type)
         for i, (gen, z_opt, cur_real_im, next_real_im, noise_amp) in enumerate(zip(
                 trained_generators, z_opts, real_imgs, real_imgs[1:], noise_amps)):
             prev_fake = fake[:, :, :cur_real_im.shape[2], :cur_real_im.shape[3]]
