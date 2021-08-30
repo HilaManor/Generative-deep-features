@@ -7,6 +7,7 @@ import os
 import torch
 from torch import nn
 import wandb
+import models
 
 import image_processing
 from plotting_helpers import convert_im, save_im
@@ -69,8 +70,8 @@ def generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_im
     :return: list of fake images of the same sample at different scales
     """
 
-    pad_noise = int(((opt.ker_size - 1) * opt.num_layer) / 2)
-    pad_func = nn.ZeroPad2d(int(pad_noise))
+    pad_amount = models.get_pad_amount(opt.ker_size, opt.num_layer, opt.pad_type)
+    pad_func = nn.ZeroPad2d(int(pad_amount))
 
     results = []
 
@@ -80,8 +81,8 @@ def generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_im
 
     for i, (G, z_opt, real_img, noise_amp) in enumerate(zip(generators, z_opts, real_imgs,
                                                             noise_amps)):
-        nzx = z_opt.shape[2] - pad_noise * 2
-        nzy = z_opt.shape[3] - pad_noise * 2
+        nzx = z_opt.shape[2] - pad_amount * 2
+        nzy = z_opt.shape[3] - pad_amount * 2
 
         # Only in the first scale the noise should be equal in all the color channels
         if n:
