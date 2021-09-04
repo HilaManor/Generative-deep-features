@@ -11,3 +11,4 @@
 core
 /code/Output/dont_track
 /code/Output/*.zip
+sum/~$*
