@@ -57,7 +57,24 @@ if __name__ == '__main__':
         in_s = in_s[:, :, :reals[n].shape[2], :reals[n].shape[3]]
 
         if opt.quantization_flag:
-            raise NotImplementedError
+            opt.mode = 'paint_train'
+            dir2trained_model =  os.path.join(out_dir,"Trained Net")
+            # N = len(reals) - 1
+            # n = opt.paint_start_scale
+            real_s = image_processing.resize(real_resized, pow(scale_factor, (N - n)), opt.nc, opt.is_cuda)
+            real_s = real_s[:, :, :reals[n].shape[2], :reals[n].shape[3]]
+            real_quant, centers = image_processing.quant(real_s, opt.device)
+            plotting_helpers.save_im(real_quant,out_dir,"real_quant.png",convert=True)
+            plotting_helpers.save_im(in_s,out_dir,"in_paint.png",convert=True)
+            in_s = image_processing.quant2centers(ref_img, centers)
+            in_s = image_processing.resize(in_s, pow(scale_factor, (N - n)), opt.nc, opt.is_cuda)
+            in_s = in_s[:, :, :reals[n].shape[2], :reals[n].shape[3]]
+            plotting_helpers.save_im(in_s,out_dir,"in_paint_quant.png",convert=True)
+            if (os.path.exists(dir2trained_model)):
+                # print('Trained model does not exist, training SinGAN for SR')
+                Generators, z_opts, NoiseAmp, reals = output_handler.load_network(dir2trained_model)
+            else:
+                Generators, z_opts, NoiseAmp, reals = train_paint(opt, Generators, z_opts, reals, NoiseAmp, centers, opt.paint_start_scale, dir2trained_model, total_scales, scale_factor)
 
         out = tests.generate_random_sample(Generators[n:], z_opts[n:], scale_factor, NoiseAmp[n:],
                                            reals[n:], opt=opt, fake=in_s, n=n)

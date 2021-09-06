@@ -104,7 +104,7 @@ def _init_generator(curr_nfc, curr_min_nfc, opt):
 
 
 def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_imgs, vgg, out_dir,
-                        scale_factor, opt):
+                        scale_factor, opt, centers=None):
     """Train a single-scale generator based on a single image
 
     :param trained_generators: list of trained generators so far
@@ -185,6 +185,7 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
     prev_rand = pad_func(prev_rand)
     prev_recon = pad_func(prev_recon)
 
+
     # # new noise to generate details-examples from over the epochs
     # if not cur_scale:
     #     # In the first scale it should be constant across the channels
@@ -197,6 +198,9 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MAIN TRAINING LOOP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     start_time = time.time()
     for epoch in range(opt.epochs):
+        if centers!=None:
+            prev_rand = image_processing.quant2centers(prev_rand, centers, opt.device)
+            plotting_helpers.save_im(prev_rand,out_dir, "prev_quant.png",convert=True)
         # noise_ is the input noise (before adding the image or changing the variance)
         if cur_scale > 0:
             noise_ = image_processing.generate_noise([opt.nc, opt.nzx, opt.nzy], device=opt.device)
@@ -239,6 +243,9 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
             distribution_loss_arr.append(loss.detach())
 
             if opt.alpha != 0:
+                if centers != None:
+                    prev_recon = image_processing.quant2centers(prev_recon, centers, opt.device)
+                    plotting_helpers.save_im(prev_recon, out_dir,"z_prev.png",convert=True)
                 Z_opt = noise_amp*z_opt + prev_recon
                 #               -->         z_opt = 0 ({Z*,0,0,0,0,0})
                 loss_criterion = nn.MSELoss()
@@ -391,3 +398,51 @@ def _draw_concat(trained_generators, z_opts, real_imgs, noise_amps, mode, pad_fu
             fake = image_processing.resize(fake, 1 / scale_factor, opt.nc, opt.is_cuda)
             fake = fake[:, :, :next_real_im.shape[2], :next_real_im.shape[3]]
     return fake
+
+def train_paint(opt,Generators,z_opts,reals,NoiseAmp,centers,paint_inject_scale, out_dir, total_scales, scale_factor):
+    vgg = torchvision.models.vgg19(pretrained=True).features.to(opt.device).eval()
+    nfc_prev = None
+
+        # scale_out_dir = output_handler.gen_scale_dir(out_dir, scale)
+        # plotting_helpers.save_im(real_imgs[scale], scale_out_dir, 'real_scale', convert=True)
+        #
+        # curr_nfc = min(opt.nfc * pow(2, math.floor(scale / 4)), 128)
+        # curr_min_nfc = min(opt.min_nfc * pow(2, math.floor(scale / 4)), 128)
+
+    for scale_num in range(total_scales):
+        curr_nfc = min(opt.nfc * pow(2, math.floor(scale_num / 4)), 128)
+        curr_min_nfc = min(opt.min_nfc * pow(2, math.floor(scale_num / 4)), 128)
+        if scale_num!=paint_inject_scale:
+            nfc_prev = curr_nfc
+            continue
+
+
+
+        scale_out_dir = output_handler.gen_scale_dir(out_dir, scale_num)
+
+        plotting_helpers.save_im(reals[scale_num],scale_out_dir,"in_scale.png",convert=True)
+
+        G_curr = _init_generator(curr_nfc, curr_min_nfc, opt)
+        # _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_imgs, vgg, out_dir,
+        #                     scale_factor, opt)
+        z_curr,in_s,G_curr = _train_single_scale(Generators[:scale_num],z_opts[:scale_num],NoiseAmp[:scale_num],G_curr,
+                                                 reals[:scale_num+1],vgg,scale_out_dir, scale_factor, opt, centers=centers)
+
+        G_curr = functions.reset_grads(G_curr,False)
+        G_curr.eval()
+        D_curr = functions.reset_grads(D_curr,False)
+        D_curr.eval()
+
+        Generators[scale_num] = G_curr
+        Zs[scale_num] = z_curr
+        NoiseAmp[scale_num] = opt.noise_amp
+
+        torch.save(Zs, '%s/Zs.pth' % (opt.out_))
+        torch.save(Generators, '%s/Gs.pth' % (opt.out_))
+        torch.save(reals, '%s/reals.pth' % (opt.out_))
+        torch.save(NoiseAmp, '%s/NoiseAmp.pth' % (opt.out_))
+
+        scale_num+=1
+        nfc_prev = opt.nfc
+        del D_curr,G_curr
+    return
