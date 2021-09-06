@@ -7,13 +7,13 @@ import image_processing
 import output_handler
 import plotting_helpers
 import tests
-
+import training
 
 if __name__ == '__main__':
     parser = get_arguments()
     parser.add_argument('--trained_net_dir', help='trained network folder', required=True)
     parser.add_argument('--ref_path', help='reference image path', required=True)
-    parser.add_argument('--quantization_flag', type=bool, default=False,
+    parser.add_argument('--quantization_flag', action='store_true',
                         help='specify if to perform color quantization training')
     parser.add_argument('--paint_start_scale', help='harmonization injection scale',
                         type=int, required=True)
@@ -58,23 +58,31 @@ if __name__ == '__main__':
 
         if opt.quantization_flag:
             opt.mode = 'paint_train'
-            dir2trained_model =  os.path.join(out_dir,"Trained Net")
+            opt.layers_weights = [opt.vgg_w1, opt.vgg_w2, opt.vgg_w3, opt.vgg_w4, opt.vgg_w5]
+            opt.chosen_layers = ['conv1_1', 'conv2_1', 'conv3_1', 'conv4_1', 'conv5_1']
+            if torch.cuda.is_available() and not opt.is_cuda:
+                print("WARNING: You have a CUDA device, consider removing --not_cuda")
+            opt.is_cuda = opt.is_cuda and torch.cuda.is_available()
+            opt.device = torch.device("cuda:0" if opt.is_cuda else "cpu")
+            opt.try_initial_guess = True if opt.try_initial_guess == 'true' else False
+            opt.upsample_for_vgg = True if opt.upsample_for_vgg == 'true' else False
+            dir2trained_model =  os.path.join(out_dir,f"Trained Net {opt.paint_start_scale}")
             # N = len(reals) - 1
             # n = opt.paint_start_scale
             real_s = image_processing.resize(real_resized, pow(scale_factor, (N - n)), opt.nc, opt.is_cuda)
             real_s = real_s[:, :, :reals[n].shape[2], :reals[n].shape[3]]
             real_quant, centers = image_processing.quant(real_s, opt.device)
-            plotting_helpers.save_im(real_quant,out_dir,"real_quant.png",convert=True)
-            plotting_helpers.save_im(in_s,out_dir,"in_paint.png",convert=True)
-            in_s = image_processing.quant2centers(ref_img, centers)
+            plotting_helpers.save_im(real_quant,out_dir,f"real_quant_{opt.paint_start_scale}.png",convert=True)
+            plotting_helpers.save_im(in_s,out_dir,f"in_paint_{opt.paint_start_scale}.png",convert=True)
+            in_s = image_processing.quant2centers(ref_img, centers,opt.device)
             in_s = image_processing.resize(in_s, pow(scale_factor, (N - n)), opt.nc, opt.is_cuda)
             in_s = in_s[:, :, :reals[n].shape[2], :reals[n].shape[3]]
-            plotting_helpers.save_im(in_s,out_dir,"in_paint_quant.png",convert=True)
+            plotting_helpers.save_im(in_s,out_dir,f"in_paint_quant_{opt.paint_start_scale}.png",convert=True)
             if (os.path.exists(dir2trained_model)):
                 # print('Trained model does not exist, training SinGAN for SR')
                 Generators, z_opts, NoiseAmp, reals = output_handler.load_network(dir2trained_model)
             else:
-                Generators, z_opts, NoiseAmp, reals = train_paint(opt, Generators, z_opts, reals, NoiseAmp, centers, opt.paint_start_scale, dir2trained_model, total_scales, scale_factor)
+                Generators, z_opts, NoiseAmp, reals = training.train_paint(opt, Generators, z_opts, reals, NoiseAmp, centers, opt.paint_start_scale, dir2trained_model, total_scales, scale_factor)
 
         out = tests.generate_random_sample(Generators[n:], z_opts[n:], scale_factor, NoiseAmp[n:],
                                            reals[n:], opt=opt, fake=in_s, n=n)

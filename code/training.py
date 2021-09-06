@@ -198,7 +198,7 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MAIN TRAINING LOOP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     start_time = time.time()
     for epoch in range(opt.epochs):
-        if centers!=None:
+        if centers is not None:
             prev_rand = image_processing.quant2centers(prev_rand, centers, opt.device)
             plotting_helpers.save_im(prev_rand,out_dir, "prev_quant.png",convert=True)
         # noise_ is the input noise (before adding the image or changing the variance)
@@ -243,7 +243,7 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
             distribution_loss_arr.append(loss.detach())
 
             if opt.alpha != 0:
-                if centers != None:
+                if centers is not None:
                     prev_recon = image_processing.quant2centers(prev_recon, centers, opt.device)
                     plotting_helpers.save_im(prev_recon, out_dir,"z_prev.png",convert=True)
                 Z_opt = noise_amp*z_opt + prev_recon
@@ -290,12 +290,13 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
             # plotting_helpers.save_im(details_fake, out_dir, f'Details_e{epoch}', convert=True)
             # logging_dict[f'scale_{cur_scale}']['Details_fake'] = details_fake_wandb
             z_opt_fake = curr_g(Z_opt, prev_recon)
-            z_opt_fake_wandb = wandb.Image(plotting_helpers.convert_im(z_opt_fake),
-                                           caption=f'Zopt_e{epoch}')
-            logging_dict[f'scale_{cur_scale}']['Z_opt'] = z_opt_fake_wandb
+            if centers is None:
+                z_opt_fake_wandb = wandb.Image(plotting_helpers.convert_im(z_opt_fake),
+                                               caption=f'Zopt_e{epoch}')
+                logging_dict[f'scale_{cur_scale}']['Z_opt'] = z_opt_fake_wandb
             plotting_helpers.save_im(z_opt_fake, out_dir, f'Zopt_e{epoch}', convert=True)
-
-        wandb.log(logging_dict)
+        if centers is None:
+            wandb.log(logging_dict)
 
         # update prev_rand
         prev_rand = _draw_concat(trained_generators, z_opts, real_imgs, noise_amps, 'rand',
@@ -306,9 +307,9 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
     fig = plotting_helpers.plot_losses(distribution_loss_arr, rec_loss_arr,
                                        show=(opt.epoch_show > -1))
     plotting_helpers.save_fig(fig, out_dir, 'fin')
-
-    images_wandb = []
-    images_wandb_all = []
+    if centers is None:
+        images_wandb = []
+        images_wandb_all = []
     # ======== GENERATE THIS SCALE'S RANDOM SAMPLES =========
     for i in range(opt.generate_fake_amount):
         # Generate an image using the same "prev_rand" image
@@ -338,12 +339,14 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
         else:
             plotting_helpers.save_im(example_fake, out_dir, f'fake_samePrev{i}', convert=True)
             plotting_helpers.save_im(example_fake_all, out_dir, f'fake_{i}', convert=True)
-        images_wandb.append(wandb.Image(plotting_helpers.convert_im(example_fake),
-                                        caption=f'fake_samePrev{i}'))
-        images_wandb_all.append(wandb.Image(plotting_helpers.convert_im(example_fake_all),
-                                            caption=f'fake_{i}'))
-    wandb.log({f'example_fake_{cur_scale}': images_wandb,
-               f'example_fake_all_{cur_scale}': images_wandb_all})
+        if centers is None:
+            images_wandb.append(wandb.Image(plotting_helpers.convert_im(example_fake),
+                                            caption=f'fake_samePrev{i}'))
+            images_wandb_all.append(wandb.Image(plotting_helpers.convert_im(example_fake_all),
+                                                caption=f'fake_{i}'))
+    if centers is None:
+        wandb.log({f'example_fake_{cur_scale}': images_wandb,
+                   f'example_fake_all_{cur_scale}': images_wandb_all})
 
     # Save the final reconstruction image
     z_opt_fake = curr_g(Z_opt, prev_recon)
@@ -401,48 +404,30 @@ def _draw_concat(trained_generators, z_opts, real_imgs, noise_amps, mode, pad_fu
 
 def train_paint(opt,Generators,z_opts,reals,NoiseAmp,centers,paint_inject_scale, out_dir, total_scales, scale_factor):
     vgg = torchvision.models.vgg19(pretrained=True).features.to(opt.device).eval()
-    nfc_prev = None
-
-        # scale_out_dir = output_handler.gen_scale_dir(out_dir, scale)
-        # plotting_helpers.save_im(real_imgs[scale], scale_out_dir, 'real_scale', convert=True)
-        #
-        # curr_nfc = min(opt.nfc * pow(2, math.floor(scale / 4)), 128)
-        # curr_min_nfc = min(opt.min_nfc * pow(2, math.floor(scale / 4)), 128)
 
     for scale_num in range(total_scales):
         curr_nfc = min(opt.nfc * pow(2, math.floor(scale_num / 4)), 128)
         curr_min_nfc = min(opt.min_nfc * pow(2, math.floor(scale_num / 4)), 128)
         if scale_num!=paint_inject_scale:
-            nfc_prev = curr_nfc
             continue
-
-
 
         scale_out_dir = output_handler.gen_scale_dir(out_dir, scale_num)
 
         plotting_helpers.save_im(reals[scale_num],scale_out_dir,"in_scale.png",convert=True)
 
         G_curr = _init_generator(curr_nfc, curr_min_nfc, opt)
-        # _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_imgs, vgg, out_dir,
-        #                     scale_factor, opt)
-        z_curr,in_s,G_curr = _train_single_scale(Generators[:scale_num],z_opts[:scale_num],NoiseAmp[:scale_num],G_curr,
+        G_curr,z_opt,noise_amp = _train_single_scale(Generators[:scale_num],z_opts[:scale_num],NoiseAmp[:scale_num],G_curr,
                                                  reals[:scale_num+1],vgg,scale_out_dir, scale_factor, opt, centers=centers)
 
-        G_curr = functions.reset_grads(G_curr,False)
+        torch.save(G_curr.state_dict(), os.path.join(scale_out_dir, G_WEIGHTS_FILE_NAME))
+        [p.requires_grad_(False) for p in G_curr.parameters()]
         G_curr.eval()
-        D_curr = functions.reset_grads(D_curr,False)
-        D_curr.eval()
 
         Generators[scale_num] = G_curr
-        Zs[scale_num] = z_curr
-        NoiseAmp[scale_num] = opt.noise_amp
+        z_opts[scale_num] = z_opt
+        NoiseAmp[scale_num] = noise_amp
 
-        torch.save(Zs, '%s/Zs.pth' % (opt.out_))
-        torch.save(Generators, '%s/Gs.pth' % (opt.out_))
-        torch.save(reals, '%s/reals.pth' % (opt.out_))
-        torch.save(NoiseAmp, '%s/NoiseAmp.pth' % (opt.out_))
+        output_handler.save_network(Generators,z_opts,NoiseAmp,reals,out_dir)
 
-        scale_num+=1
-        nfc_prev = opt.nfc
-        del D_curr,G_curr
-    return
+        del G_curr
+    return Generators, z_opts, NoiseAmp, reals
