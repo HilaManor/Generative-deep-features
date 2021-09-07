@@ -8,6 +8,7 @@ import output_handler
 import plotting_helpers
 import tests
 import training
+import json
 
 if __name__ == '__main__':
     parser = get_arguments()
@@ -19,14 +20,14 @@ if __name__ == '__main__':
                         type=int, required=True)
     opt = parser.parse_args()
 
-    opt.is_cuda = opt.is_cuda and torch.cuda.is_available()
-    opt.device = torch.device("cuda:0" if opt.is_cuda else "cpu")
-    # preprocess parameters
-    if opt.manual_seed is None:
+    with open(os.path.join(opt.trained_net_dir, 'params.txt'), 'r') as f:
+        old_opt_dict = json.load(f)
+        opt.__dict__.update(old_opt_dict)
+        opt.device = torch.device(opt.device)
         opt.manual_seed = random.randint(1, 10000)
-    print("Random Seed: ", opt.manual_seed)
-    random.seed(opt.manual_seed)
-    torch.manual_seed(opt.manual_seed)
+        print("Random Seed: ", opt.manual_seed)
+        random.seed(opt.manual_seed)
+        torch.manual_seed(opt.manual_seed)
 
     basename = os.path.basename(opt.image_path)
     basename = basename[:basename.rfind('.')]
@@ -57,16 +58,7 @@ if __name__ == '__main__':
         in_s = in_s[:, :, :reals[n].shape[2], :reals[n].shape[3]]
 
         if opt.quantization_flag:
-            opt.mode = 'paint_train'
-            opt.layers_weights = [opt.vgg_w1, opt.vgg_w2, opt.vgg_w3, opt.vgg_w4, opt.vgg_w5]
-            opt.chosen_layers = ['conv1_1', 'conv2_1', 'conv3_1', 'conv4_1', 'conv5_1']
-            if torch.cuda.is_available() and not opt.is_cuda:
-                print("WARNING: You have a CUDA device, consider removing --not_cuda")
-            opt.is_cuda = opt.is_cuda and torch.cuda.is_available()
-            opt.device = torch.device("cuda:0" if opt.is_cuda else "cpu")
-            opt.try_initial_guess = True if opt.try_initial_guess == 'true' else False
-            opt.upsample_for_vgg = True if opt.upsample_for_vgg == 'true' else False
-            dir2trained_model =  os.path.join(out_dir,f"Trained Net {opt.paint_start_scale}")
+            dir2trained_model = os.path.join(out_dir,f"Trained Net {opt.paint_start_scale}")
             # N = len(reals) - 1
             # n = opt.paint_start_scale
             real_s = image_processing.resize(real_resized, pow(scale_factor, (N - n)), opt.nc, opt.is_cuda)

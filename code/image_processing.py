@@ -72,14 +72,14 @@ def dilate_mask(mask, is_cuda, radius=7, sigma=5):
     mask = (mask - mask.min()) / (mask.max() - mask.min())
     return mask
 
-def quant(prev,device):
+def quant(prev, device):
     arr = prev.reshape((-1, 3)).cpu()
     kmeans = KMeans(n_clusters=5, random_state=0).fit(arr)
     labels = kmeans.labels_
     centers = kmeans.cluster_centers_
     x = centers[labels]
     x = torch.from_numpy(x).to(device)
-    x = x.type(torch.FloatTensor) if device == 'cpu' else x.type(torch.cuda.FloatTensor)
+    x = x.type(torch.FloatTensor) if device.type == 'cpu' else x.type(torch.cuda.FloatTensor)
     x = x.view(prev.shape)
     return x,centers
 
@@ -89,6 +89,6 @@ def quant2centers(paint, centers, device):
     labels = kmeans.labels_
     x = centers[labels]
     x = torch.from_numpy(x).to(device)
-    x = x.type(torch.FloatTensor) if device == 'cpu' else x.type(torch.cuda.FloatTensor)
+    x = x.type(torch.FloatTensor) if device.type == 'cpu' else x.type(torch.cuda.FloatTensor)
     x = x.view(paint.shape)
     return x
