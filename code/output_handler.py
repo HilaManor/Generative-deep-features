@@ -1,7 +1,8 @@
 import os
 import re
 import torch
-
+import json
+import random
 def __generate_out_name(opt):
     base_name = f"{opt.loss_func}_e{opt.epochs}_{opt.nzx}px_lr{opt.lr}" \
                  f"a{opt.alpha}_up-{opt.chosen_layers[-1]}_W{opt.layers_weights}"
@@ -74,3 +75,13 @@ def load_network(input_dir):
     real_imgs = torch.load(os.path.join(input_dir, 'real_imgs.pth'))
     return Generators, z_opts, noise_amps, real_imgs
 
+def load_parameters(opt, dir):
+    with open(os.path.join(dir, 'params.txt'), 'r') as f:
+        old_opt_dict = json.load(f)
+        opt.__dict__.update(old_opt_dict)
+        opt.device = torch.device(opt.device)
+        opt.manual_seed = random.randint(1, 10000)
+        print("Random Seed: ", opt.manual_seed)
+        random.seed(opt.manual_seed)
+        torch.manual_seed(opt.manual_seed)
+    return opt

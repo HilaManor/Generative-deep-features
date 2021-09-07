@@ -19,15 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('--paint_start_scale', help='harmonization injection scale',
                         type=int, required=True)
     opt = parser.parse_args()
-
-    with open(os.path.join(opt.trained_net_dir, 'params.txt'), 'r') as f:
-        old_opt_dict = json.load(f)
-        opt.__dict__.update(old_opt_dict)
-        opt.device = torch.device(opt.device)
-        opt.manual_seed = random.randint(1, 10000)
-        print("Random Seed: ", opt.manual_seed)
-        random.seed(opt.manual_seed)
-        torch.manual_seed(opt.manual_seed)
+    opt = output_handler.load_parameters(opt, opt.trained_net_dir)
 
     basename = os.path.basename(opt.image_path)
     basename = basename[:basename.rfind('.')]

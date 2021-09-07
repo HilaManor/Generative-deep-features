@@ -7,6 +7,7 @@ import image_processing
 import output_handler
 import plotting_helpers
 import tests
+import json
 
 if __name__ == '__main__':
     parser = get_arguments()
@@ -18,15 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('--editing', action='store_true',
                         help='specify if to perform color editing (different mask dilate)')
     opt = parser.parse_args()
-
-    opt.is_cuda = opt.is_cuda and torch.cuda.is_available()
-    opt.device = torch.device("cuda:0" if opt.is_cuda else "cpu")
-    # preprocess parameters
-    if opt.manual_seed is None:
-        opt.manual_seed = random.randint(1, 10000)
-    print("Random Seed: ", opt.manual_seed)
-    random.seed(opt.manual_seed)
-    torch.manual_seed(opt.manual_seed)
+    opt = output_handler.load_parameters(opt, opt.trained_net_dir)
 
     basename = os.path.basename(opt.image_path)
     basename = basename[:basename.rfind('.')]
