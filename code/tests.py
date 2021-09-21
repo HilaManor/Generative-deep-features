@@ -56,7 +56,7 @@ def run_tests(generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, 
     # wandb.log(wandb_res)
 
 def generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt,
-                           gen_start_scale=0, n=0, fake=None):
+                           gen_start_scale=0, n=0, scale_v=1, scale_h=1, fake=None):
     """Generate a single sample, and track it through the scales
 
     :param generators: list of trained generators
@@ -77,18 +77,22 @@ def generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_im
 
     if fake is None:
         # the initial prev is a zero image (add nothing to the noise...)
-        fake = torch.full(real_imgs[0].shape, 0, device=opt.device)
+        fake = torch.full((real_imgs[0].shape[0], 
+                           real_imgs[0].shape[1], 
+                           round(real_imgs[0].shape[2] * scale_v), 
+                           round(real_imgs[0].shape[3] * scale_h)), 
+                          0, device=opt.device)
 
     for i, (G, z_opt, real_img, noise_amp) in enumerate(zip(generators, z_opts, real_imgs,
                                                             noise_amps)):
-        nzx = z_opt.shape[2] - pad_amount * 2
-        nzy = z_opt.shape[3] - pad_amount * 2
+        nzy = round((z_opt.shape[2] - pad_amount * 2) * scale_v)
+        nzx = round((z_opt.shape[3] - pad_amount * 2) * scale_h)
 
         # Only in the first scale the noise should be equal in all the color channels
         if n:
-            z = image_processing.generate_noise([opt.nc, nzx, nzy], device=opt.device)
+            z = image_processing.generate_noise([opt.nc, nzy, nzx], device=opt.device)
         else:
-            z = image_processing.generate_noise([1, nzx, nzy], device=opt.device)
+            z = image_processing.generate_noise([1, nzy, nzx], device=opt.device)
             z = z.expand(1, 3, z.shape[2], z.shape[3])
         z = pad_func(z)
 
@@ -96,8 +100,9 @@ def generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_im
             z = z_opt
 
         # the last fake image has been upscaled, and so we cut it to fit perfectly the cur image
-        prev_fake = fake[:, :, :real_img.shape[2], :real_img.shape[3]]
+        prev_fake = fake[:, :, :round(scale_v * real_img.shape[2]), :round(scale_h * real_img.shape[3])]
         prev_fake = pad_func(prev_fake)
+        z = z[:,:,:prev_fake.shape[2], :prev_fake.shape[3]]
 
         z_in = noise_amp * z + prev_fake
         fake = G(z_in.detach(), prev_fake)
