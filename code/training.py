@@ -11,6 +11,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision
 import wandb
+import numpy as np
 
 import image_processing
 import loss_model
@@ -237,9 +238,10 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
                     fake_im.shape[2:], opt.chosen_layers, opt.min_features))
             loss_block(fake_im)
 
-            loss = color_loss * opt.c_alpha / (n_layers + 1)
+            norm_const = opt.c_alpha + np.sum(opt.layers_weights[:n_layers])
+            loss = color_loss * opt.c_alpha / norm_const
             for i, sl in enumerate(layers_losses):
-                loss += opt.layers_weights[i] * sl.loss / (n_layers + 1)
+                loss += opt.layers_weights[i] * sl.loss / norm_const
             distribution_loss_arr.append(loss.detach())
 
             if opt.alpha != 0:

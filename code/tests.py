@@ -33,7 +33,7 @@ def run_tests(generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, 
 
     wandb_res = {}
     # Test 1 - Propagate an image through the different scales
-    for sample_i in range(5):
+    for sample_i in range(opt.generate_fake_amount):
         results = generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt)
         wandb_res[f'Generated Sample {sample_i}'] = []
         for scale, res in enumerate(results):
@@ -53,7 +53,26 @@ def run_tests(generators, z_opts, scale_factor, noise_amps, real_imgs, out_dir, 
                              caption=f'Sample_startGen{gen_start_scale}_{sample_i}')
             wandb_res[f'Generated from Scale {gen_start_scale}'].append(im)
 
-    # wandb.log(wandb_res)
+    # Test 3 - Propegate an image only from some scale upwards
+    wandb_res[f'Aspect V2H1'] = []
+    wandb_res[f'Aspect H2V1'] = []
+    for sample_i in range(opt.generate_fake_amount):
+        horz_results = generate_random_sample(generators, z_opts, scale_factor, noise_amps,
+                                              real_imgs, opt, scale_h=2, scale_v=1)
+        vert_results = generate_random_sample(generators, z_opts, scale_factor, noise_amps,
+                                              real_imgs, opt, scale_h=1, scale_v=2)
+        horz_res = horz_results[-1]
+        vert_res = vert_results[-1]
+        scaled_path = os.path.join(tests_path, 'scaled')
+        save_im(horz_res, scaled_path, f'H2_V1_Sample{sample_i}', convert=True)
+        save_im(vert_res, scaled_path, f'V2_H1_Sample{sample_i}', convert=True)
+
+        im_h = wandb.Image(convert_im(horz_res), caption=f'H2_V1_Sample{sample_i}')
+        im_v = wandb.Image(convert_im(vert_res), caption=f'V2_H1_Sample{sample_i}')
+        wandb_res[f'Aspect H2V1'].append(im_h)
+        wandb_res[f'Aspect V2H1'].append(im_v)
+
+    wandb.log(wandb_res)
 
 def generate_random_sample(generators, z_opts, scale_factor, noise_amps, real_imgs, opt,
                            gen_start_scale=0, n=0, scale_v=1, scale_h=1, fake=None):
