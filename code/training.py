@@ -239,10 +239,10 @@ def _train_single_scale(trained_generators, z_opts, noise_amps, curr_g, real_img
 
             norm_const = opt.c_alpha + np.sum(opt.layers_weights[:n_layers])
             loss = color_loss * opt.c_alpha / norm_const
-            color_loss_arr.append(loss.detach() if opt.c_alpha else color_loss)
+            color_loss_arr.append(float(loss.detach()) if opt.c_alpha else color_loss)
             for i, sl in enumerate(layers_losses):
                 loss += opt.layers_weights[i] * sl.loss / norm_const
-            distribution_loss_arr.append(loss.detach())
+            distribution_loss_arr.append(float(loss.detach()))
 
             if opt.alpha != 0:
                 if centers is not None:
