@@ -1,0 +1,1 @@
+epoch 0:	pdl:2.62e-01 	 Rec:3.95e-03 	 Color:5.29e-02 	Time: 0.05
