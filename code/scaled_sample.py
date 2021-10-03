@@ -8,13 +8,29 @@ import output_handler
 import plotting_helpers
 import tests
 import training
+import re
 import json
+
+def get_unique_name(path, name):
+    possible_name = os.path.join(path, name)
+
+    files = [os.path.basename(f) for f in os.listdir(path) if not os.path.isdir(os.path.join(path, f))]
+    matches = re.findall('(' + name + r'(\((\d+)\))?)', '\n'.join(files))
+    if len(matches):
+        int_matches = [int(j) for x,i,j in matches if j]
+        if int_matches:
+            name += f'({max(int_matches)+1})'
+        else:
+            name += '(1)'
+
+    return name
 
 if __name__ == '__main__':
     parser = get_arguments()
     parser.add_argument('--trained_net_dir', help='trained network folder', required=True)
     parser.add_argument('--scale_h', type=float, help='horizontal resize factor for random samples', default=1.5)
     parser.add_argument('--scale_v', type=float, help='vertical resize factor for random samples', default=1)
+    parser.add_argument('--amount', type=int, default=1)
     opt = parser.parse_args()
     opt = output_handler.load_parameters(opt, opt.trained_net_dir)
 
@@ -31,7 +47,7 @@ if __name__ == '__main__':
 
     Generators, z_opts, NoiseAmp, reals = output_handler.load_network(opt.trained_net_dir)
    
-    out = tests.generate_random_sample(Generators, z_opts, scale_factor, NoiseAmp,
+    for i in range(opt.amount):
+        out = tests.generate_random_sample(Generators, z_opts, scale_factor, NoiseAmp,
                                        reals, opt=opt, scale_h=opt.scale_h, scale_v=opt.scale_v)
-    plotting_helpers.show_im(out[-1])
-    plotting_helpers.save_im(out[-1], out_dir, f'scaled_im_v{opt.scale_v}_h{opt.scale_h}', convert=True)
+        plotting_helpers.save_im(out[-1], out_dir, get_unique_name(out_dir, f'scaled_im_v{opt.scale_v}_h{opt.scale_h}'), convert=True)
