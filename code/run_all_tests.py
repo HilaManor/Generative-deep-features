@@ -10,7 +10,7 @@ for folder in os.listdir('Output/birds'):
         continue
     for alpha in [0.4,0.6,0.8]:
         for fps in [10, 25]:
-            os.sytem(f"animation.py --image_path ../images/2/birds.png --trained_net_dir \"{path}\" --animation_fps {fps} --animation_alpha {alpha} --animation_initial_beta_sweep 0.05 --animation_final_beta_sweep 0.99")
+            os.system(f"animation.py --image_path ../images/2/birds.png --trained_net_dir \"{path}\" --animation_fps {fps} --animation_alpha {alpha} --animation_initial_beta_sweep 0.05 --animation_final_beta_sweep 0.99")
 
 #lightining
 for folder in os.listdir('Output/lightning1'):
@@ -19,7 +19,7 @@ for folder in os.listdir('Output/lightning1'):
         continue
     for alpha in [0.4,0.6,0.8]:
         for fps in [10, 25]:
-            os.sytem(f"animation.py --image_path ../images/2/lightning1.png --trained_net_dir \"{path}\" --animation_fps {fps} --animation_alpha {alpha} --animation_initial_beta_sweep 0.05 --animation_final_beta_sweep 0.99")
+            os.system(f"animation.py --image_path ../images/2/lightning1.png --trained_net_dir \"{path}\" --animation_fps {fps} --animation_alpha {alpha} --animation_initial_beta_sweep 0.05 --animation_final_beta_sweep 0.99")
 
 
 ## paint to image
