@@ -6,6 +6,10 @@ import os
 #birds
 for folder in os.listdir('Output/birds'):
     path = os.path.join('Output/birds', folder)
+    print(path)
+    break
+    exit()
+    return
     if not os.path.isdir(path):
         continue
     for alpha in [0.4,0.6,0.8]:
