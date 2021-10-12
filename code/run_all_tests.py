@@ -5,7 +5,7 @@ import os
 
 #birds
 for folder in [os.listdir('Output/birds')]:
-    if not os.path.isfolder(folder):
+    if not os.path.isdir(folder):
         continue
     for alpha in [0.4,0.6,0.8]:
         for fps in [10, 25]:
@@ -13,7 +13,7 @@ for folder in [os.listdir('Output/birds')]:
 
 #lightining
 for folder in [os.listdir('Output/lightning1')]:
-    if not os.path.isfolder(folder):
+    if not os.path.isdir(folder):
         continue
     for alpha in [0.4,0.6,0.8]:
         for fps in [10, 25]:
@@ -24,7 +24,7 @@ for folder in [os.listdir('Output/lightning1')]:
 
 #cows
 for folder in [os.listdir('Output/cows')]:
-    if not os.path.isfolder(folder):
+    if not os.path.isdir(folder):
         continue
     for scale in [1,2,3]:
         for qunat in [""," --quantization_flag"]:
@@ -32,14 +32,14 @@ for folder in [os.listdir('Output/cows')]:
 
 #mountains
 for folder in [os.listdir('Output/mountains')]:
-    if not os.path.isfolder(folder):
+    if not os.path.isdir(folder):
         continue
     for scale in [1,2,3]:
         for qunat in [""," --quantization_flag"]:
             os.system(f"--image_path ../images/2/mountains.jpg --trained_net_dir \"{folder}\" --ref_path ../images/paint/mountains_paint_reflect.png --paint_start_scale {scale}{quant}")
 #trees
 for folder in [os.listdir('Output/trees3')]:
-    if not os.path.isfolder(folder):
+    if not os.path.isdir(folder):
         continue
     for scale in [1,2,3]:
         for qunat in [""," --quantization_flag"]:
@@ -49,14 +49,14 @@ for folder in [os.listdir('Output/trees3')]:
 
 #seascape
 for folder in [os.listdir('Output/seascape')]:
-    if not os.path.isfolder(folder):
+    if not os.path.isdir(folder):
         continue
     for scale in [3,4,5,6,7,8,9]:
             os.system(f"--image_path ../images/2/seascape.png --trained_net_dir \"{folder}\" --ref_path ../images/harmonization/tree.jpg --mask_path ../images/harmonization/tree_mask.jpg --harmonization_start_scale {scale}")
 
 #starry night
 for folder in [os.listdir('Output/starry_night_full')]:
-    if not os.path.isfolder(folder):
+    if not os.path.isdir(folder):
         continue
     for scale in [3,4,5,6,7,8,9]:
             os.system(f"--image_path ../images/1/starry_night_full.jpg --trained_net_dir \"{folder}\" --ref_path ../images/harmonization/starry_night_naive.png --mask_path ../images/harmonization/starry_night_naive_mask.png --harmonization_start_scale {scale}")
@@ -65,7 +65,7 @@ for folder in [os.listdir('Output/starry_night_full')]:
 
 # stone
 for folder in [os.listdir('Output/stone')]:
-    if not os.path.isfolder(folder):
+    if not os.path.isdir(folder):
         continue
     for scale in [1,2,3]:
             os.system(f"--image_path ../images/2/stone.png --trained_net_dir \"{folder}\" --ref_path ../images/harmonization/stone_edit.png --mask_path ../images/harmonization/stone_edit_mask.png --editing --harmonization_start_scale {scale}")
