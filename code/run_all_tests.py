@@ -7,18 +7,17 @@ def main():
     #birds
     for folder in os.listdir('Output/birds'):
         path = os.path.join('Output/birds', folder)
-        print(path)
-        break
-        exit()
-        return
         if not os.path.isdir(path):
             continue
+        print(path)
+        break
+        return
         for alpha in [0.4,0.6,0.8]:
             for fps in [10, 25]:
                 os.system(f"python animation.py --image_path ../images/2/birds.png --trained_net_dir \"{path}\" --animation_fps {fps} --animation_alpha {alpha} --animation_initial_beta_sweep 0.05 --animation_final_beta_sweep 0.99")
-                exit()
+                return
 
-    exit()
+    return
 
     #lightining
     for folder in os.listdir('Output/lightning1'):
