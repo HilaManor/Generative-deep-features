@@ -78,9 +78,13 @@ def load_network(input_dir):
 def load_parameters(opt, dir):
     with open(os.path.join(dir, 'params.txt'), 'r') as f:
         old_opt_dict = json.load(f)
+        mseed = opt.manual_seed
         opt.__dict__.update(old_opt_dict)
+        if mseed is None:
+            opt.manual_seed = random.randint(1, 10000)
+        else:
+            opt.manual_seed = mseed
         opt.device = torch.device(opt.device)
-        opt.manual_seed = random.randint(1, 10000)
         print("Random Seed: ", opt.manual_seed)
         random.seed(opt.manual_seed)
         torch.manual_seed(opt.manual_seed)

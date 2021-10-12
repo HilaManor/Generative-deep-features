@@ -31,6 +31,7 @@ if __name__ == '__main__':
     parser.add_argument('--scale_h', type=float, help='horizontal resize factor for random samples', default=1.5)
     parser.add_argument('--scale_v', type=float, help='vertical resize factor for random samples', default=1)
     parser.add_argument('--amount', type=int, default=1)
+    parser.add_argument('--verbose', action='store_true')
     opt = parser.parse_args()
     opt = output_handler.load_parameters(opt, opt.trained_net_dir)
 
@@ -43,6 +44,8 @@ if __name__ == '__main__':
     opt.nzy = real_resized.shape[0]
 
     out_dir = os.path.join(opt.trained_net_dir, 'Scaled_samples')
+    if opt.verbose:
+        out_dir = os.path.join(out_dir, str(opt.manual_seed))
     os.makedirs(out_dir, exist_ok=True)
 
     Generators, z_opts, NoiseAmp, reals = output_handler.load_network(opt.trained_net_dir)
@@ -50,4 +53,9 @@ if __name__ == '__main__':
     for i in range(opt.amount):
         out = tests.generate_random_sample(Generators, z_opts, scale_factor, NoiseAmp,
                                        reals, opt=opt, scale_h=opt.scale_h, scale_v=opt.scale_v)
-        plotting_helpers.save_im(out[-1], out_dir, get_unique_name(out_dir, f'scaled_im_v{opt.scale_v}_h{opt.scale_h}'), convert=True)
+        if opt.verbose:
+            name = get_unique_name(out_dir, f'scaled_im_v{opt.scale_v}_h{opt.scale_h}')
+            for idx, out_im in enumerate(out):
+                plotting_helpers.save_im(out_im, out_dir, f'{name}_S{idx}', convert=True)
+        else:
+            plotting_helpers.save_im(out[-1], out_dir, get_unique_name(out_dir, f'scaled_im_v{opt.scale_v}_h{opt.scale_h}_{opt.manual_seed}'), convert=True)
