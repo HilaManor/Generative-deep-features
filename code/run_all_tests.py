@@ -11,6 +11,7 @@ for folder in os.listdir('Output/birds'):
     for alpha in [0.4,0.6,0.8]:
         for fps in [10, 25]:
             os.system(f"python animation.py --image_path ../images/2/birds.png --trained_net_dir \"{path}\" --animation_fps {fps} --animation_alpha {alpha} --animation_initial_beta_sweep 0.05 --animation_final_beta_sweep 0.99")
+            exit()
 
 exit()
 
