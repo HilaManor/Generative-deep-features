@@ -27,82 +27,92 @@ def get_arguments():
                           help='Amount of random samples to be generated')
 
     # ~~~~~~~~~~~~~~~~~~ Generators HyperParameters Group ~~~~~~~~~~~~~~~~~~~~
-    gen_hyper_group = parser.add_argument_group('Generators Hyper-parameters Configuration',
-                                            'Set the hyper parameters of the generators')
+    gen_hyper_group = parser.add_argument_group('Generators Configuration',
+                                                'Set the hyper parameters of the generators in the pyramid')
     gen_hyper_group.add_argument('--ker_size', type=int, default=3,
                                  help='kernel size of the generator')
     gen_hyper_group.add_argument('--num_layer', type=int, default=5,
-                        help='number of conv layers in a generator')
+                                 help='number of conv layers in a generator')
     gen_hyper_group.add_argument('--nfc', type=int, default=32,
                                  help='The output  depth of the first layer')
     gen_hyper_group.add_argument('--min_nfc', type=int, default=32,
                                  help='The minimum output depth of any layer')
 
-    gen_hyper_group.add_argument('--padd_size', type=int, default=0, help='Generator pad size')
-    gen_hyper_group.add_argument('--pad_type', type=str, default='pre-padding', help='***')
-    gen_hyper_group.add_argument('--stride', default=1, help='Generator stride')
+    gen_hyper_group.add_argument('--padd_size', type=int, default=0, help='The padding amount between the '
+                                                                          'convolutional layers of the Generators')
+    gen_hyper_group.add_argument('--pad_type', type=str, choices=['pre-padding', 'between'], 
+                                 default='pre-padding', help='The padding type of the noise image.'
+                                                             'pre-padding means the image will be padded once, '
+                                                             'before entering the generator. between means '
+                                                             'that no padding will be added in advance, and so '
+                                                             'only padd_size matters')
+    gen_hyper_group.add_argument('--stride', default=1, help='Generator\'s convolutional layers\' stride')
 
     # ~~~~~~~~~~~~~~~~~~ Optimizers HyperParameters Group ~~~~~~~~~~~~~~~~~~~~
-    opt_hyper_group = parser.add_argument_group('Optimizers Hyper-parameters Configuration',
+    opt_hyper_group = parser.add_argument_group('Optimizer Configuration',
                                             'Set the hyper parameters of the optimization process')
-    opt_hyper_group.add_argument('--epochs', type=int, default=2000,
-                                 help='Number of epochs to train each scale')
+    opt_hyper_group.add_argument('--epochs', type=int, default=8000,
+                                 help='Number of epochs to train each scale. default=8000')
     opt_hyper_group.add_argument('--gamma', type=float, default=0.1, help='Scheduler gamma, '
-                                                                          'multiplying the lr. ')
-    opt_hyper_group.add_argument('--lr', type=float, default=0.0005,
-                                 help='Learning rate. default=0.0005')
-    opt_hyper_group.add_argument('--lr_factor', type=float, default=1.41,  # sqrt(2)
+                                                                          'multiplying the lr. '
+                                                                          'default=0.1')
+    opt_hyper_group.add_argument('--lr', type=float, default=0.0001,
+                                 help='Learning rate. default=0.0001')
+    opt_hyper_group.add_argument('--lr_factor', type=float, default=1,  # sqrt(2)
                                  help='Learning rate multiplying factor between scales.'
-                                      ' default=1.41')
+                                      ' default=1')
     opt_hyper_group.add_argument('--beta1', type=float, default=0.5,
                                  help='beta1 for adam. default=0.5')
-    opt_hyper_group.add_argument('--Gsteps', type=int, default=1, help='Generator inner steps')  # TODO - doesn't work
+    opt_hyper_group.add_argument('--Gsteps', type=int, default=1, help='DEPRACATED! Do not change!')
 
 
     # ~~~~~~~~~~~~~~~~~~ Pyramid Group ~~~~~~~~~~~~~~~~~~~~
     pyrmaid_group = parser.add_argument_group('Pyramid Configuration',
                                               'Configure the generators pyramid architecture')
-    pyrmaid_group.add_argument('--min_size', type=int,default=25,
-                               help='image minimal size at the coarser scale')
+    pyrmaid_group.add_argument('--min_size', type=int,default=19,
+                               help='image minimal size at the coarser scale. default=19')
     pyrmaid_group.add_argument('--max_size', type=int,default=250,
-                               help='image maximal size at the coarser scale')
-    pyrmaid_group.add_argument('--scale_factor', type=float, default=0.75,
-                               help='pyramid scale factor')
-    pyrmaid_group.add_argument('--noise_amp', type=float, default=0.1,
-                               help='addative noise cont weight')
-    pyrmaid_group.add_argument('--try_initial_guess', type=str, choices=['true', 'false'],
-                                help='Try loading the previous scale\'s weights as an initial guess'
-                                     ' if the dimensions match')
+                               help='image maximal size at the coarser scale. default=250')
+    pyrmaid_group.add_argument('--scale_factor', type=float, default=0.8,
+                               help='pyramid scale factor. default=0.8')
+    pyrmaid_group.add_argument('--noise_amp', type=float, default=0.2,
+                               help='addative noise cont weight. default=0.2')
+    pyrmaid_group.add_argument('--try_initial_guess', type=str, choices=['true', 'false'], 
+                               default='true', help='Try loading the previous scale\'s weights '
+                                                    'as an initial guess if the dimensions match')
 
     # ~~~~~~~~~~~~~~~~~~  Group ~~~~~~~~~~~~~~~~~~~~
     loss_group = parser.add_argument_group('Loss Function Configuration ',
                                            'Configure the parameters for the loss functions')
 
-    loss_group.add_argument('--loss_func', type=str, default='pdl',
-                          help='Loss function for distribution loss, gram/pdl')
-    loss_group.add_argument('--alpha', type=float, default=10, help='reconstruction loss weight')
+    loss_group.add_argument('--loss_func', type=str, default='pdl', choices=['pdl', 'gram'],
+                            help='Loss function for distribution loss. deafult=pdl')
+    loss_group.add_argument('--alpha', type=float, default=25, help='reconstruction loss weight.'
+                                                                    ' deafult=25')
     loss_group.add_argument('--z_opt_zero', action='store_true',
                             help='Sets the reconstruction noise to zero in all scales but the '
-                                 'first one')
+                                 'first one.')
     loss_group.add_argument('--c_alpha', type=float, default=0,
-                          help='The weight of the color loss in respect to other losses')
+                          help='The weight of the color loss in respect to other losses. default=0')
     loss_group.add_argument('--c_patch_size', type=int, default=5,
-                          help='The size of each patch of the color loss calculation')
+                          help='The size of each patch of the color loss calculation. default=5')
     loss_group.add_argument('--min_features', type=int,default=100,
-                          help='Minimum amount of output features for each vgg-19 layer')
+                            help='Minimum amount of output features for each vgg-19 layer needed '
+                                 'for a layer to be included in the distribution loss '
+                                 'calculations. default=100')
     loss_group.add_argument('--upsample_for_vgg', type=str, choices=['true', 'false'],
-                          default='false', help='Upsample the image to minimum size 224 before '
-                                                'inserting to VGG instead of adaptivley choosing '
-                                                'the layers')
+                            default='false', help='Upsample the image to minimum size 224 before '
+                                                  'inserting to VGG instead of adaptivley choosing '
+                                                  'the layers')
     loss_group.add_argument('--vgg_w1', type=float, default=1,
                             help='The weight of the 1st vgg conv layer in the distribution loss')
-    loss_group.add_argument('--vgg_w2', type=float, default=0.75,
+    loss_group.add_argument('--vgg_w2', type=float, default=0.5,
                             help='The weight of the 2nd vgg conv layer in the distribution loss')
-    loss_group.add_argument('--vgg_w3', type=float, default=0.2,
+    loss_group.add_argument('--vgg_w3', type=float, default=0.1,
                             help='The weight of the 3rd vgg conv layer in the distribution loss')
-    loss_group.add_argument('--vgg_w4', type=float, default=0.2,
+    loss_group.add_argument('--vgg_w4', type=float, default=0.075,
                             help='The weight of the 4th vgg conv layer in the distribution loss')
-    loss_group.add_argument('--vgg_w5', type=float, default=0.2,
+    loss_group.add_argument('--vgg_w5', type=float, default=0.075,
                             help='The weight of the 5th vgg conv layer in the distribution loss')
 
 
