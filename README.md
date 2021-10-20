@@ -50,7 +50,7 @@ You can find in the code folder multiple scripts for generation of applications,
 
 all will require 2 parameters `--image_path` for the original image the model was trained on, and `--train_net_dir` for the path to the trained model folder.
 The output is located inside the trained model directory, given to the script, under a suiting name (e.g., `<train_net_dir>/Harmonization` for the `harmonization.py` script)
-Each test has its own parameters, refer to the `--help` of each script. 
+Each test has its own parameters, refer to the `--help` of each script. The relevant arguments always appear on top of the help page as `optional arguments`.
 
 ## Team
 Hila Manor and Da-El Klang  
