@@ -1,3 +1,6 @@
+"""A test script for generating random samples at different sizes and aspects
+"""
+
 from config import get_arguments
 import torch
 import random
@@ -30,9 +33,13 @@ if __name__ == '__main__':
     parser.add_argument('--trained_net_dir', help='trained network folder', required=True)
     parser.add_argument('--scale_h', type=float, help='horizontal resize factor for random samples', default=1.5)
     parser.add_argument('--scale_v', type=float, help='vertical resize factor for random samples', default=1)
-    parser.add_argument('--amount', type=int, default=1)
-    parser.add_argument('--verbose', action='store_true')
+    parser.add_argument('--amount', type=int, default=1, help='the amount of samples to be generated in the '
+                                                              'given resize factors.')
+    parser.add_argument('--verbose', action='store_true', help='Output the generated samples across all the '
+                                                              'passages in the different scales')
     opt = parser.parse_args()
+    
+    # Load the trained model parameters according to the params.txt file in the folder
     opt = output_handler.load_parameters(opt, opt.trained_net_dir)
 
     basename = os.path.basename(opt.image_path)
@@ -47,7 +54,7 @@ if __name__ == '__main__':
     if opt.verbose:
         out_dir = os.path.join(out_dir, str(opt.manual_seed))
     os.makedirs(out_dir, exist_ok=True)
-
+    
     Generators, z_opts, NoiseAmp, reals = output_handler.load_network(opt.trained_net_dir)
    
     for i in range(opt.amount):
@@ -58,4 +65,7 @@ if __name__ == '__main__':
             for idx, out_im in enumerate(out):
                 plotting_helpers.save_im(out_im, out_dir, f'{name}_S{idx}', convert=True)
         else:
-            plotting_helpers.save_im(out[-1], out_dir, get_unique_name(out_dir, f'scaled_im_v{opt.scale_v}_h{opt.scale_h}_{opt.manual_seed}'), convert=True)
+            plotting_helpers.save_im(out[-1], out_dir, get_unique_name(out_dir, f'scaled_im_v{opt.scale_v}'
+                                                                                f'_h{opt.scale_h}_'
+                                                                                f'{opt.manual_seed}'), 
+                                     convert=True)
