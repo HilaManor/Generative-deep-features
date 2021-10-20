@@ -1,4 +1,5 @@
-"""Mainly the code from SinGAN, so we respected the documentation. Only adding where we changed"""
+"""Mainly the code from SinGAN, so we respected the documentation. Only adding where we changed
+SinGAN's code: https://github.com/tamarott/SinGAN"""
 
 # Author: Tamar Rott-Shaham, et al. SinGAN 2019
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

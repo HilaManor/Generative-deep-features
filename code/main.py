@@ -1,3 +1,5 @@
+"""The main file that includes training the model and generating random samples at the end"""
+
 from config import get_arguments
 import torch
 import random
