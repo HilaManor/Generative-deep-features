@@ -1,3 +1,5 @@
+"""Mainly the code from SinGAN, so we respected the documentation. Only adding where we changed"""
+
 # Author: Tamar Rott-Shaham, et al. SinGAN 2019
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -52,8 +54,16 @@ class GeneratorConcatSkip2CleanAdd(nn.Module):
         return x + y
 
 
-# the padding amount is determined by the generators amount of layers
 def get_pad_amount(ker_size, num_layer, pad_type):
+    """Decide the padding amount of the image before being inserted to the generator
+    
+    :param ker_size: the kernel size of the convolutional layers in the generators
+    :param num_layer: the amount of convolutional layers in the generator
+    :param pad_type: the padding type chosen by the user. if 'between' was chosen, 
+                     no need to padd in advance. if 'pre-padding' was given, use 
+                     the calculated padding
+    :return: the amount of padding to add to the image before inserting to the generator
+    """
     if pad_type == 'pre-padding':
         return int(((ker_size - 1) * num_layer) / 2)
     elif pad_type == 'between':
