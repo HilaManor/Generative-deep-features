@@ -82,7 +82,3 @@ parameters: min_size=19, a=35, a_color=1
 - L. A. Gatys, et al. [“Image Style Transfer Using Convolutional Neural Networks”](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf), IEEE conference on computer vision and pattern recognition, 2016, pp. 2414–2423.
 - M. Delbracio, et al. [“Projected Distribution Loss for Image Enhancement”](https://arxiv.org/pdf/2012.09289.pdf), arXiv preprint arXiv:2012.09289, 2020.
 -	L. Biewald, Experiment Tracking with Weights and Biases, 2020. 
-
-## GIT TOKEN:
-how to set token:
-git config --global credential.helper 'cache --timeout=3600'
