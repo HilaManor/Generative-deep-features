@@ -106,6 +106,8 @@ if __name__ == '__main__':
 
     real_img = image_helpers.read_image(opt.image_path, opt.nc, opt.is_cuda)
     real_resized, scale_factor, total_scales = image_processing.preprocess_image(real_img, opt)
+    opt.nzx = real_resized.shape[2]
+    opt.nzy = real_resized.shape[0]
 
     # dir2save = output_handler.gen_unique_out_dir_path(opt.output_folder, basename, opt)
     # opt.min_size = 20
