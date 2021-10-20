@@ -1,3 +1,6 @@
+"""TThis code is mainly the code from SinGAN, so we respected the documentation. Only adding where we changed
+SinGAN's code: https://github.com/tamarott/SinGAN"""
+
 # Author: Tamar Rott-Shaham, et al. SinGAN 2019
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -22,6 +25,15 @@ def generate_noise(size,num_samp=1,device='cuda',type='gaussian', scale=1):
 
 
 def resize(im, scale, nc, is_cuda):
+    """ Resizes a tensor image by the given scale factor.
+    wraper for the resizing function according to our model. 
+    
+    :param im: the tensor image to be resized
+    :param scale: the scale factor to resize by (float)
+    :param nc: the number of channels in the image
+    :param is_cuda: is the tensor located on a cuda device
+    :return: resized tensor image
+    """
     im = image_helpers.torch2uint8(im)
     im = imresize.imresize_in(im, scale_factor=scale)
     im = image_helpers.np2torch(im, nc, is_cuda)
@@ -29,6 +41,15 @@ def resize(im, scale, nc, is_cuda):
 
 
 def resize_to_shape(im, output_shape, nc, is_cuda):
+    """Resizes a tensor image to the given shape
+    wraper for the resizing function according to our model. 
+    
+    :param im: the tensor image to be resized
+    :param output_shape: the wanted output shape of the resized tensor
+    :param nc: the number of channels in the image
+    :param is_cuda: is the tensor located on a cuda device
+    :return: resized tensor image
+    """
     im = image_helpers.torch2uint8(im)
     im = imresize.imresize_in(im, output_shape=output_shape)
     im = image_helpers.np2torch(im, nc, is_cuda)

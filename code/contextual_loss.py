@@ -1,3 +1,10 @@
+"""
+Class for calculating the Contextual Loss.
+Checked a couple of times and was very heavy computionally, thus never used again.
+Maybe there's a problem in the implementation, the code was left on the repo if anyone wants to fix it and check it.
+Contextual Loss paper: https://arxiv.org/pdf/1803.02077.pdf
+"""
+
 import torch
 import torch.nn as nn
 

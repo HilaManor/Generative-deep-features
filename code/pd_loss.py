@@ -1,5 +1,6 @@
 """
 Class for calculating Projected Distribution Loss.
+Projected Distribution Loss paper: https://arxiv.org/pdf/2012.09289.pdf
 """
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Imports ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

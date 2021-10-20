@@ -1,3 +1,6 @@
+""" This file was taken from SinGAN, so we respected the documentation.
+SinGAN's code: https://github.com/tamarott/SinGAN"""
+
 # This code was taken from: https://github.com/assafshocher/resizer by Assaf Shocher
 
 import numpy as np
