@@ -1,3 +1,6 @@
+"""A test script for generating animations for the single image the network was trained on
+"""
+
 from config import get_arguments
 from training import *
 import image_processing
@@ -66,7 +69,7 @@ def generate_gif(Generators,Zs,reals,NoiseAmp,opt, scale_factor, alpha=0.1,beta=
                 I_prev = I_prev[:, :, 0:real.shape[2], 0:real.shape[3]]
                 I_prev = m_image(I_prev)
             #generation of new images is only done for the relevant scales
-            #TODO Seems a bit dumb to check *after* random walk calculation. maybe move to the top?
+            #TODO maybe move to the top?
             if current_scale < start_scale:
                 z_curr = Z_opt
 
@@ -87,18 +90,17 @@ def generate_gif(Generators,Zs,reals,NoiseAmp,opt, scale_factor, alpha=0.1,beta=
 
 if __name__ == '__main__':
     parser = get_arguments()
-    #parser.add_argument('--animation_start_scale', type=int, help='generation start scale', default=2)
     parser.add_argument('--trained_net_dir', help='trained network folder', required=True)
     parser.add_argument('--animation_initial_start_scale_sweep', help='Initial random scale for animation generation sweep.',type = int, default=0)
     parser.add_argument('--animation_final_start_scale_sweep', help='Final random scale for animation generation sweep.', type = int, default=3)
     parser.add_argument('--animation_initial_beta_sweep', help='Initial beta (weight of images diffrence vs new noise in random walk) for animation generation sweep.',type = float,default=0.8)
     parser.add_argument('--animation_final_beta_sweep', help='Final beta (weight of images diffrence vs new noise in random walk) for animation generation sweep.',type = float,default=0.95)
     parser.add_argument('--animation_alpha', help='Weight of of current image vs the diffrence vector.', type = float, default=0.1)
-    parser.add_argument('--animation_fps', help='The fps of the output gif.',type = float, default=10)
+    parser.add_argument('--animation_fps', help='The fps of the output gif. deafult=10',type = float, default=10)
     parser.add_argument('--animation_num_frames', help='The number of frames in the output gif.', type = int, default=100)
-    #parser.add_argument('--alpha_animation', type=float, help='animation random walk first moment', default=0.1)
-    #parser.add_argument('--beta_animation', type=float, help='animation random walk second moment', default=0.9)
     opt = parser.parse_args()
+    
+    # Load the trained model parameters according to the params.txt file in the folder
     opt = output_handler.load_parameters(opt, opt.trained_net_dir)
 
     basename = os.path.basename(opt.image_path)
@@ -109,19 +111,9 @@ if __name__ == '__main__':
     opt.nzx = real_resized.shape[2]
     opt.nzy = real_resized.shape[0]
 
-    # dir2save = output_handler.gen_unique_out_dir_path(opt.output_folder, basename, opt)
-    # opt.min_size = 20
-    # opt.mode = 'animation_train'
-    # real = functions.read_image(opt)
-    # functions.adjust_scales2image(real, opt)
-    # dir2trained_model = output_handler.gen_unique_out_dir_path(opt.output_folder, basename, opt)
-    # if (os.path.exists(dir2trained_model)):
-    #     Gs, Zs, reals, NoiseAmp = functions.load_trained_pyramid(opt)
-    #     opt.mode = 'animation'
-    # else:
-    #     train(opt, Gs, Zs, reals, NoiseAmp)
-    #     opt.mode = 'animation'
     Generators, z_opts, NoiseAmp, reals = output_handler.load_network(opt.trained_net_dir)
+    
+    # Start generation sweep
     for start_scale in range(opt.animation_initial_start_scale_sweep, opt.animation_final_start_scale_sweep, 1):
         for b in np.arange(opt.animation_initial_beta_sweep, opt.animation_final_beta_sweep, 0.05):
             frames = generate_gif(Generators, z_opts, reals, NoiseAmp, opt, scale_factor,
