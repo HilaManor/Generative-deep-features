@@ -405,6 +405,24 @@ def _draw_concat(trained_generators, z_opts, real_imgs, noise_amps, mode, pad_fu
     return fake
 
 def train_paint(opt,Generators,z_opts,reals,NoiseAmp,centers,paint_inject_scale, out_dir, total_scales, scale_factor):
+    """Generates an upscaled fake previous image using all the given scales generators
+    For the first scale (no trained generators) will output a zeros image
+	
+	:param opt: the configuration parameters for the network
+    :param trained_generators: list of trained generators
+    :param z_opts: list of padded optimal reconstruction noise(z)
+    :param reals: list of the real image downscaled at each scale
+    :param NoiseAmp: list of noise multipliers (amplitudes) with which each scale's generator was
+                       trained
+    :param centers: list of centers in the RGB space for quantizing the real image.
+    :param paint_inject_scale: the scale in the generators pyramid from which the
+							model is re-trained with quantized real image.
+	:param out_dir: the output base folder for this scale
+    :param total_scales: the amount of scales to create
+    :param scale_factor: the actual (calculated) scaling factor between scales
+    
+    :return: retrained Generators, z_opt, NoiseAmp, reals for the quantized mode
+    """
     vgg = torchvision.models.vgg19(pretrained=True).features.to(opt.device).eval()
 
     for scale_num in range(total_scales):
