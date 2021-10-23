@@ -42,6 +42,8 @@ if __name__ == '__main__':
         out = tests.generate_random_sample(Generators, z_opts, scale_factor, NoiseAmp,
                                        reals, opt=opt)
         #ims.append(color.rgb2gray(plotting_helpers.convert_im(out[-1])))
+        plotting_helpers.save_im(out[-1], out_dir, f"seed_{opt.manual_seed}_im_{i}",
+                                 convert=True)
         ims.append((256*color.rgb2gray(plotting_helpers.convert_im(out[-1]))).astype('uint8'))
         print(f'{i}/{opt.amount}', end='\r')
 
