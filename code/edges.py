@@ -41,13 +41,14 @@ if __name__ == '__main__':
     for i in range(opt.amount):
         out = tests.generate_random_sample(Generators, z_opts, scale_factor, NoiseAmp,
                                        reals, opt=opt)
-        ims.append(color.rgb2gray(plotting_helpers.convert_im(out[-1])))
+        #ims.append(color.rgb2gray(plotting_helpers.convert_im(out[-1])))
+        ims.append((256*color.rgb2gray(plotting_helpers.convert_im(out[-1]))).astype('uint8'))
         print(f'{i}/{opt.amount}', end='\r')
 
     ims = np.stack(ims, axis=-1)
     #ims_var = np.var(ims, axis=3)
     ims_var = np.std(ims, axis=2)
-    
-    im = plt.imshow(ims_var, cmap='jet', vmin=0, vmax=0.3)
+    im = plt.imshow(ims_var, cmap='jet', vmin=0)
+    #im = plt.imshow(ims_var, cmap='jet', vmin=0, vmax=0.3)
     plt.colorbar(im)
     plt.savefig(os.path.join(opt.trained_net_dir, f'edges_{opt.amount}.png'))

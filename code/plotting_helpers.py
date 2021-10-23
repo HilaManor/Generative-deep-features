@@ -6,7 +6,7 @@ import image_processing
 import image_helpers
 
 def plot_losses(style_losses, rec_losses, ignore_first_iter=500, show=True):
-	"""
+    """
 	The function creates ans shows a figure with 4 plots of the 2 given loss lists.
 	
 	:param style_losses: The distribution loss list, contains loss value from each epoch.
@@ -51,7 +51,7 @@ def plot_losses(style_losses, rec_losses, ignore_first_iter=500, show=True):
     return fig
 
 def save_fig(fig, out_dir, name):
-	"""
+    """
 	The function saves a given figure as png.
 	
 	:param fig: The given figure to save.
@@ -63,7 +63,7 @@ def save_fig(fig, out_dir, name):
     fig.savefig(path)
 
 def show_im(img_tensor, title=None):
-	"""
+    """
 	The function shows a pytorch image, and saves a copy as np array format.
 	
 	:param img_tensor: The given pytorch image tensor.
@@ -81,7 +81,7 @@ def show_im(img_tensor, title=None):
     return new_image
 
 def save_im(img, out_dir, name, convert=False):
-	"""
+    """
 	The function saves an image to the given dir. a pytorch image into np array format.
 	
 	:param img: The given image. np or pytorch image.
@@ -100,7 +100,7 @@ def save_im(img, out_dir, name, convert=False):
     plt.imsave(path, img)
 
 def convert_im(img):
-	"""
+    """
 	The function convert a pytorch image into np array format.
 	
 	:param img: The given pytorch image tensor.

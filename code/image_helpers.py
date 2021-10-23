@@ -18,7 +18,7 @@ def upsampling(im,sx,sy):
 
 
 def read_image(image_path, im_channels_num, is_cuda):
-	"""
+    """
     The funciton reads an image from file into pytorch image tensor.
     :param image_path: The path to read the image from.
     :param im_channels_num: Number of channels, (1 for BW, 3 for RGB).
@@ -26,6 +26,7 @@ def read_image(image_path, im_channels_num, is_cuda):
 
     :return: pytorch image.
     """
+
     x = img.imread(image_path)
     x = np2torch(x, im_channels_num, is_cuda)
     x = x[:, 0:3, :, :]  # TODO WHY?
@@ -33,7 +34,7 @@ def read_image(image_path, im_channels_num, is_cuda):
 
 
 def np2torch(x, im_channels_num, is_cuda):
-	"""
+    """
     The funciton transforms a given np image into pytorch image.
     :param x: numpy image.
     :param im_channels_num: Number of channels, (1 for BW, 3 for RGB).
@@ -57,7 +58,7 @@ def np2torch(x, im_channels_num, is_cuda):
 
 
 def torch2uint8(x):
-	"""
+    """
     The funciton transforms a given pytorch image into np uint 8 image.
     :param x: pytorch image.
 
@@ -72,7 +73,7 @@ def torch2uint8(x):
 
 
 def norm(x):
-	"""
+    """
     The funciton normilize the data from the range of [0,1] into the range [-1,1]
     :param x: data from the range of [0,1].
 
@@ -83,7 +84,7 @@ def norm(x):
 
 
 def denorm(x):
-	"""
+    """
     The funciton normilize the data from the range of [-1,1] into the range [0,1]
     :param x: data from the range of [-1,1].
 
@@ -94,7 +95,7 @@ def denorm(x):
 
 
 def convert_image_np(inp):
-	"""
+    """
     The funciton transforms a given pytorch image into np image.
     :param inp: pytorch image.
 

@@ -6,7 +6,7 @@ import random
 
 
 def __generate_out_name(opt):
-	"""
+    """
 	The function generates base name for files based on the current opt.
 	
 	:param opt: The current configure of the test.
@@ -19,7 +19,7 @@ def __generate_out_name(opt):
 
 
 def gen_unique_out_dir_path(base_out, baseim_name, opt):
-	"""
+    """
 	The function generates unique name for a new file, to avoid override.
 	
 	:param base_out: The base directory path.
@@ -49,7 +49,7 @@ def gen_unique_out_dir_path(base_out, baseim_name, opt):
 
 
 def gen_scale_dir(out_dir, scale):
-	"""
+    """
 	The function generates a folder for the current scale. If the folder already
 		exists, only a path is returned.
 	
@@ -63,7 +63,7 @@ def gen_scale_dir(out_dir, scale):
     return path
 
 def save_network(Generators, z_opts, noise_amps, real_imgs, out_dir):
-	"""
+    """
 	The function saves the current generators,noises and real images. 
 	
 	:param Generators: Trained generators to save.
@@ -80,7 +80,7 @@ def save_network(Generators, z_opts, noise_amps, real_imgs, out_dir):
 
 
 def load_network(input_dir):
-	"""
+    """
 	The function loads generators,noises and real images from the given directory.
 	
 	:param input_dir: The directory to read the files from. must contain the 
@@ -98,7 +98,7 @@ def load_network(input_dir):
     return Generators, z_opts, noise_amps, real_imgs
 
 def load_parameters(opt, dir):
-	"""
+    """
 	The function loads a new configuration file
 	
 	:param opt: The current configure of the test.
