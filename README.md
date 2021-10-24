@@ -58,9 +58,9 @@ Supervised by Tamar Rott-Shaham
 
 ## Examples
 All examples were generated using PDL as the distribution loss function
-![image](https://user-images.githubusercontent.com/53814901/138109575-115c3cb3-7838-48f0-be4b-07786f3f5754.png)
+![image](https://user-images.githubusercontent.com/53814901/138604928-5c609ffc-6e08-4142-b1df-e94f24325176.png)
 birds parameters: min_size=21, a=25, a_color=0
-mountains parameters: min_size=19, a=35, a_color=1
+mountains parameters: min_size=19, a=35, a_color=3
 colosseum parameters: min_size=19, a=10, a_color=1
 
 ![image](https://user-images.githubusercontent.com/53814901/138109948-50118785-2144-49d6-b0f8-da7d3cfa6859.png)
