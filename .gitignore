@@ -9,6 +9,6 @@
 .ipynb_checkpoints/*
 /code/wandb/*
 core
-/code/Output/dont_track
-/code/Output/*.zip
-sum/~$*
+Examples/dont_track
+sum
+SinGAN*
