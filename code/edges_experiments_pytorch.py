@@ -80,13 +80,13 @@ if __name__ == '__main__':
                     mse = torch.mean((torch.from_numpy(patch.ravel()).to(device=opt.device) - real_patches_mat)**2, axis=1)
                     mse_ind = torch.argmin(mse)
                     mse_2d_ind = np.unravel_index(mse_ind.cpu().numpy(), dist_map_mse.shape) 
-                    #dist_to_edge = min([mse_2d_ind[0], 
-                    #                    np.abs(mse_2d_ind[0] - (im.shape[0] - opt.patch_size)), 
-                    #                    mse_2d_ind[1],
-                    #                    np.abs(mse_2d_ind[1] - (im.shape[1] - opt.patch_size))])
+                    dist_to_edge = min([mse_2d_ind[0], 
+                                        np.abs(mse_2d_ind[0] - (im.shape[0] - opt.patch_size)), 
+                                        mse_2d_ind[1],
+                                        np.abs(mse_2d_ind[1] - (im.shape[1] - opt.patch_size))])
                                         
                     dist_map_mse[mse_2d_ind] = mse[mse_ind].cpu().numpy()
-                    #dist_map_edge[mse_2d_ind] = dist_to_edge
+                    dist_map_edge[mse_2d_ind] = dist_to_edge
             ims_mse.append(dist_map_mse)
             ims_edge.append(dist_map_edge)
             
