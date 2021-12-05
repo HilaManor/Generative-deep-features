@@ -3,6 +3,8 @@
 [![torchvision](https://img.shields.io/badge/torchvision-0.8.2+-green)](https://pytorch.org/)
 
 # Generative deep features
+![image](https://user-images.githubusercontent.com/53814901/138604928-5c609ffc-6e08-4142-b1df-e94f24325176.png)
+
 In recent years more and more GANs are being trained to solve the problem of image generation, since they offer stunning visual quality. One of the bigger disadvantages of GANs is the need to use large datasets to train on, which aren't easily available for every purpose. SinGAN[1] was introduced as a model that combats this disadvantage, by training on a single image alone, by using a multi-scale GANs architecture.
 
 In parallel to that, different papers published in the last couple of years have already established the connection between the deep features of classification networks and the semantic content of images, such that we can define the visual content of an image by the statistics of its deep features. 
