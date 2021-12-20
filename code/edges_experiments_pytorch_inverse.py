@@ -36,29 +36,21 @@ if __name__ == '__main__':
 
     Generators, z_opts, NoiseAmp, reals = output_handler.load_network(opt.trained_net_dir)
     
+    real_im = color.rgb2gray(plotting_helpers.convert_im(real_resized))
     
-    # Fit KNN model
-    real_patches = []
-    im = color.rgb2gray(plotting_helpers.convert_im(real_resized))
-    for y in range(im.shape[0] - opt.patch_size + 1):
-        for x in range(im.shape[1] - opt.patch_size + 1):
-            patch = im[y:y + opt.patch_size, x:x + opt.patch_size]
-            real_patches.append(patch.ravel())
-            #print(f'Patch {y*(im.shape[0] - opt.patch_size)+ x}/{(im.shape[0] - opt.patch_size)*(im.shape[1] - opt.patch_size)}', end='\r')
-    real_patches_mat = torch.from_numpy(np.stack(real_patches, axis=0)).to(device=opt.device)
     
     # Generate images
     ims_mse = []
     ims_edge = []
-    out_dir = os.path.join(opt.trained_net_dir, 'Edges_experiments_pytorch')
+    out_dir = os.path.join(opt.trained_net_dir, 'Edges_experiments_pytorch_real')
     #if os.path.isdir(out_dir):
     #    for f in os.listdir(out_dir):
     #        filepath = os.path.join(out_dir, f)
     #        #ims.append(plt.imread(filepath))
     #else:
     os.makedirs(out_dir, exist_ok=True)
-    out_dir_mse = os.path.join(opt.trained_net_dir, 'Edges_experiments_pytorch_maps_mse')
-    out_dir_edge = os.path.join(opt.trained_net_dir, 'Edges_experiments_pytorch_maps_edge')
+    out_dir_mse = os.path.join(opt.trained_net_dir, 'Edges_experiments_pytorch_maps_mse_real')
+    out_dir_edge = os.path.join(opt.trained_net_dir, 'Edges_experiments_pytorch_maps_edge_real')
     os.makedirs(out_dir_mse, exist_ok=True)
     os.makedirs(out_dir_edge, exist_ok=True)
     for i in range(opt.amount):
@@ -72,22 +64,32 @@ if __name__ == '__main__':
         #color.rgb2gray(plotting_helpers.convert_im(out[-1]))
         
         im = color.rgb2gray(plotting_helpers.convert_im(out[-1]))
-        dist_map_mse = np.zeros((im.shape[0] - opt.patch_size + 1, im.shape[1] - opt.patch_size + 1))
-        dist_map_edge = np.zeros((im.shape[0] - opt.patch_size + 1, im.shape[1] - opt.patch_size + 1 ))
         
+        # create patches matrix for KNN
+        gen_patches = []
         for y in range(im.shape[0] - opt.patch_size + 1):
-            print(f'image: {i}/{opt.amount}\t\t'
-                  f'Patch {y*(im.shape[0] - opt.patch_size + 1)}/{(im.shape[0] - opt.patch_size + 1)*(im.shape[1] - opt.patch_size + 1)}', 
-                  end='\r')
             for x in range(im.shape[1] - opt.patch_size + 1):
                 patch = im[y:y + opt.patch_size, x:x + opt.patch_size]
-                mse = torch.mean((torch.from_numpy(patch.ravel()).to(device=opt.device) - real_patches_mat)**2, axis=1)
+                gen_patches.append(patch.ravel())
+                #print(f'patch {y*(im.shape[0] - opt.patch_size)+ x}/{(im.shape[0] - opt.patch_size)*(im.shape[1] - opt.patch_size)}', end='\r')
+        gen_patches_mat = torch.from_numpy(np.stack(gen_patches, axis=0)).to(device=opt.device)
+        
+        
+        dist_map_mse = np.zeros((real_im.shape[0] - opt.patch_size + 1, real_im.shape[1] - opt.patch_size + 1))
+        dist_map_edge = np.zeros((real_im.shape[0] - opt.patch_size + 1, real_im.shape[1] - opt.patch_size + 1 ))
+        for y in range(real_im.shape[0] - opt.patch_size + 1):
+            print(f'image: {i}/{opt.amount}\t\t'
+                  f'Patch {y*(real_im.shape[0] - opt.patch_size + 1)}/{(real_im.shape[0] - opt.patch_size + 1)*(real_im.shape[1] - opt.patch_size + 1)}', 
+                  end='\r')
+            for x in range(real_im.shape[1] - opt.patch_size + 1):
+                patch = real_im[y:y + opt.patch_size, x:x + opt.patch_size]
+                mse = torch.mean((torch.from_numpy(patch.ravel()).to(device=opt.device) - gen_patches_mat)**2, axis=1)
                 mse_ind = torch.argmin(mse)
                 mse_2d_ind = np.unravel_index(mse_ind.cpu().numpy(), dist_map_mse.shape) 
                 dist_to_edge = min([mse_2d_ind[0], 
-                                    np.abs(mse_2d_ind[0] - (im.shape[0] - opt.patch_size)), 
+                                    np.abs(mse_2d_ind[0] - (real_im.shape[0] - opt.patch_size)), 
                                     mse_2d_ind[1],
-                                    np.abs(mse_2d_ind[1] - (im.shape[1] - opt.patch_size))])
+                                    np.abs(mse_2d_ind[1] - (real_im.shape[1] - opt.patch_size))])
                                     
                 dist_map_mse[mse_2d_ind] = mse[mse_ind].cpu().numpy()
                 dist_map_edge[mse_2d_ind] = dist_to_edge
@@ -109,7 +111,7 @@ if __name__ == '__main__':
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     plt.colorbar(im, cax=cax)# ticks=[0,0.5,1,1.5], cax=cax)
-    plt.savefig(os.path.join(opt.trained_net_dir, f'edges_exper_avgmse_n{opt.amount}_p{opt.patch_size}.png'))
+    plt.savefig(os.path.join(opt.trained_net_dir, f'real_edges_exper_avgmse_n{opt.amount}_p{opt.patch_size}.png'))
     plt.figure()
     ax = plt.gca()
     im = ax.imshow(ims_edge_avg)
@@ -118,5 +120,5 @@ if __name__ == '__main__':
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     plt.colorbar(im, cax=cax)# ticks=[0,0.5,1,1.5], cax=cax)
-    plt.savefig(os.path.join(opt.trained_net_dir, f'edges_exper_avgedge_n{opt.amount}_p{opt.patch_size}.png'))
+    plt.savefig(os.path.join(opt.trained_net_dir, f'real_edges_exper_avgedge_n{opt.amount}_p{opt.patch_size}.png'))
     
