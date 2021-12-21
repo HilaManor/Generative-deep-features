@@ -42,6 +42,7 @@ if __name__ == '__main__':
     # Generate images
     ims_mse = []
     ims_edge = []
+    ims_patchdist = []
     out_dir = os.path.join(opt.trained_net_dir, 'Edges_experiments_pytorch_real')
     #if os.path.isdir(out_dir):
     #    for f in os.listdir(out_dir):
@@ -51,8 +52,10 @@ if __name__ == '__main__':
     os.makedirs(out_dir, exist_ok=True)
     out_dir_mse = os.path.join(opt.trained_net_dir, 'Edges_experiments_pytorch_maps_mse_real')
     out_dir_edge = os.path.join(opt.trained_net_dir, 'Edges_experiments_pytorch_maps_edge_real')
+    out_dir_patchdist = os.path.join(opt.trained_net_dir, 'Edges_experiments_pytorch_maps_patchdist_real')
     os.makedirs(out_dir_mse, exist_ok=True)
     os.makedirs(out_dir_edge, exist_ok=True)
+    os.makedirs(out_dir_patchdist, exist_ok=True)
     for i in range(opt.amount):
         out = tests.generate_random_sample(Generators, z_opts, scale_factor, NoiseAmp,
                                        reals, opt=opt)
@@ -90,19 +93,25 @@ if __name__ == '__main__':
                                     np.abs(mse_2d_ind[0] - (real_im.shape[0] - opt.patch_size)), 
                                     mse_2d_ind[1],
                                     np.abs(mse_2d_ind[1] - (real_im.shape[1] - opt.patch_size))])
-                                    
+                dist_to_patch = np.sqrt((x - mse_2d_ind[1])**2 + (y - mse_2d_ind[0])**2)
                 dist_map_mse[mse_2d_ind] = mse[mse_ind].cpu().numpy()
                 dist_map_edge[mse_2d_ind] = dist_to_edge
+                dist_map_patchdist[mse_2d_ind] = dist_to_patch
         
         ims_mse.append(dist_map_mse)
         ims_edge.append(dist_map_edge)
+        ims_patchdist.append(dist_map_patchdist)
         plotting_helpers.save_im(dist_map_mse, out_dir_mse, f"seed_{opt.manual_seed}_im_{i}", convert=False)
         plotting_helpers.save_im(dist_map_edge, out_dir_edge, f"seed_{opt.manual_seed}_im_{i}", convert=False)
+        plotting_helpers.save_im(dist_map_patchdist, out_dir_patchdist, f"seed_{opt.manual_seed}_im_{i}", convert=False)
             
     ims_mse = np.stack(ims_mse, axis=-1)
     ims_edge = np.stack(ims_edge, axis=-1)
+    ims_patchdist = np.stack(ims_patchdist, axis=-1)
     ims_mse_avg = np.mean(ims_mse, axis=2)
     ims_edge_avg = np.mean(ims_edge, axis=2)
+    ims_patchdist_avg = np.mean(ims_patchdist, axis=2)
+    
     plt.figure()
     ax = plt.gca()
     im = ax.imshow(ims_mse_avg)
@@ -112,6 +121,7 @@ if __name__ == '__main__':
     cax = divider.append_axes("right", size="5%", pad=0.05)
     plt.colorbar(im, cax=cax)# ticks=[0,0.5,1,1.5], cax=cax)
     plt.savefig(os.path.join(opt.trained_net_dir, f'real_edges_exper_avgmse_n{opt.amount}_p{opt.patch_size}.png'))
+    
     plt.figure()
     ax = plt.gca()
     im = ax.imshow(ims_edge_avg)
@@ -122,3 +132,10 @@ if __name__ == '__main__':
     plt.colorbar(im, cax=cax)# ticks=[0,0.5,1,1.5], cax=cax)
     plt.savefig(os.path.join(opt.trained_net_dir, f'real_edges_exper_avgedge_n{opt.amount}_p{opt.patch_size}.png'))
     
+    plt.figure()
+    ax = plt.gca()
+    im = ax.imshow(ims_patchdist_avg)
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    plt.colorbar(im, cax=cax)# ticks=[0,0.5,1,1.5], cax=cax)
+    plt.savefig(os.path.join(opt.trained_net_dir, f'real_edges_exper_avgpatchdist_n{opt.amount}_p{opt.patch_size}.png'))
