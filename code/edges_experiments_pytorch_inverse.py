@@ -80,6 +80,7 @@ if __name__ == '__main__':
         
         dist_map_mse = np.zeros((real_im.shape[0] - opt.patch_size + 1, real_im.shape[1] - opt.patch_size + 1))
         dist_map_edge = np.zeros((real_im.shape[0] - opt.patch_size + 1, real_im.shape[1] - opt.patch_size + 1 ))
+        dist_map_patchdist = np.zeros((real_im.shape[0] - opt.patch_size + 1, real_im.shape[1] - opt.patch_size + 1 ))
         for y in range(real_im.shape[0] - opt.patch_size + 1):
             print(f'image: {i}/{opt.amount}\t\t'
                   f'Patch {y*(real_im.shape[0] - opt.patch_size + 1)}/{(real_im.shape[0] - opt.patch_size + 1)*(real_im.shape[1] - opt.patch_size + 1)}', 
